@@ -17,7 +17,11 @@
     "react-native-pager-view": "6.7.1",
     "@react-navigation/native": "*",
     "react-native-safe-area-context": "5.4.0",
-    "@react-navigation/material-top-tabs": "*"
+    "@react-navigation/material-top-tabs": "*",
+    "react-dom": "19.0.0",
+    "react-native-web": "^0.20.0",
+    "@expo/metro-runtime": "~5.0.4",
+    "expo-asset": "~11.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
