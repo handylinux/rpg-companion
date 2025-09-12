@@ -128,7 +128,12 @@ export const CharacterProvider = ({ children }) => {
 
   // Добавляем очки атрибутов от перка
   const addPerkAttributePoints = (points) => {
-    setAvailablePerkAttributePoints(prev => prev + points);
+    console.log('addPerkAttributePoints called with points:', points);
+    console.log('Current availablePerkAttributePoints:', availablePerkAttributePoints);
+    setAvailablePerkAttributePoints(prev => {
+      console.log('Setting availablePerkAttributePoints from', prev, 'to', prev + points);
+      return prev + points;
+    });
   };
 
   // Применяем изменения атрибутов после распределения очков от перков

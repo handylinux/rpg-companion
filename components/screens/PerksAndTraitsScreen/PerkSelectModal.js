@@ -69,7 +69,6 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
                             // Выбрать перк
                             setSelectedPerks([...selectedPerks, perk]);
                           }
-                          onChoosePerk && onChoosePerk(perk);
                         }}
                         style={[
                           styles.chooseButton,
@@ -90,6 +89,22 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
           </ScrollView>
 
           <View style={styles.modalButtons}>
+            <TouchableOpacity 
+              style={[styles.modalButton, styles.confirmButton]} 
+              onPress={() => {
+                console.log('Confirm button pressed, selectedPerks:', selectedPerks);
+                if (selectedPerks.length > 0) {
+                  // Выбираем только первый перк, так как в нашем случае выбирается один перк за раз
+                  const chosenPerk = selectedPerks[0];
+                  console.log('Choosing perk:', chosenPerk);
+                  onChoosePerk && onChoosePerk(chosenPerk);
+                }
+                onClose();
+              }}
+              disabled={selectedPerks.length === 0}
+            >
+              <Text style={styles.modalButtonText}>Подтвердить</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={onClose}>
               <Text style={styles.modalButtonText}>Отмена</Text>
             </TouchableOpacity>
@@ -196,6 +211,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     marginLeft: 8
+  },
+  confirmButton: {
+    backgroundColor: '#16a34a',
+    borderColor: '#15803d',
+    marginRight: 8,
   },
   cancelButton: {
     backgroundColor: '#ef4444',
