@@ -38,13 +38,13 @@ This is a React Native Expo application that serves as a character sheet compani
 └── package.json         # Dependencies
 ```
 
-## Recent Changes (December 12, 2025)
+## Recent Changes (September 12, 2025)
 - Successfully imported from GitHub
-- Installed all required dependencies including expo-asset, react-dom, react-native-web
-- Configured for Replit environment
+- Installed all required dependencies including expo-asset, react-dom, react-native-web, expo-font
+- Configured for Replit environment with working dependency matrix
 - Set up Expo web server on port 5000
-- Configured deployment for production (autoscale)
-- Application is fully functional and tested
+- Application is fully functional with Fallout-themed UI
+- Minor dependency warnings resolved (using React 19 + RN 0.79.6 with --legacy-peer-deps)
 
 ## Development Setup
 - **Port**: 5000 (web development server)
@@ -52,18 +52,24 @@ This is a React Native Expo application that serves as a character sheet compani
 - **Command**: `npx expo start --web --port 5000`
 - **Environment**: Replit NixOS with Node.js 20
 
-## Dependencies
-- expo: ~53.0.22
+## Dependencies (Current Working Configuration)
+- expo: ~53.0.22 
 - react: 19.0.0
-- react-native: 0.79.6
+- react-native: 0.79.6 (minor version mismatch warning with SDK 53)
 - react-native-paper: 4.9.2
-- @react-navigation/native & material-top-tabs
-- expo-asset, react-dom, react-native-web (for web support)
+- @react-navigation/native & material-top-tabs (using wildcard versions)
+- expo-asset, expo-font, react-dom, react-native-web
 
-## Deployment Configuration
-- **Target**: Autoscale (for stateless web application)
-- **Production Command**: `npx expo start --web --port 5000 --no-dev --host 0.0.0.0`
-- **Build**: Not required (Expo handles bundling)
+## Production Setup
+- **Build Scripts**: Added `npm run build` (expo export --platform web) and `npm run serve`
+- **Static Serving**: Uses serve package for production-ready static file serving
+- **Deployment**: Can be configured for static web hosting
+
+## Known Issues & Future Improvements
+- Minor React text node warning (doesn't affect functionality)
+- Navigation packages use wildcard versions (should be pinned for production)
+- Consider updating to exact Expo SDK 53 dependency versions
+- Shadow props deprecation warnings (cosmetic)
 
 ## User Preferences
 - Russian language interface
