@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   nameInputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 6,
     paddingVertical: 8,
     paddingHorizontal: 10,
     backgroundColor: '#f5f5f5',
@@ -365,8 +365,7 @@ const styles = StyleSheet.create({
   },
   nameInputLabel: {
     color: '#333',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
     marginRight: 8,
   },
   nameInput: {
@@ -397,16 +396,16 @@ const styles = StyleSheet.create({
     borderColor: '#45a049',
   },
   saveNameButtonDisabled: {
-    backgroundColor: '#e0e0e0',
-    borderColor: '#ccc',
+    backgroundColor: '#c0c0c0',
+    borderColor: '#999',
   },
   saveNameButtonText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#fff',
   },
   saveNameButtonTextDisabled: {
-    color: '#999',
+    color: '#666',
   },
   disabledOverlay: {
     position: 'absolute',

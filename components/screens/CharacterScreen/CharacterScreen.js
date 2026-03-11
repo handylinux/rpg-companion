@@ -945,7 +945,7 @@ export default function CharacterScreen() {
               <Text style={styles.nameInputLabel}>Имя:</Text>
               <TextInput
                 style={[styles.nameInput, !nameSaved && styles.nameInputActive]}
-                placeholder="Введите имя персонажа"
+                placeholder="Введите имя"
                 placeholderTextColor="#999"
                 value={characterName}
                 onChangeText={setCharacterName}
