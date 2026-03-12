@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { 
   createInitialAttributes, 
   ALL_SKILLS, 
@@ -14,12 +15,33 @@ import { createModifiedWeaponFromId, createWeaponId, getAllWeapons, getWeaponMod
 
 const CharacterContext = createContext();
 
+const STORAGE_LIST_KEY = 'fallout_characters_list';
+const STORAGE_CHAR_KEY = 'fallout_character_';
+
+const generateId = () => `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+const serializeState = (state) => ({
+  ...state,
+  modifiedItems: state.modifiedItems instanceof Map 
+    ? Array.from(state.modifiedItems.entries())
+    : (Array.isArray(state.modifiedItems) ? state.modifiedItems : []),
+});
+
+const deserializeState = (data) => ({
+  ...data,
+  modifiedItems: new Map(Array.isArray(data.modifiedItems) ? data.modifiedItems : []),
+});
+
 export const CharacterProvider = ({ children }) => {
+  const [characterName, setCharacterName] = useState('');
+  const [characterId, setCharacterId] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+
   const [level, setLevel] = useState(1);
   const [attributes, setAttributes] = useState(createInitialAttributes());
   const [skills, setSkills] = useState(ALL_SKILLS.map(s => ({...s, value: 0})));
-  const [selectedSkills, setSelectedSkills] = useState([]); // Main tagged skills (max 3)
-  const [extraTaggedSkills, setExtraTaggedSkills] = useState([]); // Extra tagged skills from traits/origins
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [extraTaggedSkills, setExtraTaggedSkills] = useState([]);
   const [forcedSelectedSkills, setForcedSelectedSkills] = useState([]);
   const [origin, setOrigin] = useState(null);
   const [trait, setTrait] = useState(null);
@@ -36,11 +58,8 @@ export const CharacterProvider = ({ children }) => {
   });
   const [caps, setCaps] = useState(0);
   const [currentHealth, setCurrentHealth] = useState(0);
-  
-  // Состояние для модифицированных предметов и очков атрибутов от перков
-  const [modifiedItems, setModifiedItems] = useState(new Map()); // itemId -> modifiedItem
-  const [availablePerkAttributePoints, setAvailablePerkAttributePoints] = useState(0); // Очки атрибутов от перков
-  
+  const [modifiedItems, setModifiedItems] = useState(new Map());
+  const [availablePerkAttributePoints, setAvailablePerkAttributePoints] = useState(0);
   const [luckPoints, setLuckPoints] = useState(0);
   const [maxLuckPoints, setMaxLuckPoints] = useState(0);
   const [attributesSaved, setAttributesSaved] = useState(false);
@@ -51,70 +70,215 @@ export const CharacterProvider = ({ children }) => {
   const [initiative, setInitiative] = useState(0);
   const [defense, setDefense] = useState(1);
 
-  // Функции для работы с модифицированными предметами
-  const getItemId = (item) => {
-    // Для уникальных экземпляров (экипированных) используем их ID
-    if (item.uniqueId) {
-      return item.uniqueId;
+  const isSavedRef = useRef(isSaved);
+  const characterIdRef = useRef(characterId);
+  useEffect(() => { isSavedRef.current = isSaved; }, [isSaved]);
+  useEffect(() => { characterIdRef.current = characterId; }, [characterId]);
+
+  // Собираем снапшот всего состояния персонажа
+  const buildSnapshot = useCallback(() => ({
+    characterName,
+    level,
+    attributes,
+    skills,
+    selectedSkills,
+    extraTaggedSkills,
+    forcedSelectedSkills,
+    origin,
+    trait,
+    equipment,
+    effects,
+    equippedWeapons,
+    equippedArmor,
+    caps,
+    currentHealth,
+    modifiedItems,
+    availablePerkAttributePoints,
+    luckPoints,
+    maxLuckPoints,
+    attributesSaved,
+    skillsSaved,
+    selectedPerks,
+    carryWeight,
+    meleeBonus,
+    initiative,
+    defense,
+  }), [
+    characterName, level, attributes, skills, selectedSkills, extraTaggedSkills,
+    forcedSelectedSkills, origin, trait, equipment, effects, equippedWeapons,
+    equippedArmor, caps, currentHealth, modifiedItems, availablePerkAttributePoints,
+    luckPoints, maxLuckPoints, attributesSaved, skillsSaved, selectedPerks,
+    carryWeight, meleeBonus, initiative, defense,
+  ]);
+
+  // Realtime сохранение — запускается при любом изменении состояния если персонаж уже сохранён
+  const saveTimeoutRef = useRef(null);
+  useEffect(() => {
+    if (!isSavedRef.current || !characterIdRef.current) return;
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        const snapshot = buildSnapshot();
+        const serialized = serializeState(snapshot);
+        await AsyncStorage.setItem(
+          STORAGE_CHAR_KEY + characterIdRef.current,
+          JSON.stringify({ ...serialized, updatedAt: Date.now() })
+        );
+        // Обновляем updatedAt в списке
+        const listRaw = await AsyncStorage.getItem(STORAGE_LIST_KEY);
+        const list = listRaw ? JSON.parse(listRaw) : [];
+        const idx = list.findIndex(c => c.id === characterIdRef.current);
+        if (idx >= 0) {
+          list[idx].updatedAt = Date.now();
+          list[idx].name = snapshot.characterName;
+          await AsyncStorage.setItem(STORAGE_LIST_KEY, JSON.stringify(list));
+        }
+      } catch (e) {
+        console.error('Realtime save error:', e);
+      }
+    }, 500);
+    return () => { if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current); };
+  }, [
+    characterName, level, attributes, skills, selectedSkills, extraTaggedSkills,
+    forcedSelectedSkills, origin, trait, equipment, effects, equippedWeapons,
+    equippedArmor, caps, currentHealth, modifiedItems, availablePerkAttributePoints,
+    luckPoints, maxLuckPoints, attributesSaved, skillsSaved, selectedPerks,
+    carryWeight, meleeBonus, initiative, defense, buildSnapshot,
+  ]);
+
+  // Первичное сохранение персонажа (вызывается из CharacterScreen при нажатии "Сохранить")
+  const saveCharacter = useCallback(async (name) => {
+    try {
+      const id = characterIdRef.current || generateId();
+      setCharacterId(id);
+      characterIdRef.current = id;
+
+      const snapshot = buildSnapshot();
+      const snapshotWithName = { ...snapshot, characterName: name };
+      const serialized = serializeState(snapshotWithName);
+      const now = Date.now();
+
+      await AsyncStorage.setItem(
+        STORAGE_CHAR_KEY + id,
+        JSON.stringify({ ...serialized, createdAt: now, updatedAt: now })
+      );
+
+      const listRaw = await AsyncStorage.getItem(STORAGE_LIST_KEY);
+      const list = listRaw ? JSON.parse(listRaw) : [];
+      const existingIdx = list.findIndex(c => c.id === id);
+      const entry = { id, name, createdAt: now, updatedAt: now };
+      if (existingIdx >= 0) {
+        list[existingIdx] = entry;
+      } else {
+        list.push(entry);
+      }
+      await AsyncStorage.setItem(STORAGE_LIST_KEY, JSON.stringify(list));
+
+      setIsSaved(true);
+      isSavedRef.current = true;
+      return id;
+    } catch (e) {
+      console.error('Save character error:', e);
+      return null;
     }
-    // Для стаков в инвентаре используем ID стака
+  }, [buildSnapshot]);
+
+  // Загрузка персонажа по ID
+  const loadCharacter = useCallback(async (id) => {
+    try {
+      const raw = await AsyncStorage.getItem(STORAGE_CHAR_KEY + id);
+      if (!raw) return false;
+      const data = deserializeState(JSON.parse(raw));
+
+      setCharacterId(id);
+      setCharacterName(data.characterName || '');
+      setLevel(data.level ?? 1);
+      setAttributes(data.attributes || createInitialAttributes());
+      setSkills(data.skills || ALL_SKILLS.map(s => ({...s, value: 0})));
+      setSelectedSkills(data.selectedSkills || []);
+      setExtraTaggedSkills(data.extraTaggedSkills || []);
+      setForcedSelectedSkills(data.forcedSelectedSkills || []);
+      setOrigin(data.origin || null);
+      setTrait(data.trait || null);
+      setEquipment(data.equipment || null);
+      setEffects(data.effects || []);
+      setEquippedWeapons(data.equippedWeapons || [null, null]);
+      setEquippedArmor(data.equippedArmor || {
+        head: { armor: null, clothing: null },
+        body: { armor: null, clothing: null },
+        leftArm: { armor: null, clothing: null },
+        rightArm: { armor: null, clothing: null },
+        leftLeg: { armor: null, clothing: null },
+        rightLeg: { armor: null, clothing: null },
+      });
+      setCaps(data.caps ?? 0);
+      setCurrentHealth(data.currentHealth ?? 0);
+      setModifiedItems(data.modifiedItems instanceof Map ? data.modifiedItems : new Map());
+      setAvailablePerkAttributePoints(data.availablePerkAttributePoints ?? 0);
+      setLuckPoints(data.luckPoints ?? 0);
+      setMaxLuckPoints(data.maxLuckPoints ?? 0);
+      setAttributesSaved(data.attributesSaved ?? false);
+      setSkillsSaved(data.skillsSaved ?? false);
+      setSelectedPerks(data.selectedPerks || []);
+      setCarryWeight(data.carryWeight ?? 150);
+      setMeleeBonus(data.meleeBonus ?? 0);
+      setInitiative(data.initiative ?? 0);
+      setDefense(data.defense ?? 1);
+      setIsSaved(true);
+      isSavedRef.current = true;
+      characterIdRef.current = id;
+      return true;
+    } catch (e) {
+      console.error('Load character error:', e);
+      return false;
+    }
+  }, []);
+
+  // Получить список всех персонажей
+  const getCharactersList = useCallback(async () => {
+    try {
+      const raw = await AsyncStorage.getItem(STORAGE_LIST_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      console.error('Get characters list error:', e);
+      return [];
+    }
+  }, []);
+
+  // Удалить персонажа
+  const deleteCharacter = useCallback(async (id) => {
+    try {
+      await AsyncStorage.removeItem(STORAGE_CHAR_KEY + id);
+      const listRaw = await AsyncStorage.getItem(STORAGE_LIST_KEY);
+      const list = listRaw ? JSON.parse(listRaw) : [];
+      const filtered = list.filter(c => c.id !== id);
+      await AsyncStorage.setItem(STORAGE_LIST_KEY, JSON.stringify(filtered));
+      return true;
+    } catch (e) {
+      console.error('Delete character error:', e);
+      return false;
+    }
+  }, []);
+
+  const getItemId = (item) => {
+    if (item.uniqueId) return item.uniqueId;
     return item.weaponId || item.code || item.Название;
   };
 
   const getModifiedItem = (item) => {
     const itemId = getItemId(item);
-    
-    // Если у оружия уже есть weaponId, создаем модифицированное оружие из него
     if (item.itemType === 'weapon' && item.weaponId) {
       const modifiedWeapon = createModifiedWeaponFromId(item.weaponId, getAllWeapons(), getWeaponModifications());
-      if (modifiedWeapon) {
-        return modifiedWeapon;
-      }
+      if (modifiedWeapon) return modifiedWeapon;
     }
-    
-    // Проверяем сохраненные модификации
     const modifiedItem = modifiedItems.get(itemId);
-    
-    if (modifiedItem) {
-      console.log('getModifiedItem: found modified item:', { 
-        originalName: item.Название || item.name, 
-        itemId, 
-        modifiedName: modifiedItem.Название || modifiedItem.name,
-        modifiedItem: modifiedItem
-      });
-      return modifiedItem;
-    } else {
-      // Если предмет не является оружием или броней, он не может быть модифицирован.
-      // Просто возвращаем его и не выводим лог.
-      if (item.itemType !== 'weapon' && item.itemType !== 'armor' && item.itemType !== 'clothing') {
-          return item;
-      }
-      
-      // Логируем только если это оружие/броня, для которых мы ожидали найти модификацию
-      console.log('getModifiedItem: no modification found for:', { 
-        originalName: item.Название || item.name, 
-        itemId 
-      });
-      return item;
-    }
+    if (modifiedItem) return modifiedItem;
+    if (item.itemType !== 'weapon' && item.itemType !== 'armor' && item.itemType !== 'clothing') return item;
+    return item;
   };
 
   const saveModifiedItem = (originalItem, modifiedItem) => {
     const itemId = getItemId(originalItem);
-    
-    // Если у модифицированного предмета есть weaponId, используем его
-    if (modifiedItem.weaponId) {
-      console.log('saveModifiedItem: using existing weaponId:', modifiedItem.weaponId);
-    }
-    
-    console.log('saveModifiedItem:', { 
-      originalName: originalItem.Название || originalItem.name, 
-      modifiedName: modifiedItem.Название || modifiedItem.name, 
-      itemId,
-      weaponId: modifiedItem.weaponId,
-      originalItem: originalItem,
-      modifiedItem: modifiedItem
-    });
     setModifiedItems(prev => new Map(prev).set(itemId, modifiedItem));
   };
 
@@ -127,26 +291,20 @@ export const CharacterProvider = ({ children }) => {
     });
   };
 
-  // Добавляем очки атрибутов от перка
   const addPerkAttributePoints = (points) => {
     setAvailablePerkAttributePoints(prev => prev + points);
   };
 
-  // Применяем изменения атрибутов после распределения очков от перков
   const commitAttributeChanges = (newAttributes, pointsSpent) => {
     setAttributes(newAttributes);
     setAvailablePerkAttributePoints(prev => prev - pointsSpent);
-
-    // Пересчитываем все зависимые характеристики
     const newLuck = getLuckPoints(newAttributes);
     setMaxLuckPoints(newLuck);
     setLuckPoints(prevLuck => Math.min(prevLuck, newLuck));
-    
     setCarryWeight(calculateCarryWeight(newAttributes, trait));
     setMeleeBonus(calculateMeleeBonus(newAttributes));
     setInitiative(calculateInitiative(newAttributes));
     setDefense(calculateDefense(newAttributes));
-    
     const newMaxHealth = calculateMaxHealth(newAttributes, level);
     setCurrentHealth(prevHealth => Math.min(prevHealth, newMaxHealth));
   };
@@ -163,9 +321,7 @@ export const CharacterProvider = ({ children }) => {
     const initialLuck = getLuckPoints(initialAttributes);
     setMaxLuckPoints(initialLuck);
     setLuckPoints(initialLuck);
-    if (!preserveOrigin) {
-      setOrigin(null);
-    }
+    if (!preserveOrigin) setOrigin(null);
     setTrait(null);
     setEquipment(null);
     setEffects([]);
@@ -183,15 +339,26 @@ export const CharacterProvider = ({ children }) => {
     setMeleeBonus(0);
     setInitiative(calculateInitiative(initialAttributes));
     setDefense(calculateDefense(initialAttributes));
-    
     const currentMaxHealth = calculateMaxHealth(initialAttributes, level);
     setCurrentHealth(currentMaxHealth);
-    
     setModifiedItems(new Map());
     clearWeaponCache();
+    // Сбрасываем статус сохранения
+    setCharacterName('');
+    setCharacterId(null);
+    setIsSaved(false);
+    isSavedRef.current = false;
+    characterIdRef.current = null;
   };
 
   const value = {
+    characterName, setCharacterName,
+    characterId,
+    isSaved,
+    saveCharacter,
+    loadCharacter,
+    getCharactersList,
+    deleteCharacter,
     level, setLevel,
     attributes, setAttributes,
     skills, setSkills,
@@ -216,7 +383,6 @@ export const CharacterProvider = ({ children }) => {
     meleeBonus,
     initiative,
     defense,
-    // Helpers for trait-driven display rules
     hasTrait: (traitName) => !!(trait && (trait.name === traitName)),
     getItemId,
     getModifiedItem,
@@ -226,7 +392,6 @@ export const CharacterProvider = ({ children }) => {
     availablePerkAttributePoints,
     addPerkAttributePoints,
     commitAttributeChanges,
-    // Perk requirement helpers
     meetsPerkRequirements: (perk) => meetsPerkRequirements(perk, attributes, level),
     getPerkUnmetReasons: (perk) => getPerkUnmetReasons(perk, attributes, level),
     annotatePerks: (perks) => annotatePerks(perks, attributes, level),

@@ -12,10 +12,12 @@
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
+    "@react-native-async-storage/async-storage": "^3.0.1",
     "@react-navigation/material-top-tabs": "*",
     "@react-navigation/native": "*",
     "expo": "~53.0.22",
     "expo-asset": "~11.1.7",
+    "expo-font": "~13.3.2",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -23,8 +25,7 @@
     "react-native-pager-view": "6.7.1",
     "react-native-paper": "4.9.2",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-web": "^0.20.0",
-    "expo-font": "~13.3.2"
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -236,6 +236,9 @@ const LuckPointsRow = ({ luckPoints, maxLuckPoints, onSpend, onRestore }) => {
 
 export default function CharacterScreen() {
   const {
+    characterName, setCharacterName,
+    isSaved,
+    saveCharacter,
     level,
     setLevel,
     attributes,
@@ -280,10 +283,6 @@ export default function CharacterScreen() {
 
   const [showResetWarning, setShowResetWarning] = useState(false);
   const [resetType, setResetType] = useState(null);
-
-  // Состояние для имени персонажа
-  const [characterName, setCharacterName] = useState("");
-  const [nameSaved, setNameSaved] = useState(false);
 
   // Состояние для временного распределения очков атрибутов от перков
   const [tempAttributes, setTempAttributes] = useState(null);
@@ -944,31 +943,31 @@ export default function CharacterScreen() {
             <View style={styles.nameInputRow}>
               <Text style={styles.nameInputLabel}>Имя:</Text>
               <TextInput
-                style={[styles.nameInput, !nameSaved && styles.nameInputActive]}
+                style={[styles.nameInput, !isSaved && styles.nameInputActive]}
                 placeholder="Введите имя"
                 placeholderTextColor="#999"
                 value={characterName}
                 onChangeText={setCharacterName}
-                editable={!nameSaved}
+                editable={!isSaved}
               />
               <TouchableOpacity
                 style={[
                   styles.saveNameButton,
-                  characterName.length > 0 && !nameSaved
+                  characterName.length > 0 && !isSaved
                     ? styles.saveNameButtonActive
                     : styles.saveNameButtonDisabled,
                 ]}
                 onPress={() => {
                   if (characterName.length > 0) {
-                    setNameSaved(true);
+                    saveCharacter(characterName);
                   }
                 }}
-                disabled={characterName.length === 0 || nameSaved}
+                disabled={characterName.length === 0 || isSaved}
               >
                 <Text
                   style={[
                     styles.saveNameButtonText,
-                    characterName.length === 0 || nameSaved
+                    characterName.length === 0 || isSaved
                       ? styles.saveNameButtonTextDisabled
                       : {},
                   ]}
@@ -979,23 +978,24 @@ export default function CharacterScreen() {
             </View>
 
             {/* Если имя не сохранено, показываем затемняющий слой */}
-            {!nameSaved && <View style={styles.disabledOverlay} />}
+            {!isSaved && <View style={styles.disabledOverlay} />}
 
             <PressableRow
               title="Происхождение"
               value={origin ? origin.name : "Не выбрано"}
               onPress={() => setIsOriginModalVisible(true)}
-              disabled={!nameSaved}
+              disabled={!isSaved}
             />
             <PressableRow
               title="Черта"
               value={trait ? trait.name : "Не выбрано"}
               onPress={handleTraitPress}
-              disabled={!nameSaved || (trait && !isMultiTraitOrigin(origin?.name))}
+              disabled={!isSaved || (trait && !isMultiTraitOrigin(origin?.name))}
             />
             <PressableRow
               title="Снаряжение"
               value={equipment ? equipment.name : "Не выбрано"}
+              disabled={!isSaved}
               onPress={() => {
                 if (origin && origin.equipmentKits) {
                   if (equipment) {
@@ -1058,12 +1058,12 @@ export default function CharacterScreen() {
                 }
               }}
             />
-            <View style={[styles.levelContainer, !nameSaved && styles.disabledLevelContainer]}>
+            <View style={[styles.levelContainer, !isSaved && styles.disabledLevelContainer]}>
               <Text style={styles.levelLabel}>Уровень:</Text>
               <CompactCounter
                 value={level}
-                onIncrease={() => nameSaved && handleLevelChange(1)}
-                onDecrease={() => nameSaved && handleLevelChange(-1)}
+                onIncrease={() => isSaved && handleLevelChange(1)}
+                onDecrease={() => isSaved && handleLevelChange(-1)}
               />
             </View>
           </View>
