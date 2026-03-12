@@ -28,13 +28,12 @@ const CreateCell = ({ onPress }) => (
   </TouchableOpacity>
 );
 
-const CharacterCell = ({ character, onPress, onLongPress }) => {
+const CharacterCell = ({ character, onPress, onDelete }) => {
   const originImage = getOriginImage(character.originName);
   return (
     <TouchableOpacity
       style={styles.characterCell}
       onPress={onPress}
-      onLongPress={onLongPress}
       activeOpacity={0.8}
     >
       <View style={styles.characterImageContainer}>
@@ -46,6 +45,9 @@ const CharacterCell = ({ character, onPress, onLongPress }) => {
           </View>
         )}
       </View>
+      <TouchableOpacity style={styles.deleteButton} onPress={onDelete} hitSlop={{ top: 6, right: 6, bottom: 6, left: 6 }}>
+        <Text style={styles.deleteIcon}>🗑</Text>
+      </TouchableOpacity>
       <Text style={styles.characterName} numberOfLines={2}>{character.name}</Text>
       {character.level ? (
         <Text style={styles.characterLevel}>Ур. {character.level}</Text>
@@ -92,22 +94,22 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  const handleLongPress = (character) => {
+  const handleDelete = (character) => {
     Alert.alert(
-      character.name,
-      'Что сделать с персонажем?',
+      'Удаление персонажа',
+      'Вы действительно хотите удалить этого персонажа?',
       [
-        { text: 'Открыть', onPress: () => handleOpen(character.id) },
         {
-          text: 'Удалить',
+          text: 'Да',
           style: 'destructive',
           onPress: async () => {
             await deleteCharacter(character.id);
             loadList();
           },
         },
-        { text: 'Отмена', style: 'cancel' },
-      ]
+        { text: 'Нет', style: 'cancel' },
+      ],
+      { cancelable: false }
     );
   };
 
@@ -154,7 +156,7 @@ export default function HomeScreen({ navigation }) {
                     key={item.id}
                     character={item}
                     onPress={() => handleOpen(item.id)}
-                    onLongPress={() => handleLongPress(item)}
+                    onDelete={() => handleDelete(item)}
                   />
                 );
               })}
@@ -243,6 +245,27 @@ const styles = StyleSheet.create({
   characterImageContainer: {
     flex: 1,
     backgroundColor: '#e0e0e0',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+  },
+  deleteIcon: {
+    fontSize: 15,
+    lineHeight: 18,
   },
   characterImage: {
     width: '100%',
