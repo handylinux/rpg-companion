@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export const CREATE_TABLES = [
   `CREATE TABLE IF NOT EXISTS schema_meta (
@@ -16,22 +16,53 @@ export const CREATE_TABLES = [
     fire_rate TEXT,
     qualities TEXT,
     weight TEXT,
-    price TEXT,
+    cost TEXT,
     rarity TEXT,
-    ammo TEXT,
+    ammo_id TEXT,
+    range TEXT,
+    range_name TEXT,
+    rules TEXT,
+    flavour TEXT,
     mods_config TEXT
   )`,
 
   `CREATE TABLE IF NOT EXISTS weapon_mods (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
-    category TEXT NOT NULL,
-    weapon_type TEXT NOT NULL,
     prefix TEXT,
+    slot TEXT NOT NULL,
+    complexity INTEGER,
+    perk_1 TEXT,
+    perk_2 TEXT,
+    skill TEXT,
+    rarity TEXT,
+    materials TEXT,
+    cost INTEGER,
     effects TEXT,
-    weight REAL,
-    price INTEGER,
-    required_perks TEXT
+    effect_description TEXT,
+    weight TEXT,
+    applies_to_ids TEXT
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS weapon_mod_slots (
+    weapon_id TEXT NOT NULL,
+    slot TEXT NOT NULL,
+    mod_id TEXT NOT NULL,
+    PRIMARY KEY (weapon_id, slot, mod_id)
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS ammo_types (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    rarity TEXT,
+    cost TEXT
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS weapon_qualities (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    effect TEXT,
+    opposite TEXT
   )`,
 
   `CREATE TABLE IF NOT EXISTS perks (

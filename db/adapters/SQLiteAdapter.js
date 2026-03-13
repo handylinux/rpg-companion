@@ -9,21 +9,38 @@ async function getDb() {
   return _db;
 }
 
+const DATA_TABLES = [
+  'weapons', 'weapon_mods', 'weapon_mod_slots', 'ammo_types',
+  'weapon_qualities', 'perks', 'items', 'perk_effects',
+];
+
 export async function initDatabase() {
   const db = await getDb();
   await db.execAsync('PRAGMA journal_mode = WAL;');
-  for (const sql of CREATE_TABLES) {
-    await db.execAsync(sql);
-  }
+  await db.execAsync('CREATE TABLE IF NOT EXISTS schema_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)');
+
   const row = await db.getFirstAsync(
     "SELECT value FROM schema_meta WHERE key = 'version'"
   );
-  if (!row) {
-    await db.runAsync(
-      "INSERT INTO schema_meta (key, value) VALUES ('version', ?)",
-      [String(SCHEMA_VERSION)]
-    );
+  const storedVersion = row ? Number(row.value) : 0;
+
+  if (storedVersion !== SCHEMA_VERSION) {
+    for (const t of DATA_TABLES) {
+      await db.execAsync(`DROP TABLE IF EXISTS ${t}`);
+    }
+    for (const sql of CREATE_TABLES) {
+      await db.execAsync(sql);
+    }
+    if (row) {
+      await db.runAsync("UPDATE schema_meta SET value = ? WHERE key = 'version'", [String(SCHEMA_VERSION)]);
+    } else {
+      await db.runAsync("INSERT INTO schema_meta (key, value) VALUES ('version', ?)", [String(SCHEMA_VERSION)]);
+    }
     return true;
+  }
+
+  for (const sql of CREATE_TABLES) {
+    await db.execAsync(sql);
   }
   return false;
 }

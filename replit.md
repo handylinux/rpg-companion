@@ -47,14 +47,15 @@ This is a React Native Expo application that serves as a character sheet compani
 └── package.json         # Dependencies
 ```
 
-## Recent Changes (March 11, 2026)
-- **Fixed Critical Bug**: Corrected skills counting system - extra skills from origins/traits no longer incorrectly increase main selectable skills limit (stays at 3)
-- **Implemented Intensive Training Perk System**: Complete temporary attribute allocation system with validation
-- **Fixed PerkSelectModal**: Resolved duplicate selections and missing confirmation button
-- **Major Refactor**: Separated main skills (max 3) from extra skills using new extraTaggedSkills state
-- **Added Character Name Input**: New field at top of Character Screen for naming personage with save button
-- **Auto-Save Logic**: Once name is saved, all other fields become active; until name is saved, all other options remain disabled/greyed out
-- BASE_TAGGED_SKILLS constant properly exported and used throughout application
+## Recent Changes (March 13, 2026)
+- **Updated Weapons Data**: All 101 weapons with new id-based format (weapon_001..weapon_101); English keys, Russian names
+- **Updated Weapon Mods**: 197 mods with id-system (mod_001..mod_197), `applies_to_ids` arrays, slot groupings
+- **Added Ammo Types**: 36 ammo types with id-refs (ammo_001..ammo_036)
+- **Added Weapon Qualities**: 37 weapon qualities with rules descriptions
+- **Added Mod Overrides**: slot-based mod assignments for 32 weapons
+- **Schema v2**: New tables: `weapon_mod_slots`, `ammo_types`, `weapon_qualities`; all weapons/mods tables use id-primary-keys
+- **Auto-Reseed**: Schema version bump triggers automatic data refresh on both Web (AsyncStorage) and Native (SQLite)
+- **WebAdapter Fix**: `readTable` now always returns array; `schema_meta` stored as row-array compatible with SQL queries
 
 ## Development Setup
 - **Port**: 5000 (web development server)

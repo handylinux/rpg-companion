@@ -32,7 +32,7 @@ function App() {
         const isFirstRun = await initDatabase();
         await seedDatabase(isFirstRun);
       } catch (e) {
-        console.error('DB init error:', e);
+        console.error('DB init error:', e?.message || String(e));
       } finally {
         setDbReady(true);
       }

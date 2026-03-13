@@ -1,25 +1,17 @@
-import { runBatch, getRowCount, getAll, runQuery } from './Database';
+import { runBatch, getFirst, runQuery } from './Database';
+import { SCHEMA_VERSION } from './schema';
 
-import lightWeaponsData from '../assets/Equipment/light_weapons.json';
-import heavyWeaponsData from '../assets/Equipment/heavy_weapons.json';
-import energyWeaponsData from '../assets/Equipment/energy_weapons.json';
-import meleeWeaponsData from '../assets/Equipment/melee_weapons.json';
-import lightWeaponModsData from '../assets/Equipment/light_weapon_mods.json';
+import weaponsData from '../assets/Equipment/weapons.json';
+import weaponModsData from '../assets/Equipment/weapon_mods.json';
+import ammoTypesData from '../assets/Equipment/ammo_types.json';
+import qualitiesData from '../assets/Equipment/qualities.json';
+import modsOverridesData from '../assets/Equipment/mods_overrides.json';
+
 import armorData from '../assets/Equipment/armor.json';
 import clothesData from '../assets/Equipment/Clothes.json';
 import chemsData from '../assets/Equipment/chems.json';
-import ammoData from '../assets/Equipment/ammoData.json';
 import miscData from '../assets/Equipment/miscellaneous.json';
 import perksData from '../assets/Perks/perks.json';
-
-function slugify(str) {
-  if (!str) return '';
-  return str
-    .toLowerCase()
-    .replace(/[^a-zа-яё0-9\s]/gi, '')
-    .trim()
-    .replace(/\s+/g, '_');
-}
 
 function safeStr(v) {
   if (v === null || v === undefined) return null;
@@ -32,122 +24,139 @@ function safeNum(v) {
   return isNaN(n) ? null : n;
 }
 
+function slugify(str) {
+  if (!str) return '';
+  return str.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '_').replace(/_+/g, '_').slice(0, 40);
+}
+
+async function clearTable(tableName) {
+  await runQuery(`DELETE FROM ${tableName}`, []);
+}
+
 async function seedWeapons() {
-  const count = await getRowCount('weapons');
-  if (count > 0) return;
-
-  const statements = [];
-
-  const addWeapon = (weapon, weaponType) => {
-    const id = weapon.code || slugify(weapon['Название']) + '_' + weaponType;
-    statements.push({
-      sql: `INSERT OR REPLACE INTO weapons
-        (id, name, weapon_type, damage, damage_effects, damage_type, fire_rate, qualities, weight, price, rarity, ammo, mods_config)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      params: [
-        id,
-        weapon['Название'] || weapon.name || '',
-        weaponType,
-        safeNum(weapon['Урон']),
-        safeStr(weapon['Эффекты']),
-        safeStr(weapon['Тип урона']),
-        safeStr(weapon['Скорость стрельбы']),
-        safeStr(weapon['Качества']),
-        safeStr(weapon['Вес']),
-        safeStr(weapon['Цена']),
-        safeStr(weapon['Редкость']),
-        safeStr(weapon['Патроны']),
-        weapon['Модификации'] ? JSON.stringify(weapon['Модификации']) : null,
-      ],
-    });
-  };
-
-  lightWeaponsData.forEach(w => addWeapon(w, 'light'));
-  heavyWeaponsData.forEach(w => addWeapon(w, 'heavy'));
-  energyWeaponsData.forEach(w => addWeapon(w, 'energy'));
-  meleeWeaponsData.forEach(w => addWeapon(w, 'melee'));
-
+  await clearTable('weapons');
+  const statements = weaponsData.map(w => ({
+    sql: `INSERT OR REPLACE INTO weapons
+      (id, name, weapon_type, damage, damage_effects, damage_type, fire_rate, qualities,
+       weight, cost, rarity, ammo_id, range, range_name, rules, flavour)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    params: [
+      w.id,
+      w.Name || '',
+      w['Weapon Type'] || '',
+      safeNum(w['Damage Rating']),
+      safeStr(w['Damage Effects']),
+      safeStr(w['Damage Type']),
+      safeStr(w['Rate of Fire']),
+      safeStr(w['Qualities']),
+      safeStr(w['Weight']),
+      safeStr(w['Cost']),
+      safeStr(w['Rarity']),
+      safeStr(w['Ammo']),
+      safeStr(w['Range']),
+      safeStr(w['range name']),
+      safeStr(w['Rules']),
+      safeStr(w['Flavour']),
+    ],
+  }));
   if (statements.length > 0) await runBatch(statements);
 }
 
 async function seedWeaponMods() {
-  const count = await getRowCount('weapon_mods');
-  if (count > 0) return;
+  await clearTable('weapon_mods');
+  const statements = weaponModsData.map(m => ({
+    sql: `INSERT OR REPLACE INTO weapon_mods
+      (id, name, prefix, slot, complexity, perk_1, perk_2, skill, rarity, materials,
+       cost, effects, effect_description, weight, applies_to_ids)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    params: [
+      m.id,
+      m.Name || '',
+      safeStr(m.Prefix),
+      m.Slot || '',
+      safeNum(m.Complexity),
+      safeStr(m['Perk 1']),
+      safeStr(m['Perk 2']),
+      safeStr(m.Skill),
+      safeStr(m.Rarity),
+      safeStr(m.Materials),
+      safeNum(m.Cost),
+      safeStr(m.Effects),
+      safeStr(m.EffectDescription),
+      safeStr(m.Weight),
+      m.applies_to_ids ? JSON.stringify(m.applies_to_ids) : null,
+    ],
+  }));
+  if (statements.length > 0) await runBatch(statements);
+}
 
+async function seedWeaponModSlots() {
+  await clearTable('weapon_mod_slots');
   const statements = [];
-  const modsObj = lightWeaponModsData['Модификации'] || {};
+  for (const [weaponId, slots] of Object.entries(modsOverridesData)) {
+    for (const [slot, modIds] of Object.entries(slots)) {
+      for (const modId of modIds) {
+        statements.push({
+          sql: `INSERT OR REPLACE INTO weapon_mod_slots (weapon_id, slot, mod_id) VALUES (?, ?, ?)`,
+          params: [weaponId, slot, modId],
+        });
+      }
+    }
+  }
+  if (statements.length > 0) await runBatch(statements);
+}
 
-  Object.entries(modsObj).forEach(([category, modsInCat]) => {
-    Object.entries(modsInCat).forEach(([modName, modData]) => {
-      const id = `${slugify(category)}_${slugify(modName)}_light`;
-      statements.push({
-        sql: `INSERT OR REPLACE INTO weapon_mods
-          (id, name, category, weapon_type, prefix, effects, weight, price, required_perks)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        params: [
-          id,
-          modName,
-          category,
-          'light',
-          safeStr(modData['Префикс имени']),
-          safeStr(modData['Эффекты']),
-          safeNum(modData['Вес']),
-          safeNum(modData['Цена']),
-          modData['Перки'] ? JSON.stringify(modData['Перки']) : '[]',
-        ],
-      });
-    });
-  });
+async function seedAmmoTypes() {
+  await clearTable('ammo_types');
+  const statements = ammoTypesData.map(a => ({
+    sql: `INSERT OR REPLACE INTO ammo_types (id, name, rarity, cost) VALUES (?, ?, ?, ?)`,
+    params: [a.id, a.name, safeStr(a.rarity), safeStr(a.cost)],
+  }));
+  if (statements.length > 0) await runBatch(statements);
+}
 
+async function seedQualities() {
+  await clearTable('weapon_qualities');
+  const statements = qualitiesData.map(q => ({
+    sql: `INSERT OR REPLACE INTO weapon_qualities (id, name, effect, opposite) VALUES (?, ?, ?, ?)`,
+    params: [q.id, q.Name || '', safeStr(q.Effect), safeStr(q.Opposite)],
+  }));
   if (statements.length > 0) await runBatch(statements);
 }
 
 async function seedPerks() {
-  const count = await getRowCount('perks');
-  if (count > 0) return;
-
-  const statements = [];
-  perksData.forEach(perk => {
-    statements.push({
-      sql: `INSERT INTO perks (perk_name, rank, max_rank, requirements, description, level_increase)
-            VALUES (?, ?, ?, ?, ?, ?)`,
-      params: [
-        perk.perk_name,
-        perk.rank || 1,
-        perk.max_rank || 1,
-        perk.requirements ? JSON.stringify(perk.requirements) : null,
-        perk.description || '',
-        perk.level_increase ?? null,
-      ],
-    });
-  });
-
+  await clearTable('perks');
+  const statements = perksData.map(perk => ({
+    sql: `INSERT INTO perks (perk_name, rank, max_rank, requirements, description, level_increase)
+          VALUES (?, ?, ?, ?, ?, ?)`,
+    params: [
+      perk.perk_name,
+      perk.rank || 1,
+      perk.max_rank || 1,
+      perk.requirements ? JSON.stringify(perk.requirements) : null,
+      perk.description || '',
+      perk.level_increase ?? null,
+    ],
+  }));
   if (statements.length > 0) await runBatch(statements);
 }
 
 async function seedItems() {
-  const count = await getRowCount('items');
-  if (count > 0) return;
-
+  await clearTable('items');
   const statements = [];
 
   const addItem = (item, itemType, category = null, subtype = null) => {
     const name = item.name || item['Название'] || '';
-    const id = slugify(name) + '_' + itemType + (category ? '_' + slugify(category) : '');
+    const id = itemType + '_' + slugify(name) + (category ? '_' + slugify(category) : '');
     statements.push({
       sql: `INSERT OR REPLACE INTO items
-        (id, name, item_type, item_subtype, phys_dr, energy_dr, rad_dr, protected_area, clothing_type, find_formula, weight, price, rarity, category)
+        (id, name, item_type, item_subtype, phys_dr, energy_dr, rad_dr, protected_area,
+         clothing_type, find_formula, weight, price, rarity, category)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       params: [
-        id,
-        name,
-        itemType,
-        subtype,
-        safeNum(item['Физ.СУ']),
-        safeNum(item['Энрг.СУ']),
-        safeNum(item['Рад.СУ']),
-        safeStr(item['protected_area']),
-        safeStr(item['clothingType']),
+        id, name, itemType, subtype,
+        safeNum(item['Физ.СУ']), safeNum(item['Энрг.СУ']), safeNum(item['Рад.СУ']),
+        safeStr(item['protected_area']), safeStr(item['clothingType']),
         safeStr(item['find_formula']),
         safeStr(item['weight'] ?? item['Вес']),
         safeStr(item['price'] ?? item['Цена']),
@@ -157,50 +166,43 @@ async function seedItems() {
     });
   };
 
-  armorData.armor.forEach(group => {
-    group.items.forEach(item => addItem(item, 'armor', group.type));
-  });
-
-  clothesData.clothes.forEach(group => {
-    group.items.forEach(item => addItem(item, 'clothing', group.type, item.clothingType));
-  });
-
+  armorData.armor.forEach(group => group.items.forEach(item => addItem(item, 'armor', group.type)));
+  clothesData.clothes.forEach(group => group.items.forEach(item => addItem(item, 'clothing', group.type, item.clothingType)));
   chemsData.forEach(item => {
     const name = item['Название'] || '';
-    const id = 'chem_' + slugify(name);
     statements.push({
-      sql: `INSERT OR REPLACE INTO items (id, name, item_type, weight, price, rarity)
-            VALUES (?, ?, ?, ?, ?, ?)`,
-      params: [id, name, 'chem', safeStr(item['Вес']), safeStr(item['Цена']), safeStr(item['Редкость'])],
+      sql: `INSERT OR REPLACE INTO items (id, name, item_type, weight, price, rarity) VALUES (?, ?, ?, ?, ?, ?)`,
+      params: ['chem_' + slugify(name), name, 'chem', safeStr(item['Вес']), safeStr(item['Цена']), safeStr(item['Редкость'])],
     });
   });
-
-  ammoData.forEach(item => {
-    const id = 'ammo_' + slugify(item.name);
-    statements.push({
-      sql: `INSERT OR REPLACE INTO items (id, name, item_type, find_formula, weight, price, rarity)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      params: [id, item.name, 'ammo', item.find_formula, safeStr(item.weight), safeStr(item.price), safeStr(item.rarity)],
-    });
-  });
-
-  miscData.miscellaneous.forEach(group => {
-    group.items.forEach(item => addItem(item, item.itemType || 'misc', group.type));
-  });
+  miscData.miscellaneous.forEach(group => group.items.forEach(item => addItem(item, item.itemType || 'misc', group.type)));
 
   if (statements.length > 0) await runBatch(statements);
 }
 
 export async function seedDatabase(isFirstRun) {
-  if (!isFirstRun) {
-    const weaponCount = await getRowCount('weapons');
-    const perkCount = await getRowCount('perks');
-    if (weaponCount > 0 && perkCount > 0) return;
-  }
+  const seededRow = await getFirst(
+    "SELECT value FROM schema_meta WHERE key = 'seeded_version'",
+    []
+  );
+  const seededVersion = seededRow ? Number(seededRow.value) : 0;
+
+  if (!isFirstRun && seededVersion >= SCHEMA_VERSION) return;
+
   await Promise.all([
     seedWeapons(),
     seedWeaponMods(),
+    seedWeaponModSlots(),
+    seedAmmoTypes(),
+    seedQualities(),
     seedPerks(),
     seedItems(),
   ]);
+
+  const existing = await getFirst("SELECT key FROM schema_meta WHERE key = 'seeded_version'", []);
+  if (existing) {
+    await runQuery("UPDATE schema_meta SET value = ? WHERE key = 'seeded_version'", [String(SCHEMA_VERSION)]);
+  } else {
+    await runQuery("INSERT INTO schema_meta (key, value) VALUES ('seeded_version', ?)", [String(SCHEMA_VERSION)]);
+  }
 }

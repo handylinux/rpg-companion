@@ -5,7 +5,9 @@ const PREFIX = 'fallout_db_';
 
 async function readTable(tableName) {
   const raw = await AsyncStorage.getItem(PREFIX + tableName);
-  return raw ? JSON.parse(raw) : [];
+  if (!raw) return [];
+  const parsed = JSON.parse(raw);
+  return Array.isArray(parsed) ? parsed : [];
 }
 
 async function writeTable(tableName, rows) {
@@ -14,11 +16,19 @@ async function writeTable(tableName, rows) {
 
 async function readMeta() {
   const raw = await AsyncStorage.getItem(PREFIX + 'schema_meta');
-  return raw ? JSON.parse(raw) : {};
+  if (!raw) return {};
+  const parsed = JSON.parse(raw);
+  if (Array.isArray(parsed)) {
+    const obj = {};
+    parsed.forEach(r => { if (r.key) obj[r.key] = r.value; });
+    return obj;
+  }
+  return parsed;
 }
 
 async function writeMeta(meta) {
-  await AsyncStorage.setItem(PREFIX + 'schema_meta', JSON.stringify(meta));
+  const rows = Object.entries(meta).map(([key, value]) => ({ key, value }));
+  await AsyncStorage.setItem(PREFIX + 'schema_meta', JSON.stringify(rows));
 }
 
 function matchesWhere(row, whereClause, params) {
@@ -80,9 +90,19 @@ function parseSelect(sql) {
   return { cols: m[1], table: m[2], where: m[3], orderBy: m[4], limit: m[5] };
 }
 
+const DATA_TABLES = [
+  'weapons', 'weapon_mods', 'weapon_mod_slots', 'ammo_types',
+  'weapon_qualities', 'perks', 'items', 'perk_effects',
+];
+
 export async function initDatabase() {
   const meta = await readMeta();
-  if (!meta.version) {
+  const storedVersion = meta.version ? Number(meta.version) : 0;
+
+  if (storedVersion !== SCHEMA_VERSION) {
+    for (const t of DATA_TABLES) {
+      await AsyncStorage.removeItem(PREFIX + t);
+    }
     await writeMeta({ version: String(SCHEMA_VERSION) });
     return true;
   }
