@@ -85,35 +85,64 @@ export const declinePrefix = (prefix, weaponName) => {
   return prefixDeclensions[gender][prefix] || prefix;
 };
 
+// Хелпер: получить название оружия из любого формата
+const getWeaponName = (weapon) => weapon.Название || weapon.name || '';
+
+// Хелпер: получить префикс мода из любого формата
+const getModPrefix = (mod) => {
+  if (!mod) return null;
+  return mod['Префикс имени'] || mod['Prefix'] || null;
+};
+
+// Хелпер: получить эффекты мода из любого формата (русский текст > english текст)
+const getModEffects = (mod) => {
+  if (!mod) return null;
+  return mod['Эффекты'] || mod['EffectDescription'] || null;
+};
+
+// Хелпер: получить вес мода из любого формата
+const getModWeight = (mod) => {
+  if (!mod) return undefined;
+  const w = mod['Вес'] ?? mod['Weight'];
+  return w !== undefined ? Number(w) : undefined;
+};
+
+// Хелпер: получить цену мода из любого формата
+const getModCost = (mod) => {
+  if (!mod) return undefined;
+  const c = mod['Цена'] ?? mod['Cost'];
+  return c !== undefined ? Number(c) : undefined;
+};
+
 // Функция для получения полного названия модифицированного оружия
 export const getModifiedWeaponName = (weapon, modifications) => {
+  const weaponName = getWeaponName(weapon);
   if (!modifications || modifications.length === 0) {
-    return weapon.Название;
+    return weaponName;
   }
   
-  // Собираем все префиксы из модификаций
-  const prefixes = modifications.map(mod => mod['Префикс имени']).filter(Boolean);
+  // Собираем все префиксы из модификаций (поддерживаем оба формата)
+  const prefixes = modifications.map(mod => getModPrefix(mod)).filter(Boolean);
   
   if (prefixes.length === 0) {
-    return weapon.Название;
+    return weaponName;
   }
   
   // Склоняем префиксы
-  const declinedPrefixes = prefixes.map(prefix => declinePrefix(prefix, weapon.Название));
+  const declinedPrefixes = prefixes.map(prefix => declinePrefix(prefix, weaponName));
   
   // Объединяем префиксы и название оружия
-  const result = `${declinedPrefixes.join(' ')} ${weapon.Название}`;
-  
-  return result;
+  return `${declinedPrefixes.join(' ')} ${weaponName}`;
 };
 
 // Функция для применения модификации к оружию
 export const applyModification = (weapon, modification) => {
   const modifiedWeapon = { ...weapon };
   
-  // Применяем эффекты модификации
-  if (modification.Эффекты) {
-    const effects = modification.Эффекты.split(', ');
+  // Применяем эффекты модификации (поддержка обоих форматов)
+  const effectsStr = getModEffects(modification);
+  if (effectsStr) {
+    const effects = effectsStr.split(', ');
     
     effects.forEach(effect => {
       if (effect.includes('+') && effect.includes('урона')) {
