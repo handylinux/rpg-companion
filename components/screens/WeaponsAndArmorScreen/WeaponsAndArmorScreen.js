@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
-import energyWeapons from '../../../assets/Equipment/energy_weapons.json';
 import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
 import styles from '../../../styles';
 import { renderTextWithIcons } from './textUtils';
-import lightWeapons from '../../../assets/Equipment/light_weapons.json';
 
 // Импортируем модальное окно модификаций
 import WeaponModificationModal from './WeaponModificationModal';
@@ -105,7 +103,7 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
 
     // Снижение базовой скорострельности на 1 при "Техника спуска" для стрелкового и энергооружия
     const isLightOrEnergy = (weapon?.itemType === 'weapon') && (
-      lightWeapons.some(w => w.code === weapon.code) || energyWeapons.some(w => w.Название === (weapon.Название || weapon.name))
+      weapon.weapon_type === 'Light' || weapon.weapon_type === 'Energy'
     );
     const fireRateBase = Number(displayWeapon['Скорость стрельбы']) || 0;
     const fireRateWithTrait = hasTrait('Техника спуска') && isLightOrEnergy ? Math.max(0, fireRateBase - 1) : fireRateBase;

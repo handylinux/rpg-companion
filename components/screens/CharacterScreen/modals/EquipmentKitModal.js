@@ -1,37 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { resolveLoot } from '../logic/ammoLogic.js';
-import { resolveRandomLoot, supportedLootTags } from '../logic/RandomLootLogic.js';
-
-// Импортируем все данные для поиска полных характеристик предметов
-import allMeleeWeapons from '../../../../assets/Equipment/melee_weapons.json';
-import allLightWeapons from '../../../../assets/Equipment/light_weapons.json';
-import allHeavyWeapons from '../../../../assets/Equipment/heavy_weapons.json';
-import allEnergyWeapons from '../../../../assets/Equipment/energy_weapons.json';
-import allArmor from '../../../../assets/Equipment/armor.json';
-import allClothes from '../../../../assets/Equipment/Clothes.json';
-import allMisc from '../../../../assets/Equipment/miscellaneous.json';
-import allAmmoData from '../../../../assets/Equipment/ammoData.json';
-import allChems from '../../../../assets/Equipment/chems.json';
-import lightWeaponMods from '../../../../assets/Equipment/light_weapon_mods.json';
-
-// Утилиты для кода оружия и модификаций
-import {
-  getWeaponByCode as getWeaponByCodeUtil,
-  getModificationByCode,
-  getModifiedWeaponName,
-  applyMultipleModifications,
-  getWeaponModifications,
-} from '../../WeaponsAndArmorScreen/weaponModificationUtils.js';
+import { useState, useEffect } from 'react';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { resolveKitItems } from '../../WeaponsAndArmorScreen/kitResolver.js';
 
 // Безопасный match для возможных не-строковых значений
 const safeMatch = (value, regex) => (typeof value === 'string' ? value.match(regex) : null);
-
-const allWeapons = [...allMeleeWeapons, ...allLightWeapons, ...allHeavyWeapons, ...allEnergyWeapons];
-const getWeaponByCodeLocal = (code) => allWeapons.find(w => w.code === code);
-const allArmorItems = allArmor.armor.flatMap(a => a.items);
-const allClothesItems = allClothes.clothes.flatMap(c => c.items);
-const allMiscItems = allMisc.miscellaneous.flatMap(category => category.items);
 
 const kitCategories = [
   { key: 'armor', title: 'Броня' },
@@ -41,188 +13,49 @@ const kitCategories = [
   { key: 'loot', title: 'Прочее' },
 ];
 
-
-
 const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => {
   const [expandedKit, setExpandedKit] = useState(null);
   const [selectedChoices, setSelectedChoices] = useState({});
   const [calculatedKits, setCalculatedKits] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Рассчитываем все случайные значения только один раз, когда модальное окно открывается
-    if (visible && equipmentKits?.length > 0) {
-      console.log('[EquipmentKitModal] open with kits:', equipmentKits?.map(k => k.name));
-      console.log('[EquipmentKitModal] supportedLootTags:', supportedLootTags);
-      const newCalculatedKits = equipmentKits.map(kit => {
-        const newKit = JSON.parse(JSON.stringify(kit));
+    if (!visible || !equipmentKits?.length) return;
 
-        kitCategories.forEach(({ key }) => {
-          if (newKit[key]) {
-            const supportedFormulaTags = ['ammo', 'caps', 'basicmaterial'];
-            newKit[key].forEach((item, idx) => {
-              if (item.type === 'fixed') {
-                const capsTagMatch = safeMatch(item.name, /(\d+)\s*<caps>/);
-                if (capsTagMatch) {
-                  const capsQuantity = parseInt(capsTagMatch[1], 10);
-                  item.name = 'Крышки';
-                  item.quantity = capsQuantity;
-                  item.resolved = true;
-                  item.itemType = 'currency';
-                  console.log('Обработаны крышки:', item);
-                } else {
-                  const tagMatch = safeMatch(item.name, /<(\w+)>/);
-                  if (tagMatch) {
-                    const tag = (tagMatch[1] || '').toLowerCase();
-                    // СНАЧАЛА пробуем всегда как случайный лут (поддержит outcast даже если нет в supportedLootTags)
-                    console.log('[EquipmentKitModal] Resolving loot formula:', { category: key, index: idx, name: item.name, tag });
-                    const randLoot = resolveRandomLoot(item.name);
-                    console.log('[EquipmentKitModal] Resolved loot result:', randLoot);
-                    if (randLoot) {
-                      Object.assign(item, randLoot);
-                      item.resolved = true;
-                    } else if (supportedFormulaTags.includes(tag)) {
-                      const resolvedLoot = resolveLoot(item.name, {});
-                      console.log('[EquipmentKitModal] Resolved formula result:', resolvedLoot);
-                      if (resolvedLoot) Object.assign(item, resolvedLoot);
-                    } else {
-                      console.warn('[EquipmentKitModal] Unhandled formula tag:', tag, 'for', item.name);
-                    }
-                  }
-                }
-                // Построение отображаемого имени для фиксированного оружия, заданного по коду/модификациям
-                if (!item.resolved) {
-                  let weaponCode = item.weaponCode || item.code || item.baseWeaponCode;
-                  const modsFromOption = item.modCodes || item.mods || null; // массив кодов
-                  const appliedModsMap = item.appliedMods || null; // {category: code}
-                  if (weaponCode) {
-                    const baseWeapon = getWeaponByCodeLocal(weaponCode);
-                    if (baseWeapon) {
-                      const modEntries = [];
-                      if (Array.isArray(modsFromOption)) {
-                        modsFromOption.forEach(code => {
-                          const modData = getModificationByCode(code, 'light');
-                          if (modData) modEntries.push(modData);
-                        });
-                      }
-                      if (appliedModsMap && typeof appliedModsMap === 'object') {
-                        Object.values(appliedModsMap).forEach(code => {
-                          const modData = getModificationByCode(code, 'light');
-                          if (modData) modEntries.push(modData);
-                        });
-                      }
-                      item.displayName = modEntries.length > 0
-                        ? getModifiedWeaponName(baseWeapon, modEntries)
-                        : baseWeapon.Название;
-                      if (!item.name) item.name = item.displayName;
-                      item.itemType = 'weapon';
-                    }
-                  }
-                }
-              }
-              if (item.type === 'choice') {
-                item.options.forEach(option => {
-                  let weaponCode = option.weaponCode || option.code || option.baseWeaponCode;
-                  const modsFromOption = option.modCodes || option.mods || null; // массив кодов
-                  const appliedModsMap = option.appliedMods || null; // {category: code}
+    const resolveKits = async () => {
+      setIsLoading(true);
+      try {
+        console.log('[EquipmentKitModal] open with kits:', equipmentKits?.map(k => k.name));
+        const resolved = await Promise.all(equipmentKits.map(kit => resolveKitItems(kit)));
+        setCalculatedKits(resolved);
 
-                  // Вычисляем отображаемое имя с префиксами
-                  if (weaponCode) {
-                    const baseWeapon = getWeaponByCodeLocal(weaponCode);
-                    if (baseWeapon) {
-                      const modEntries = [];
-                      if (Array.isArray(modsFromOption)) {
-                        modsFromOption.forEach(code => {
-                          const modData = getModificationByCode(code, 'light');
-                          if (modData) modEntries.push(modData);
-                        });
-                      }
-                      if (appliedModsMap && typeof appliedModsMap === 'object') {
-                        Object.values(appliedModsMap).forEach(code => {
-                          const modData = getModificationByCode(code, 'light');
-                          if (modData) modEntries.push(modData);
-                        });
-                      }
-                      option.displayName = modEntries.length > 0
-                        ? getModifiedWeaponName(baseWeapon, modEntries)
-                        : baseWeapon.Название;
-                      // На всякий случай заполним name, если его нет
-                      if (!option.name) option.name = option.displayName;
-                    }
+        // Устанавливаем выборы по умолчанию
+        const initialChoices = {};
+        resolved.forEach(kit => {
+          kitCategories.forEach(({ key }) => {
+            if (kit[key]) {
+              kit[key].forEach((item, index) => {
+                if (item?.type === 'choice') {
+                  const firstOption = item.options[0];
+                  if (firstOption?.group) {
+                    initialChoices[`${kit.name}-${key}-${index}`] = `group-${firstOption.group.map(i => i.name).join('+')}`;
                   } else {
-                    // Попытка авто-распознавания по префиксу в названии
-                    const allMods = (typeof getWeaponModifications === 'function' && getWeaponModifications()) || lightWeaponMods.Модификации;
-                    const prefixToCode = {};
-                    Object.values(allMods).forEach(categoryMods => {
-                      Object.values(categoryMods).forEach(mod => {
-                        if (mod['Префикс имени']) {
-                          prefixToCode[mod['Префикс имени']] = mod.code;
-                        }
-                      });
-                    });
-
-                    const knownPrefixes = Object.keys(prefixToCode);
-                    const matchedPrefix = knownPrefixes.find(p => option.name && option.name.startsWith(p + ' '));
-                    if (matchedPrefix) {
-                      const baseName = option.name.substring((matchedPrefix + ' ').length);
-                      const baseWeapon = allWeapons.find(w => w.Название === baseName || w.name === baseName);
-                      if (baseWeapon && baseWeapon.code) {
-                        weaponCode = baseWeapon.code;
-                        option.weaponCode = weaponCode;
-                        option.modCodes = [prefixToCode[matchedPrefix]];
-                        const modData = getModificationByCode(prefixToCode[matchedPrefix], 'light');
-                        option.displayName = getModifiedWeaponName(baseWeapon, modData ? [modData] : []);
-                      }
-                    } else if (option.name === 'Гладкоствольный карабин с болтовым затвором') {
-                      // Спец-кейс для standard_stock на bolt_action_rfl
-                      const baseWeapon = allWeapons.find(w => w.code === 'bolt_action_rfl');
-                      if (baseWeapon) {
-                        weaponCode = baseWeapon.code;
-                        option.weaponCode = weaponCode;
-                        option.modCodes = ['standard_stock'];
-                        const stdMod = getModificationByCode('standard_stock', 'light');
-                        option.displayName = getModifiedWeaponName(baseWeapon, stdMod ? [stdMod] : []);
-                      }
-                    }
+                    initialChoices[`${kit.name}-${key}-${index}`] = firstOption?.name;
                   }
-
-                  if (option.ammunition) {
-                    option.resolvedAmmunition = resolveLoot(option.ammunition, { weaponCode: weaponCode, weaponName: option.name });
-                  }
-                });
-              } else if (item.type === 'fixed' && item.ammunition) {
-                const weaponCode = item.weaponCode || item.code || item.baseWeaponCode;
-                item.resolvedAmmunition = resolveLoot(item.ammunition, { weaponCode, weaponName: item.name });
-              }
-            });
-          }
-        });
-        
-
-
-        return newKit;
-      });
-      setCalculatedKits(newCalculatedKits);
-
-      // Устанавливаем выборы по умолчанию
-      const initialChoices = {};
-      newCalculatedKits.forEach(kit => {
-        kitCategories.forEach(({ key }) => {
-          if (kit[key]) {
-            kit[key].forEach((item, index) => {
-                          if (item?.type === 'choice') {
-              const firstOption = item.options[0];
-              if (firstOption.group) {
-                initialChoices[`${kit.name}-${key}-${index}`] = `group-${firstOption.group.map(item => item.name).join('+')}`;
-              } else {
-                initialChoices[`${kit.name}-${key}-${index}`] = firstOption.name;
-              }
+                }
+              });
             }
-            });
-          }
+          });
         });
-      });
-      setSelectedChoices(initialChoices);
-    }
+        setSelectedChoices(initialChoices);
+      } catch (e) {
+        console.error('[EquipmentKitModal] resolveKits error:', e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    resolveKits();
   }, [visible, equipmentKits]);
 
   if (!equipmentKits) return null;
@@ -233,15 +66,15 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
     setSelectedChoices(prev => ({ ...prev, [`${kitName}-${categoryKey}-${itemIndex}`]: groupKey }));
   };
 
-  const handleSelectKit = (kit) => {
+  const handleSelectKit = async (kit) => {
     console.log('[EquipmentKitModal] Selecting kit:', kit?.name);
     const rawItems = [];
 
-    // Собираем все выбранные предметы
-    kitCategories.forEach(({ key }) => {
+    for (const { key } of kitCategories) {
       if (kit[key]) {
-        kit[key].forEach((item, index) => {
-            let chosenItem = item.type === 'fixed' ? item : null;
+        for (let index = 0; index < kit[key].length; index++) {
+          const item = kit[key][index];
+          let chosenItem = item.type === 'fixed' ? item : null;
           if (item.type === 'choice') {
             const selectedKey = selectedChoices[`${kit.name}-${key}-${index}`];
             chosenItem = item.options.find(opt => {
@@ -250,216 +83,118 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
               return groupKey === selectedKey;
             });
           }
-          
+
           if (chosenItem) {
-            // Fallback: разворачиваем формулы в выбранном пункте (например, d20<outcast>)
-            if (typeof chosenItem?.name === 'string') {
-              const fm = safeMatch(chosenItem.name, /<(\w+)>/);
-              if (fm) {
-                const t = (fm[1] || '').toLowerCase();
-                const rl = resolveRandomLoot(chosenItem.name);
-                if (rl) {
-                  Object.assign(chosenItem, rl);
-                  chosenItem.resolved = true;
-                }
-              }
-            }
             if (chosenItem.group) {
-              // Если это группа — добавляем каждый предмет из группы как отдельный объект
               chosenItem.group.forEach(groupItem => {
                 rawItems.push({ name: groupItem.name, quantity: groupItem.quantity || 1 });
               });
-            } else if (chosenItem.itemType === 'loot' || chosenItem.itemType === 'currency' || chosenItem.itemType === 'chem') {
-              rawItems.push(chosenItem);
+            } else if (chosenItem.itemType === 'weapon' || chosenItem.weaponId) {
+              // Оружие из БД — строим финальный объект
+              const weapon = chosenItem._weapon || {};
+              const mods = chosenItem._mods || [];
+              const appliedMods = {};
+              mods.forEach(m => { if (m.slot && m.id) appliedMods[m.slot] = m.id; });
+
+              const weaponObj = {
+                ...weapon,
+                Название: chosenItem.displayName || chosenItem.name || weapon.name,
+                weaponId: chosenItem.weaponId,
+                appliedMods,
+                quantity: chosenItem.quantity || 1,
+                itemType: 'weapon',
+              };
+              console.log('[EquipmentKitModal] Built weapon object from DB:', weaponObj);
+              rawItems.push(weaponObj);
             } else {
-              // Если это оружие, заданное по коду/модам — сохраняем структуру целиком
-              if (chosenItem.weaponCode || chosenItem.code || chosenItem.baseWeaponCode || chosenItem.appliedMods || chosenItem.modCodes || chosenItem.mods) {
-                rawItems.push({ ...chosenItem, quantity: chosenItem.quantity || 1, itemType: 'weapon' });
-            } else {
-              rawItems.push({ name: chosenItem.name, quantity: chosenItem.quantity || 1 });
-              }
+              rawItems.push({
+                ...chosenItem,
+                Название: chosenItem.Название || chosenItem.name,
+                quantity: chosenItem.quantity || 1,
+              });
             }
 
-            // Добавляем патроны, если они есть.
+            // Патроны уже разрешены в resolveKitItems
             if (chosenItem.resolvedAmmunition) {
               rawItems.push(chosenItem.resolvedAmmunition);
             }
           }
-        });
+        }
       }
-    });
+    }
 
     // Добавляем случайный лут
     if (kit.resolvedLoot) {
       rawItems.push(...kit.resolvedLoot.filter(Boolean));
     }
-    console.log('[EquipmentKitModal] rawItems before enrich:', rawItems);
 
-    // Обрабатываем каждый предмет
+    console.log('[EquipmentKitModal] rawItems:', rawItems);
+
     const allItems = rawItems.flatMap(item => {
-        // Если это уже полностью готовый объект (случайный лут или патроны), пропускаем его.
-        if (item.itemType === 'loot' || item.type === 'ammo' || item.itemType === 'currency') {
-            return [{ ...item, Название: item.Название || item.name, quantity: item.quantity || 1 }];
-        }
-        
-        // Если это химический предмет с полными данными (например, из случайного лута), пропускаем его.
-        if (item.itemType === 'chem' && item.Вес !== undefined && item.Цена !== undefined) {
-            return [{ ...item, Название: item.Название || item.name, quantity: item.quantity || 1 }];
-        }
+      if (!item) return [];
 
-        // Ищем полные данные, проверяя и 'name', и 'Название'
-        
-        const capsTagMatch = safeMatch(item.name, /(\d+)\s*<caps>/);
-        if (capsTagMatch) {
-            const capsQuantity = parseInt(capsTagMatch[1], 10);
-            return [{ 
-                name: 'Крышки', 
-                Название: 'Крышки', 
-                quantity: capsQuantity, 
-                itemType: 'currency',
-                Цена: 1,
-                Вес: 0
-            }];
-        }
+      // Крышки
+      const capsTagMatch = safeMatch(item.name, /(\d+)\s*<caps>/);
+      if (capsTagMatch) {
+        return [{ name: 'Крышки', Название: 'Крышки', quantity: parseInt(capsTagMatch[1], 10), itemType: 'currency', Цена: 1, Вес: 0 }];
+      }
 
-        // Поддержка оружия, заданного по коду/модификациям
-        const weaponCode = item.weaponCode || item.code || item.baseWeaponCode;
-        const modsFromOption = item.modCodes || item.mods || null;
-        const appliedModsMap = item.appliedMods || null; // {category: code}
+      // Уже готовые объекты (патроны, лут, валюта)
+      if (item.type === 'ammo' || item.itemType === 'loot' || item.itemType === 'currency') {
+        return [{ ...item, Название: item.Название || item.name, quantity: item.quantity || 1 }];
+      }
 
-        if (weaponCode) {
-            const baseWeapon = getWeaponByCodeLocal(weaponCode);
-            if (baseWeapon) {
-                const modEntries = [];
-                if (Array.isArray(modsFromOption)) {
-                    modsFromOption.forEach(code => {
-                        const modData = getModificationByCode(code, 'light');
-                        if (modData) modEntries.push(modData);
-                    });
-                }
-                if (appliedModsMap && typeof appliedModsMap === 'object') {
-                    Object.entries(appliedModsMap).forEach(([category, code]) => {
-                        const modData = getModificationByCode(code, 'light');
-                        if (modData) modEntries.push({ ...modData, category });
-                    });
-                }
+      // Химикаты с полными данными
+      if (item.itemType === 'chem' && item.Вес !== undefined && item.Цена !== undefined) {
+        return [{ ...item, Название: item.Название || item.name, quantity: item.quantity || 1 }];
+      }
 
-                let finalWeapon = { ...baseWeapon };
-                if (modEntries.length > 0) {
-                    const modsForApply = modEntries.map(m => ({ category: m.category, data: m }));
-                    finalWeapon = applyMultipleModifications(baseWeapon, modsForApply);
-                }
+      // Оружие из БД
+      if (item.itemType === 'weapon') {
+        return [{ ...item, Название: item.Название || item.name, quantity: item.quantity || 1 }];
+      }
 
-                const finalAppliedMods = {};
-                modEntries.forEach(m => {
-                    if (m.category && m.code) finalAppliedMods[m.category] = m.code;
-                });
-                const weaponId = [weaponCode, ...Object.entries(finalAppliedMods).map(([cat, code]) => `${cat}=${code}`)].join('+');
-
-                const weaponObj = {
-                    ...finalWeapon,
-                    Название: finalWeapon.Название || item.displayName || item.name,
-                    code: weaponCode,
-                    weaponId,
-                    appliedMods: finalAppliedMods,
-                    quantity: item.quantity || 1,
-                    itemType: 'weapon'
-                };
-                console.log('[EquipmentKitModal] Built weapon object from code/mods:', weaponObj);
-                return [weaponObj];
-            }
-        }
-
-        let fullItemData = null;
-        // Если у нас уже оружие по коду/модам, мы не должны ещё раз искать по имени.
-        // Но если это обычный предмет (без кодов), пробуем найти его в справочниках.
-        if (!weaponCode) {
-            fullItemData = allWeapons.find(i => i.name === item.name || i.Название === item.name);
-        }
-        if (!fullItemData) {
-            fullItemData = allArmorItems.find(i => i.name === item.name || i.Название === item.name);
-        }
-        if (!fullItemData) {
-            fullItemData = allClothesItems.find(i => i.name === item.name || i.Название === item.name);
-        }
-        if (!fullItemData) {
-            fullItemData = allMiscItems.find(i => i.name === item.name || i.Название === item.name);
-        }
-        if (!fullItemData) {
-            fullItemData = allAmmoData.find(i => i.name === item.name || i.Название === item.name);
-        }
-        if (!fullItemData) {
-            fullItemData = allChems.find(i => i.name === item.name || i.Название === item.name);
-        }
-        
-        // Если нашли, обогащаем наш предмет данными из базы и гарантируем наличие 'Название'.
-        if (fullItemData) {
-            const enriched = { 
-                ...fullItemData, 
-                ...item, 
-                Название: fullItemData.Название || fullItemData.name, 
-                quantity: item.quantity || 1,
-                // Убеждаемся, что itemType сохраняется
-                itemType: fullItemData.itemType || item.itemType
-            };
-            console.log('[EquipmentKitModal] Enriched non-weapon item:', enriched);
-            return [enriched];
-        }
-
-        // Если не нашли, возвращаем как есть, но с 'Название'.
-        const passthrough = { ...item, Название: item.name, quantity: item.quantity || 1 };
-        console.warn('[EquipmentKitModal] Passthrough item (no full data found):', passthrough);
-        return [passthrough];
+      // Всё остальное — передаём как есть с гарантией Название
+      const passthrough = { ...item, Название: item.Название || item.name, quantity: item.quantity || 1 };
+      if (!item.Название && !item.name) {
+        console.warn('[EquipmentKitModal] item without name:', item);
+      }
+      return [passthrough];
     }).filter(Boolean);
+
     console.log('[EquipmentKitModal] allItems after enrich:', allItems);
 
     const totalCaps = allItems.reduce((acc, item) => {
-      if (item.itemType === 'currency' && item.name === 'Крышки') {
-        console.log('Найдены крышки:', item.quantity);
-        return acc + (item.quantity || 0);
-      }
+      if (item.itemType === 'currency' && item.name === 'Крышки') return acc + (item.quantity || 0);
       return acc;
     }, 0);
-    
-    console.log('Всего крышек:', totalCaps);
 
     const finalItems = allItems.filter(item => item.itemType !== 'currency');
-    console.log('[EquipmentKitModal] finalItems to inventory:', finalItems);
 
-    // Рассчитываем общий вес и цену
     const totalWeight = finalItems.reduce((acc, item) => {
-      const weightStr = item.Вес !== undefined ? String(item.Вес) : '0';
-      const weight = parseFloat(weightStr.replace(',', '.')) || 0;
-      return acc + (weight * (item.quantity || 1));
+      const weight = parseFloat(String(item.Вес ?? '0').replace(',', '.')) || 0;
+      return acc + weight * (item.quantity || 1);
     }, 0);
 
     const totalPrice = finalItems.reduce((acc, item) => {
-      const price = item.Цена !== undefined ? item.Цена : 0;
-      return acc + (price * (item.quantity || 1));
+      return acc + ((item.Цена ?? 0) * (item.quantity || 1));
     }, 0);
 
-    // Передаем полностью готовые данные
-    const payload = { 
-      name: kit.name, 
-      items: finalItems,
-      weight: totalWeight,
-      price: totalPrice,
-      caps: totalCaps
-    };
+    const payload = { name: kit.name, items: finalItems, weight: totalWeight, price: totalPrice, caps: totalCaps };
     console.log('[EquipmentKitModal] onSelectKit payload:', payload);
     onSelectKit(payload);
     onClose();
   };
-  
+
   const toggleExpand = (kitName) => {
     setExpandedKit(k => (k === kitName ? null : kitName));
   };
-  
+
   const renderItemDetails = (item) => {
     const lootDetails = item.resolvedAmmunition;
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text>{item.displayName || item.name}</Text>
+        <Text>{item.displayName || item.Название || item.name}</Text>
         {lootDetails && (
           <Text style={styles.ammoText}>
             ({lootDetails.quantity}шт. {lootDetails.name})
@@ -474,78 +209,82 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.title}>Выберите комплект снаряжения</Text>
-          <ScrollView>
-            {calculatedKits.map((kit) => (
-              <View key={kit.name} style={styles.kitContainer}>
-                <TouchableOpacity onPress={() => toggleExpand(kit.name)}>
-                  <Text style={styles.kitName}>{kit.name}</Text>
-                </TouchableOpacity>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#005A9C" style={{ marginVertical: 30 }} />
+          ) : (
+            <ScrollView>
+              {calculatedKits.map((kit) => (
+                <View key={kit.name} style={styles.kitContainer}>
+                  <TouchableOpacity onPress={() => toggleExpand(kit.name)}>
+                    <Text style={styles.kitName}>{kit.name}</Text>
+                  </TouchableOpacity>
 
-                {expandedKit === kit.name && (
-                  <View style={styles.kitDetails}>
-                    {kitCategories.map(({ key, title }) => (
-                      kit[key] && (
-                        <View key={key} style={styles.categoryContainer}>
-                          <Text style={styles.categoryTitle}>{title}:</Text>
-                          {kit[key].map((item, index) => {
-                            if (item.resolved) {
-                              return (
-                                <View key={index} style={styles.fixedItem}>
-                                  <Text>{item.name}: {item.quantity} шт.</Text>
-                                </View>
-                              );
-                            }
-                            if (item?.type === 'choice') {
-                              return (
-                                <View key={index} style={styles.choiceContainer}>
-                                  {item.options.map(opt => {
-                                    const isGroup = !!opt.group;
-                                    const groupKey = isGroup ? `group-${opt.group.map(i => i.name).join('+')}` : opt.name;
-                                    return (
-                                      <TouchableOpacity
-                                        key={groupKey}
-                                        style={styles.radioContainer}
-                                        onPress={() => handleSelectChoice(kit.name, key, index, opt)}
-                                      >
-                                        <View style={[
-                                          styles.radio,
-                                          selectedChoices[`${kit.name}-${key}-${index}`] === groupKey && styles.radioSelected
-                                        ]} />
-                                        {isGroup
-                                          ? <Text>{opt.group.map(i => i.name).join(' + ')}</Text>
-                                          : renderItemDetails(opt)
-                                        }
-                                      </TouchableOpacity>
-                                    );
-                                  })}
-                                </View>
-                              );
-                            }
-                            if (item?.type === 'fixed') {
-                              return (
-                                <View key={index} style={styles.fixedItem}>
-                                  {renderItemDetails(item)}
-                                </View>
-                              );
-                            }
-                            return null;
-                          })}
-                        </View>
-                      )
-                    ))}
-                    
-                    {kit.resolvedLoot?.map((item, index) => item && (
-                      <Text key={`loot-${index}`} style={styles.detailText}>- {item.quantity}шт. {item.name}</Text>
-                    ))}
+                  {expandedKit === kit.name && (
+                    <View style={styles.kitDetails}>
+                      {kitCategories.map(({ key, title }) => (
+                        kit[key] && (
+                          <View key={key} style={styles.categoryContainer}>
+                            <Text style={styles.categoryTitle}>{title}:</Text>
+                            {kit[key].map((item, index) => {
+                              if (item.resolved) {
+                                return (
+                                  <View key={index} style={styles.fixedItem}>
+                                    <Text>{item.name}: {item.quantity} шт.</Text>
+                                  </View>
+                                );
+                              }
+                              if (item?.type === 'choice') {
+                                return (
+                                  <View key={index} style={styles.choiceContainer}>
+                                    {item.options.map(opt => {
+                                      const isGroup = !!opt.group;
+                                      const groupKey = isGroup ? `group-${opt.group.map(i => i.name).join('+')}` : opt.name;
+                                      return (
+                                        <TouchableOpacity
+                                          key={groupKey}
+                                          style={styles.radioContainer}
+                                          onPress={() => handleSelectChoice(kit.name, key, index, opt)}
+                                        >
+                                          <View style={[
+                                            styles.radio,
+                                            selectedChoices[`${kit.name}-${key}-${index}`] === groupKey && styles.radioSelected
+                                          ]} />
+                                          {isGroup
+                                            ? <Text>{opt.group.map(i => i.name).join(' + ')}</Text>
+                                            : renderItemDetails(opt)
+                                          }
+                                        </TouchableOpacity>
+                                      );
+                                    })}
+                                  </View>
+                                );
+                              }
+                              if (item?.type === 'fixed') {
+                                return (
+                                  <View key={index} style={styles.fixedItem}>
+                                    {renderItemDetails(item)}
+                                  </View>
+                                );
+                              }
+                              return null;
+                            })}
+                          </View>
+                        )
+                      ))}
 
-                    <TouchableOpacity style={styles.selectButton} onPress={() => handleSelectKit(kit)}>
-                      <Text style={styles.selectButtonText}>Выбрать</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            ))}
-          </ScrollView>
+                      {kit.resolvedLoot?.map((item, index) => item && (
+                        <Text key={`loot-${index}`} style={styles.detailText}>- {item.quantity}шт. {item.name}</Text>
+                      ))}
+
+                      <TouchableOpacity style={styles.selectButton} onPress={() => handleSelectKit(kit)}>
+                        <Text style={styles.selectButtonText}>Выбрать</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              ))}
+            </ScrollView>
+          )}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Закрыть</Text>
           </TouchableOpacity>
@@ -612,8 +351,8 @@ const styles = StyleSheet.create({
   fixedItem: {
     marginLeft: 10,
     marginBottom: 5,
-    flexDirection: 'row', 
-    alignItems: 'center'
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   choiceContainer: {
     marginVertical: 5,
@@ -643,7 +382,6 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginLeft: 5,
   },
-
   selectButton: {
     backgroundColor: '#2E7D32',
     paddingVertical: 12,
@@ -670,4 +408,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EquipmentKitModal; 
+export default EquipmentKitModal;

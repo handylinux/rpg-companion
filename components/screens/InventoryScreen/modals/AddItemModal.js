@@ -1,25 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, TextInput } from 'react-native';
 
-import lightWeapons from '../../../../assets/Equipment/light_weapons.json';
-import heavyWeapons from '../../../../assets/Equipment/heavy_weapons.json';
-import energyWeapons from '../../../../assets/Equipment/energy_weapons.json';
-import meleeWeapons from '../../../../assets/Equipment/melee_weapons.json';
 import allArmor from '../../../../assets/Equipment/armor.json';
 import allClothes from '../../../../assets/Equipment/Clothes.json';
 import ammoData from '../../../../assets/Equipment/ammoData.json';
 import chemsData from '../../../../assets/Equipment/chems.json';
+import { getWeapons } from '../../../../db/Database';
 
-const allData = {
-  'Оружие': {
-    'Стрелковое': lightWeapons,
-    'Тяжелое': heavyWeapons,
-    'Энергетическое': energyWeapons,
-    'Ближний бой': meleeWeapons,
-    'Рукопашная': [],
-    'Взрывчатка': [],
-    'Метательное': [],
-  },
+const STATIC_DATA = {
   'Броня': allArmor.armor.reduce((acc, category) => {
     acc[category.type] = category.items;
     return acc;
@@ -34,9 +22,38 @@ const allData = {
   'Материалы': {},
 };
 
+const WEAPON_TYPE_LABELS = {
+  'Light': 'Стрелковое',
+  'Heavy': 'Тяжелое',
+  'Energy': 'Энергетическое',
+  'Melee': 'Ближний бой',
+  'Unarmed': 'Рукопашная',
+  'Thrown': 'Метательное',
+  'Explosive': 'Взрывчатка',
+};
+
 const AddItemModal = ({ visible, onClose, onSelectItem }) => {
   const [currentPath, setCurrentPath] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [weaponsByType, setWeaponsByType] = useState({});
+
+  useEffect(() => {
+    if (!visible) return;
+    getWeapons().then(weapons => {
+      const grouped = {};
+      (weapons || []).forEach(w => {
+        const label = WEAPON_TYPE_LABELS[w.weapon_type] || w.weapon_type || 'Прочее';
+        if (!grouped[label]) grouped[label] = [];
+        grouped[label].push({ ...w, Название: w.name, itemType: 'weapon' });
+      });
+      setWeaponsByType(grouped);
+    }).catch(e => console.warn('[AddItemModal] failed to load weapons:', e));
+  }, [visible]);
+
+  const allData = useMemo(() => ({
+    'Оружие': weaponsByType,
+    ...STATIC_DATA,
+  }), [weaponsByType]);
 
   const handleSelect = (item) => {
     const itemName = item.Название || item.name;
@@ -118,7 +135,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem }) => {
     // Fallback for empty or invalid paths
     return { categories: [] };
 
-  }, [currentPath, searchTerm]);
+  }, [currentPath, searchTerm, allData]);
 
   const renderItem = ({ item }) => {
     const itemName = item.Название || item.name;

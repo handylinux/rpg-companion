@@ -14,12 +14,12 @@ export const ORIGINS = [
         { type: 'fixed', name: 'Капюшон Братства Стали' },
         ],
         weapons: [
-          { type: 'fixed', name: 'Боевой нож' },
+          { type: 'fixed', weaponId: 'weapon_029' },
           {
             type: 'choice',
             options: [
-              { name: 'Лазерный пистолет', ammunition: '10+5fn{CD} <ammo>' },
-              { name: '10-мм Пистолет', ammunition: '10+5fn{CD} <ammo>' }
+              { weaponId: 'weapon_018', ammunition: '10+5fn{CD}<ammo>' },
+              { weaponId: 'weapon_002', ammunition: '10+5fn{CD}<ammo>' }
             ]
           }
         ],
@@ -36,12 +36,12 @@ export const ORIGINS = [
           { type: 'fixed', name: 'Шляпа писца' },
         ],
         weapons: [
-          { type: 'fixed', name: 'Боевой нож' },
+          { type: 'fixed', weaponId: 'weapon_029' },
           { 
             type: 'choice',
             options: [
-              { name: 'Лазерный пистолет', ammunition: '6+3fn{CD} <ammo>' },
-              { name: '10-мм Пистолет', ammunition: '6+3fn{CD} <ammo>' }
+              { weaponId: 'weapon_018', ammunition: '6+3fn{CD}<ammo>' },
+              { weaponId: 'weapon_002', ammunition: '6+3fn{CD}<ammo>' }
             ]
           }
         ],
@@ -68,22 +68,22 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Боевой карабин', ammunition: '8+4fn{CD}<ammo>' },
-              { name: 'Боевой дробовик', ammunition: '6+3fn{CD}<ammo>' }
+              { weaponId: 'weapon_005', ammunition: '8+4fn{CD}<ammo>' },
+              { weaponId: 'weapon_009', ammunition: '6+3fn{CD}<ammo>' }
             ]
           },
           {
             type: 'choice',
             options: [
-              { name: '10-мм Пистолет', ammunition: '8+4fn{CD}<ammo>' },
-              { name: 'Боевой нож' }
+              { weaponId: 'weapon_002', ammunition: '8+4fn{CD}<ammo>' },
+              { weaponId: 'weapon_029' }
             ]
           }
         ],
         miscellaneous: [
           { type: 'fixed', name: 'd20<food>' },
           { type: 'fixed', name: 'Очищенная вода', itemType: 'chem' },
-          { type: 'fixed', name: '5+5fn{CD} долларов НКР' }
+          { type: 'fixed', name: '(5+(5<cd>))<нкр>' }
         ]
       },
       {
@@ -106,15 +106,15 @@ export const ORIGINS = [
           }
         ],
         weapons: [
-          { type: 'fixed', name: 'Двуствольный дробовик', ammunition: '6+3fn{CD}<ammo>' },
+          { type: 'fixed', weaponId: 'weapon_010', ammunition: '6+3fn{CD}<ammo>' },
           {
             type: 'choice',
             options: [
-              { name: 'Боевой нож' },
+              { weaponId: 'weapon_029' },
               {
                 group: [
-                  { type: 'fixed', name: 'Кастет' },
-                  { type: 'fixed', name: 'Кастет' }
+                  { type: 'fixed', weaponId: 'weapon_048' },
+                  { type: 'fixed', weaponId: 'weapon_048' }
                 ]
               }
             ]
@@ -131,7 +131,7 @@ export const ORIGINS = [
           { type: 'fixed', name: 'd20<brewery>' },
           { type: 'fixed', name: 'd20<brewery>' },
           { type: 'fixed', name: 'колода карт' },
-          { type: 'fixed', name: '2d20 долларов НКР' }
+          { type: 'fixed', name: '2d20<нкр>' }
         ]
       },
       {
@@ -143,7 +143,7 @@ export const ORIGINS = [
           { type: 'fixed', name: 'Армейский шлем' }
         ],
         weapons: [
-          { type: 'fixed', weaponCode: 'hunting_rfl', modCodes: ['power_receiver_plus', 'long_optic_sight'], ammunition: '6+3fn{CD}<ammo>' }
+          { type: 'fixed', weaponId: 'weapon_007', modIds: ['mod_005', 'mod_035'], ammunition: '6+3fn{CD}<ammo>' }
         ],
         miscellaneous: [
           { type: 'fixed', name: 'Спокойствие', itemType: 'chem' },
@@ -176,8 +176,8 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Лазерный Мушкет', ammunition: '14+7fn{CD}<ammo>' },
-              { name: 'Охотничья винтовка', ammunition: '6+3fn{CD}<ammo>' }
+              { weaponId: 'weapon_017', ammunition: '14+7fn{CD}<ammo>' },
+              { weaponId: 'weapon_007', ammunition: '6+3fn{CD}<ammo>' }
             ]
           }
         ],
@@ -201,8 +201,8 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Двуствольный дробовик', ammunition: '6+3fn{CD}<ammo>' },
-              { name: 'Пистолет-пулемёт Томпсона', ammunition: '8+4fn{CD}<ammo>' }
+              { weaponId: 'weapon_010', ammunition: '6+3fn{CD}<ammo>' },
+              { weaponId: 'weapon_008', ammunition: '8+4fn{CD}<ammo>' }
             ]
           }
         ],
@@ -226,8 +226,8 @@ export const ORIGINS = [
         { type: 'fixed', name: 'Прочная одежда' }
       ],
       weapons: [
-        { type: 'fixed', name: 'Трость' },
-        { type: 'fixed', name: 'Гамма-пушка', ammunition: '4+2fn{CD}<ammo>' }
+        { type: 'fixed', weaponId: 'weapon_045' },
+        { type: 'fixed', weaponId: 'weapon_020', ammunition: '4+2fn{CD}<ammo>' }
       ],
       miscellaneous: [
         { type: 'fixed', name: 'Стим-пак', itemType: 'chem' },
@@ -250,8 +250,8 @@ export const ORIGINS = [
         { type: 'fixed', name: 'Противогаз' }
       ],
       weapons: [
-        { type: 'fixed', name: 'Мачете' },
-        { type: 'fixed', name: 'Гамма-пушка', ammunition: '4+2fn{CD}<ammo>' }
+        { type: 'fixed', weaponId: 'weapon_030' },
+        { type: 'fixed', weaponId: 'weapon_020', ammunition: '4+2fn{CD}<ammo>' }
       ],
       miscellaneous: [
         { type: 'fixed', name: 'd20<food>' },
@@ -301,17 +301,17 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Бейсбольная бита' },
-              { name: 'Балонный ключ' }
+              { weaponId: 'weapon_034' },
+              { weaponId: 'weapon_044' }
             ]
           },
           {
             type: 'choice',
             options: [
-              { name: '10-мм Пистолет', ammunition: '10+5fn{CD}<ammo>' },
-              { name: 'Револьвер Калибра .44', ammunition: '10+5fn{CD}<ammo>' },
-              { name: 'Охотничья винтовка', ammunition: '10+5fn{CD}<ammo>' },
-              { name: 'Гладкоствольный пистолет', ammunition: '10+5fn{CD}<ammo>' }
+              { weaponId: 'weapon_002', ammunition: '10+5fn{CD}<ammo>' },
+              { weaponId: 'weapon_001', ammunition: '10+5fn{CD}<ammo>' },
+              { weaponId: 'weapon_007', ammunition: '10+5fn{CD}<ammo>' },
+              { weaponId: 'weapon_012', ammunition: '10+5fn{CD}<ammo>' }
             ]
           }
         ],
@@ -329,15 +329,15 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Выкидной нож' },
-              { name: 'Разводной ключ' },
-              { name: 'Скалка' },
-              { name: 'Кастет' }
+              { weaponId: 'weapon_033' },
+              { weaponId: 'weapon_038' },
+              { weaponId: 'weapon_040' },
+              { weaponId: 'weapon_048' }
             ]
           },
           { 
             type: 'fixed', 
-            name: 'Гладкоствольный пистолет', 
+            weaponId: 'weapon_012', 
             ammunition: '6+3fn{CD}<ammo>' 
           }
         ],
@@ -357,15 +357,15 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Выкидной нож' },
-              { name: 'Разводной ключ' },
-              { name: 'Скалка' },
-              { name: 'Кастет' }
+              { weaponId: 'weapon_033' },
+              { weaponId: 'weapon_038' },
+              { weaponId: 'weapon_040' },
+              { weaponId: 'weapon_048' }
             ]
           },
           { 
             type: 'fixed', 
-            name: 'Гладкоствольный пистолет', 
+            weaponId: 'weapon_012', 
             ammunition: '8+4fn{CD}<ammo>' 
           }
         ],
@@ -394,14 +394,14 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Саницовая труба' },
-              { name: 'Бильярдный кий' },
-              { name: 'Балонный ключ' }
+              { weaponId: 'weapon_037' },
+              { weaponId: 'weapon_039' },
+              { weaponId: 'weapon_044' }
             ]
           },
           { 
             type: 'fixed', 
-            name: 'Гладкоствольный пистолет', 
+            weaponId: 'weapon_012', 
             ammunition: '10+5fn{CD}<ammo>' 
           }
         ],
@@ -416,7 +416,7 @@ export const ORIGINS = [
           {
             type: 'choice',
             options: [
-              { name: 'Коктейль Молотова' },
+              { weaponId: 'weapon_055' },
               { name: 'Стим-пак', itemType: 'chem' }
             ]
           },
@@ -445,7 +445,7 @@ export const ORIGINS = [
         weapons: [
           { 
             type: 'fixed', 
-            name: 'Гладкоствольный пистолет', 
+            weaponId: 'weapon_012', 
             ammunition: '8+4fn{CD}<ammo>' 
           }
         ],
@@ -493,17 +493,17 @@ export const ORIGINS = [
         {
           type: 'choice',
           options: [
-            { name: 'Бейсбольная бита' },
-            { name: 'Балонный ключ' }
+            { weaponId: 'weapon_034' },
+            { weaponId: 'weapon_044' }
           ]
         },
         {
           type: 'choice',
           options: [
-            { name: '10-мм Пистолет', ammunition: '10+5fn{CD}<ammo>' },
-            { name: 'Револьвер Калибра .44', ammunition: '10+5fn{CD}<ammo>' },
-            { name: 'Охотничья винтовка', ammunition: '10+5fn{CD}<ammo>' },
-            { name: 'Гладкоствольный пистолет', ammunition: '10+5fn{CD}<ammo>' }
+            { weaponId: 'weapon_002', ammunition: '10+5fn{CD}<ammo>' },
+            { weaponId: 'weapon_001', ammunition: '10+5fn{CD}<ammo>' },
+            { weaponId: 'weapon_007', ammunition: '10+5fn{CD}<ammo>' },
+            { weaponId: 'weapon_012', ammunition: '10+5fn{CD}<ammo>' }
           ]
         }
       ],
@@ -521,15 +521,15 @@ export const ORIGINS = [
         {
           type: 'choice',
           options: [
-            { name: 'Выкидной нож' },
-            { name: 'Разводной ключ' },
-            { name: 'Скалка' },
-            { name: 'Кастет' }
+            { weaponId: 'weapon_033' },
+            { weaponId: 'weapon_038' },
+            { weaponId: 'weapon_040' },
+            { weaponId: 'weapon_048' }
           ]
         },
         { 
           type: 'fixed', 
-          name: 'Гладкоствольный пистолет', 
+          weaponId: 'weapon_012', 
           ammunition: '6+3fn{CD}<ammo>' 
         }
       ],
@@ -549,15 +549,15 @@ export const ORIGINS = [
         {
           type: 'choice',
           options: [
-            { name: 'Выкидной нож' },
-            { name: 'Разводной ключ' },
-            { name: 'Скалка' },
-            { name: 'Кастет' }
+            { weaponId: 'weapon_033' },
+            { weaponId: 'weapon_038' },
+            { weaponId: 'weapon_040' },
+            { weaponId: 'weapon_048' }
           ]
         },
         { 
           type: 'fixed', 
-          name: 'Гладкоствольный пистолет', 
+          weaponId: 'weapon_012', 
           ammunition: '8+4fn{CD}<ammo>' 
         }
       ],
@@ -586,14 +586,14 @@ export const ORIGINS = [
         {
           type: 'choice',
           options: [
-            { name: 'Саницовая труба' },
-            { name: 'Бильярдный кий' },
-            { name: 'Балонный ключ' }
+            { weaponId: 'weapon_037' },
+            { weaponId: 'weapon_039' },
+            { weaponId: 'weapon_044' }
           ]
         },
         { 
           type: 'fixed', 
-          name: 'Гладкоствольный пистолет', 
+          weaponId: 'weapon_012', 
           ammunition: '10+5fn{CD}<ammo>' 
         }
       ],
@@ -608,7 +608,7 @@ export const ORIGINS = [
         {
           type: 'choice',
           options: [
-            { name: 'Коктейль Молотова' },
+            { weaponId: 'weapon_055' },
             { name: 'Стим-пак', itemType: 'chem' }
           ]
         },
@@ -637,7 +637,7 @@ export const ORIGINS = [
       weapons: [
         { 
           type: 'fixed', 
-          name: 'Гладкоствольный пистолет', 
+          weaponId: 'weapon_012', 
           ammunition: '8+4fn{CD}<ammo>' 
         }
       ],
@@ -677,14 +677,14 @@ export const ORIGINS = [
         weapons: [
           { 
             type: 'fixed', 
-            name: 'Гладкоствольный карабин', 
+            weaponId: 'weapon_012', 
             ammunition: '6+3fn{CD}<ammo>' 
           },
           {
             type: 'choice',
             options: [
-              { name: 'Бейсбольная бита' },
-              { name: 'Мачете' }
+              { weaponId: 'weapon_034' },
+              { weaponId: 'weapon_030' }
             ]
           }
         ],
@@ -708,10 +708,11 @@ export const ORIGINS = [
         weapons: [
           { 
             type: 'fixed', 
-            name: 'Усиленный гладкоствольный карабин с болтовым затвором', 
+            weaponId: 'weapon_011', 
+            modIds: ['mod_005'],
             ammunition: '8+4fn{CD}<ammo>' 
           },
-          { type: 'fixed', name: 'Дрын' }
+          { type: 'fixed', weaponId: 'weapon_036' }
         ],
         miscellaneous: [
           { type: 'fixed', name: 'd20<trinklet>' },
@@ -739,7 +740,7 @@ export const ORIGINS = [
           { type: 'fixed', name: 'Очищенная вода', itemType: 'chem' }
         ],
         weapons: [
-          { type: 'fixed', name: 'Лазерный Мушкет', ammunition: '8+6fn{CD}<ammo>' }
+          { type: 'fixed', weaponId: 'weapon_017', ammunition: '8+6fn{CD}<ammo>' }
         ],
         loot: [
           { type: 'fixed', name: 'd20<outcast>' },
@@ -755,7 +756,7 @@ export const ORIGINS = [
           { type: 'fixed', name: 'Поношенная броня писца Братства' }
         ],
         weapons: [
-          { type: 'fixed', name: 'Лазерный пистолет', ammunition: '8+4fn{CD}<ammo>' }
+          { type: 'fixed', weaponId: 'weapon_018', ammunition: '8+4fn{CD}<ammo>' }
         ],
         miscellaneous: [
           { type: 'fixed', name: 'Мультитул' }
@@ -794,7 +795,7 @@ export const ORIGINS = [
       {
         name: 'Гипнотрон',
         weapons: [
-          { type: 'fixed', name: 'Гипнотрон', ammunition: '10+5fn{CD}<ammo>' }
+          { type: 'fixed', weaponId: 'weapon_067', ammunition: '10+5fn{CD}<ammo>' }
         ],
         miscellaneous: [
           { type: 'fixed', name: 'd20<food>' },

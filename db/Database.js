@@ -27,6 +27,10 @@ export async function searchWeapons(query) {
   return getAll('SELECT * FROM weapons WHERE name LIKE ?', [`%${query}%`]);
 }
 
+export async function getWeaponByName(name) {
+  return getFirst('SELECT * FROM weapons WHERE name = ?', [name]);
+}
+
 // ─── Модификации оружия ────────────────────────────────────────────────────────
 
 export async function getWeaponMods(weaponId = null) {

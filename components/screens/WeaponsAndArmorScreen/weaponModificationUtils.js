@@ -5,7 +5,7 @@ const prefixDeclensions = {
   // Мужской род (пистолет, карабин, револьвер)
   masculine: {
     'Укреплённый': 'Укреплённый',
-    'Усиленный': 'Усиленный', 
+    'Усиленный': 'Усиленный',
     'Улучшенный': 'Улучшенный',
     'Калиброванный': 'Калиброванный',
     'Автоматический': 'Автоматический',
@@ -33,7 +33,7 @@ const prefixDeclensions = {
   feminine: {
     'Укреплённый': 'Укреплённая',
     'Усиленный': 'Усиленная',
-    'Улучшенный': 'Улучшенная', 
+    'Улучшенный': 'Улучшенная',
     'Калиброванный': 'Калиброванная',
     'Автоматический': 'Автоматическая',
     'Чувствительный': 'Чувствительная',
@@ -62,13 +62,13 @@ const prefixDeclensions = {
 const getWeaponGender = (weaponName) => {
   const feminineEndings = ['винтовка', 'пушка', 'ракета', 'мина'];
   const lowerName = weaponName.toLowerCase();
-  
+
   for (const ending of feminineEndings) {
     if (lowerName.includes(ending)) {
       return 'feminine';
     }
   }
-  
+
   return 'masculine'; // По умолчанию мужской род
 };
 
@@ -120,17 +120,17 @@ export const getModifiedWeaponName = (weapon, modifications) => {
   if (!modifications || modifications.length === 0) {
     return weaponName;
   }
-  
+
   // Собираем все префиксы из модификаций (поддерживаем оба формата)
   const prefixes = modifications.map(mod => getModPrefix(mod)).filter(Boolean);
-  
+
   if (prefixes.length === 0) {
     return weaponName;
   }
-  
+
   // Склоняем префиксы
   const declinedPrefixes = prefixes.map(prefix => declinePrefix(prefix, weaponName));
-  
+
   // Объединяем префиксы и название оружия
   return `${declinedPrefixes.join(' ')} ${weaponName}`;
 };
@@ -138,12 +138,12 @@ export const getModifiedWeaponName = (weapon, modifications) => {
 // Функция для применения модификации к оружию
 export const applyModification = (weapon, modification) => {
   const modifiedWeapon = { ...weapon };
-  
+
   // Применяем эффекты модификации (поддержка обоих форматов)
   const effectsStr = getModEffects(modification);
   if (effectsStr) {
     const effects = effectsStr.split(', ');
-    
+
     effects.forEach(effect => {
       if (effect.includes('+') && effect.includes('урона')) {
         // Изменение урона
@@ -165,10 +165,10 @@ export const applyModification = (weapon, modification) => {
         // Изменение дистанции
         const distanceChange = parseInt(effect.match(/на (\d+) зон/)[1]);
         const currentDistance = modifiedWeapon['Дистанция'] || 'Близкая';
-        
+
         const distanceLevels = ['Близкая', 'Средняя', 'Дальняя', 'Экстремальная'];
         const currentIndex = distanceLevels.indexOf(currentDistance);
-        
+
         if (currentIndex !== -1) {
           const newIndex = Math.min(currentIndex + distanceChange, distanceLevels.length - 1);
           modifiedWeapon['Дистанция'] = distanceLevels[newIndex];
@@ -177,10 +177,10 @@ export const applyModification = (weapon, modification) => {
         // Уменьшение дистанции
         const distanceChange = parseInt(effect.match(/на (\d+) зон/)[1]);
         const currentDistance = modifiedWeapon['Дистанция'] || 'Близкая';
-        
+
         const distanceLevels = ['Близкая', 'Средняя', 'Дальняя', 'Экстремальная'];
         const currentIndex = distanceLevels.indexOf(currentDistance);
-        
+
         if (currentIndex !== -1) {
           const newIndex = Math.max(currentIndex - distanceChange, 0);
           modifiedWeapon['Дистанция'] = distanceLevels[newIndex];
@@ -243,16 +243,16 @@ export const applyModification = (weapon, modification) => {
       }
     });
   }
-  
+
   // Изменяем вес и цену
   if (modification.Вес !== undefined) {
     modifiedWeapon.Вес = (modifiedWeapon.Вес || 0) + modification.Вес;
   }
-  
+
   if (modification.Цена !== undefined) {
     modifiedWeapon.Цена = (modifiedWeapon.Цена || 0) + modification.Цена;
   }
-  
+
   // Изменяем патроны если указано
   if (modification.Эффекты && modification.Эффекты.includes('Смените патроны на')) {
     const newAmmo = modification.Эффекты.match(/на калибр ([^,]+)/);
@@ -260,17 +260,17 @@ export const applyModification = (weapon, modification) => {
       modifiedWeapon.Патроны = newAmmo[1];
     }
   }
-  
+
   return modifiedWeapon;
 };
 
 // Функция для удаления эффектов модификации
 export const removeModificationEffects = (weapon, modification) => {
   const modifiedWeapon = { ...weapon };
-  
+
   if (modification.Эффекты) {
     const effects = modification.Эффекты.split(', ');
-    
+
     effects.forEach(effect => {
       if (effect.includes('+') && effect.includes('урона')) {
         // Отменяем изменение урона
@@ -291,10 +291,10 @@ export const removeModificationEffects = (weapon, modification) => {
         // Отменяем увеличение дистанции
         const distanceChange = parseInt(effect.match(/на (\d+) зон/)[1]);
         const currentDistance = modifiedWeapon['Дистанция'] || 'Близкая';
-        
+
         const distanceLevels = ['Близкая', 'Средняя', 'Дальняя', 'Экстремальная'];
         const currentIndex = distanceLevels.indexOf(currentDistance);
-        
+
         if (currentIndex !== -1) {
           const newIndex = Math.max(currentIndex - distanceChange, 0);
           modifiedWeapon['Дистанция'] = distanceLevels[newIndex];
@@ -303,10 +303,10 @@ export const removeModificationEffects = (weapon, modification) => {
         // Отменяем уменьшение дистанции
         const distanceChange = parseInt(effect.match(/на (\d+) зон/)[1]);
         const currentDistance = modifiedWeapon['Дистанция'] || 'Близкая';
-        
+
         const distanceLevels = ['Близкая', 'Средняя', 'Дальняя', 'Экстремальная'];
         const currentIndex = distanceLevels.indexOf(currentDistance);
-        
+
         if (currentIndex !== -1) {
           const newIndex = Math.min(currentIndex + distanceChange, distanceLevels.length - 1);
           modifiedWeapon['Дистанция'] = distanceLevels[newIndex];
@@ -331,23 +331,68 @@ export const removeModificationEffects = (weapon, modification) => {
       }
     });
   }
-  
+
   // Отменяем изменения веса и цены
   if (modification.Вес !== undefined) {
     modifiedWeapon.Вес = Math.max(0, (modifiedWeapon.Вес || 0) - modification.Вес);
   }
-  
+
   if (modification.Цена !== undefined) {
     modifiedWeapon.Цена = Math.max(0, (modifiedWeapon.Цена || 0) - modification.Цена);
   }
-  
+
   return modifiedWeapon;
+};
+
+// Функция для получения или создания базовых характеристик оружия
+export const getOrCreateBaseStats = (weapon) => {
+  if (weapon._baseStats) return weapon._baseStats;
+
+  return {
+    Урон: weapon.Урон,
+    'Скорость стрельбы': weapon['Скорость стрельбы'],
+    Дистанция: weapon.Дистанция,
+    Вес: weapon.Вес,
+    Цена: weapon.Цена,
+    Эффекты: weapon.Эффекты,
+    Качества: weapon.Качества,
+    Патроны: weapon.Патроны,
+    Название: weapon.Название,
+  };
+};
+
+// Функция для применения модификации к конкретному слоту
+export const applyModificationToSlot = (weapon, category, mod) => {
+  // Получаем или создаём базовые характеристики
+  const baseStats = getOrCreateBaseStats(weapon);
+
+  // Обновляем установленные моды (заменяем мод в указанной категории)
+  const installedMods = { ...(weapon._installedMods || {}), [category]: mod };
+
+  // Начинаем с базовых характеристик
+  let result = {
+    ...weapon,
+    ...baseStats,
+    _baseStats: baseStats,
+    _installedMods: installedMods
+  };
+
+  // Применяем все установленные модификации последовательно
+  for (const installedMod of Object.values(installedMods)) {
+    result = applyModification(result, installedMod.data || installedMod);
+  }
+
+  // Обновляем название оружия с учётом всех модификаций
+  const modsForName = Object.values(installedMods).map(m => m.data || m);
+  result.Название = getModifiedWeaponName({ ...baseStats }, modsForName);
+
+  return result;
 };
 
 // Функция для применения нескольких модификаций к оружию
 export const applyMultipleModifications = (weapon, modifications) => {
   let modifiedWeapon = { ...weapon };
-  
+
   // Группируем модификации по категориям
   const modificationsByCategory = {};
   modifications.forEach(mod => {
@@ -362,17 +407,17 @@ export const applyMultipleModifications = (weapon, modifications) => {
       }
     }
   });
-  
+
   // Для каждой категории применяем только последнюю выбранную модификацию
   // Это обеспечивает замену модификаций из одной категории, а не накопление
   Object.values(modificationsByCategory).forEach(categoryMods => {
     // Берем последнюю модификацию из категории (если выбрано несколько)
     const lastMod = categoryMods[categoryMods.length - 1];
-    
+
     // Применяем модификацию
     modifiedWeapon = applyModification(modifiedWeapon, lastMod);
   });
-  
+
   // Обновляем название оружия с учетом всех модификаций
   // Преобразуем модификации в правильный формат для getModifiedWeaponName
   const modificationsForName = Object.values(modificationsByCategory).map(categoryMods => {
@@ -381,23 +426,23 @@ export const applyMultipleModifications = (weapon, modifications) => {
   });
   const newName = getModifiedWeaponName(modifiedWeapon, modificationsForName);
   modifiedWeapon.Название = newName;
-  
+
   // Создаем конфигурационную строку
   const configString = createWeaponConfig(weapon.Название, modificationsByCategory);
   modifiedWeapon.weaponConfig = configString;
-  
+
   return modifiedWeapon;
 };
 
 // Функция для создания конфигурационной строки оружия
 export const createWeaponConfig = (baseWeaponName, modificationsByCategory) => {
   let config = baseWeaponName;
-  
+
   Object.entries(modificationsByCategory).forEach(([category, mods]) => {
     const lastMod = mods[mods.length - 1];
     config += `+${category.toLowerCase()}=${lastMod.name}`;
   });
-  
+
   return config;
 };
 
@@ -406,14 +451,14 @@ export const parseWeaponConfig = (configString) => {
   const parts = configString.split('+');
   const baseWeaponName = parts[0];
   const modifications = {};
-  
+
   for (let i = 1; i < parts.length; i++) {
     const [category, modName] = parts[i].split('=');
     if (category && modName) {
       modifications[category] = modName;
     }
   }
-  
+
   return {
     baseWeaponName,
     modifications
@@ -431,7 +476,7 @@ export const getBaseWeapon = (weapon) => {
       weaponConfig: baseWeaponName
     };
   }
-  
+
   // Для обычного оружия возвращаем его как есть
   return weapon;
 };
@@ -444,7 +489,7 @@ export const getRemovedModificationName = (modificationName, weaponName) => {
 // Функция для проверки совместимости модификации с оружием
 export const isModificationCompatible = (weapon, modificationName, modificationCategory) => {
   if (!weapon.Модификации) return false;
-  
+
   const availableMods = weapon.Модификации[modificationCategory];
   return availableMods && availableMods.includes(modificationName);
 };
@@ -452,9 +497,9 @@ export const isModificationCompatible = (weapon, modificationName, modificationC
 // Функция для получения всех доступных модификаций для оружия
 export const getAvailableModifications = (weapon, modsData) => {
   if (!weapon || !weapon.Модификации || !modsData) return {};
-  
+
   const available = {};
-  
+
   // Маппинг для несовпадающих названий модификаций
   const modificationMapping = {
     'Продвинутый': 'Улучшенный',
@@ -468,31 +513,31 @@ export const getAvailableModifications = (weapon, modsData) => {
     'Настроенный': 'Чувствительный',
     'Стрелка': 'Ложа стрелка'
   };
-  
+
   Object.entries(weapon.Модификации).forEach(([category, modNames]) => {
     if (modsData[category]) {
       const categoryMods = modNames.map(modName => {
         // Проверяем оригинальное название
         let data = modsData[category][modName];
-        
+
         // Если не найдено, проверяем маппинг
         if (!data && modificationMapping[modName]) {
           const mappedName = modificationMapping[modName];
           data = modsData[category][mappedName];
         }
-        
+
         return {
           name: modName,
           data: data
         };
       }).filter(mod => mod.data); // Фильтруем только существующие модификации
-      
+
       if (categoryMods.length > 0) {
         available[category] = categoryMods;
       }
     }
   });
-  
+
   return available;
 };
 
@@ -505,19 +550,19 @@ export const parseWeaponWithModifications = (weaponString, weaponsData, modsData
       weaponConfig: weaponString
     };
   }
-  
+
   const { baseWeaponName, modifications } = parseWeaponConfig(weaponString);
   const baseWeapon = weaponsData.find(w => w.Название === baseWeaponName);
-  
+
   if (!baseWeapon) {
     return null;
   }
-  
+
   // Применяем модификации
   const modificationsArray = Object.entries(modifications).map(([category, modName]) => {
     // Находим данные модификации
     let modData = modsData[category]?.[modName];
-    
+
     // Проверяем маппинг
     const modificationMapping = {
       'Продвинутый': 'Улучшенный',
@@ -531,20 +576,20 @@ export const parseWeaponWithModifications = (weaponString, weaponsData, modsData
       'Настроенный': 'Чувствительный',
       'Стрелка': 'Ложа стрелка'
     };
-    
+
     if (!modData && modificationMapping[modName]) {
       const mappedName = modificationMapping[modName];
       modData = modsData[category]?.[mappedName];
     }
-    
+
     return {
       name: modName,
       data: modData
     };
   }).filter(mod => mod.data);
-  
+
   const modifiedWeapon = applyMultipleModifications(baseWeapon, modificationsArray);
-  
+
   return {
     weapon: modifiedWeapon,
     weaponConfig: weaponString

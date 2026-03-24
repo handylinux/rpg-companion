@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert 
 } from 'react-native';
-import { applyModification, getModifiedWeaponName, applyMultipleModifications, getAvailableModifications, getWeaponBaseCode } from './weaponModificationUtils';
+import { applyModificationToSlot, getAvailableModifications } from './weaponModificationUtils';
 import lightWeaponMods from '../../../assets/Equipment/light_weapon_mods.json';
 
 // Компонент для сворачиваемой секции
@@ -28,31 +28,6 @@ const CollapsibleSection = ({ title, children, isExpanded, onToggle }) => {
   );
 };
 
-// Функция для получения базового оружия из модификационного кода
-const getBaseWeaponFromCode = (weapon) => {
-  // Если у оружия есть модификационный код, отличный от базового
-  if (weapon.weaponConfig && weapon.weaponConfig !== weapon.Название) {
-    // Возвращаем копию оружия с базовыми свойствами
-    return {
-      ...weapon,
-      // Сбрасываем свойства, которые изменяются модификациями
-      Урон: weapon.Урон,
-      'Скорость стрельбы': weapon['Скорость стрельбы'],
-      'Дистанция': weapon['Дистанция'] || 'Близкая',
-      Вес: weapon.Вес,
-      Цена: weapon.Цена,
-      Эффекты: weapon.Эффекты,
-      Качества: weapon.Качества,
-      Патроны: weapon.Патроны,
-      Название: weapon.Название,
-      weaponConfig: weapon.Название // Сбрасываем к базовому названию
-    };
-  }
-  
-  // Для обычного оружия возвращаем его как есть
-  return weapon;
-};
-
 const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification }) => {
   const [selectedModifications, setSelectedModifications] = useState({}); // category -> modification
   const [modifiedWeapon, setModifiedWeapon] = useState(weapon);
@@ -62,8 +37,8 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
   React.useEffect(() => {
     if (weapon && visible) {
       setModifiedWeapon(weapon);
-      // Сбрасываем выбранные модификации при открытии модального окна
-      setSelectedModifications({});
+      // Загружаем уже установленные моды как выбранные
+      setSelectedModifications(weapon._installedMods || {});
     }
   }, [weapon, visible]);
 
@@ -96,40 +71,21 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
   };
 
   const handleSelectModification = (mod) => {
-    if (!weapon) {
-      return;
+    if (!weapon) return;
+
+    // Строим новый набор выбранных модов (UI-состояние)
+    const newSelected = { ...selectedModifications, [mod.category]: mod };
+    setSelectedModifications(newSelected);
+
+    // Пересчитываем оружие от базы, применяя все выбранные моды
+    // Используем applyModificationToSlot последовательно для каждого выбранного мода
+    const categories = Object.keys(newSelected);
+    let result = weapon;
+    for (const cat of categories) {
+      result = applyModificationToSlot(result, cat, newSelected[cat]);
     }
-    
-    const newSelectedModifications = { ...selectedModifications };
-    
-    // Если модификация из той же категории уже выбрана, заменяем её
-    if (newSelectedModifications[mod.category]) {
-      newSelectedModifications[mod.category] = mod;
-    } else {
-      newSelectedModifications[mod.category] = mod;
-    }
-    
-    setSelectedModifications(newSelectedModifications);
-    
-    // Применяем все выбранные модификации
-    const modificationsArray = Object.values(newSelectedModifications);
-    
-    if (modificationsArray.length > 0) {
-      // Получаем базовое оружие (без предыдущих модификаций)
-      const baseWeapon = getBaseWeaponFromCode(weapon);
-      
-      // Преобразуем модификации в правильный формат
-      const modificationsWithNames = modificationsArray.map(m => ({
-        ...m.data,
-        name: m.name,
-        category: m.category
-      }));
-      
-      const newModifiedWeapon = applyMultipleModifications(baseWeapon, modificationsWithNames);
-      setModifiedWeapon(newModifiedWeapon);
-    } else {
-      setModifiedWeapon(weapon);
-    }
+
+    setModifiedWeapon(result);
   };
 
   const handleApplyModification = () => {

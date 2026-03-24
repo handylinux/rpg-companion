@@ -6,10 +6,6 @@ import CapsModal from './modals/CapsModal';
 import SellItemModal from './modals/SellItemModal';
 import AddItemModal from './modals/AddItemModal';
 
-import allLightWeapons from '../../../assets/Equipment/light_weapons.json';
-import heavyWeapons from '../../../assets/Equipment/heavy_weapons.json';
-import energyWeapons from '../../../assets/Equipment/energy_weapons.json';
-import meleeWeapons from '../../../assets/Equipment/melee_weapons.json';
 import allArmor from '../../../assets/Equipment/armor.json';
 import allClothes from '../../../assets/Equipment/Clothes.json';
 import allChems from '../../../assets/Equipment/chems.json';
@@ -288,8 +284,9 @@ const InventoryScreen = () => {
         const newEquipped = [...prev];
         if (newEquipped[slot] && (newEquipped[slot].uniqueId === weapon.uniqueId || newEquipped[slot].Название === weapon.Название)) {
             // Проверяем, является ли это модифицированным оружием
-            // Если у оружия есть uniqueId, начинающийся с 'modified-', то это модифицированное оружие
-            const isModified = newEquipped[slot].uniqueId && newEquipped[slot].uniqueId.startsWith('modified-');
+            // Считаем оружие модифицированным если у него есть uniqueId с 'modified-' ИЛИ есть _installedMods (новая система слотов)
+            const isModified = (newEquipped[slot].uniqueId && newEquipped[slot].uniqueId.startsWith('modified-')) ||
+                               (newEquipped[slot]._installedMods && Object.keys(newEquipped[slot]._installedMods).length > 0);
             
             // Добавляем снятое оружие обратно в инвентарь
             const newItems = equipment?.items ? [...equipment.items] : [];
@@ -811,7 +808,7 @@ const InventoryScreen = () => {
         <AddWeaponModal
           visible={isAddWeaponModalVisible}
           onClose={() => setIsAddWeaponModalVisible(false)}
-          weapons={[...allLightWeapons, ...allClothes.clothes.flatMap(category => category.be), ...allArmor.armor.flatMap(category => category.items), ...allChems]}
+          weapons={[]}
           onSelectWeapon={handleAddItem}
         />
         <CapsModal
