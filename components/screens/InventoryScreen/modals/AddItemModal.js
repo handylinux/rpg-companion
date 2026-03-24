@@ -44,7 +44,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem }) => {
       (weapons || []).forEach(w => {
         const label = WEAPON_TYPE_LABELS[w.weapon_type] || w.weapon_type || 'Прочее';
         if (!grouped[label]) grouped[label] = [];
-        grouped[label].push({ ...w, Название: w.name, itemType: 'weapon' });
+        grouped[label].push({ ...w, itemType: 'weapon' });
       });
       setWeaponsByType(grouped);
     }).catch(e => console.warn('[AddItemModal] failed to load weapons:', e));

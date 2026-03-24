@@ -84,6 +84,50 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     }
   
     const displayWeapon = weapon;
+
+    const damageTypeRu = (v) => {
+      const key = String(v || '').trim();
+      const map = {
+        Physical: 'Физический',
+        Energy: 'Энергетический',
+        Radiation: 'Радиационный',
+        Poison: 'Ядовитый',
+      };
+      return map[key] || v;
+    };
+
+    const qualitiesRu = (v) => {
+      if (!v) return v;
+      const map = {
+        Reliable: 'Надёжное',
+        Vicious: 'Порочный',
+        Piercing: 'Проникающий',
+        Persistent: 'Постоянный',
+        Stun: 'Оглушающий',
+        Accurate: 'Меткий',
+        Inaccurate: 'Неточный',
+        'Two-Handed': 'Двуручное',
+        Radioactive: 'Радиоактивный',
+        'Close Quarters': 'Ближний бой',
+      };
+      return String(v)
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(token => map[token] || token)
+        .join(', ');
+    };
+
+    // БД-формат (приоритет) + обратная совместимость со старым (русские ключи)
+    const weaponName = displayWeapon.name ?? displayWeapon.Название;
+    const damageType = damageTypeRu(displayWeapon.damage_type ?? displayWeapon['Тип урона']);
+    const baseDamageRaw = displayWeapon.damage ?? displayWeapon.Урон;
+    const baseDamage = Number(baseDamageRaw) || 0;
+    const effectsValue = displayWeapon.damage_effects ?? displayWeapon.Эффекты;
+    const fireRateRaw = displayWeapon.fire_rate ?? displayWeapon['Скорость стрельбы'];
+    const fireRateBase = Number(fireRateRaw) || 0;
+    const rangeValue = displayWeapon.range_name ?? displayWeapon['Дистанция'] ?? 'Близкая';
+    const qualitiesValue = qualitiesRu(displayWeapon.qualities ?? displayWeapon.Качества);
   
     // Бонус урона для НКР "Пехотинец"
     const ncrInfantryBonusMap = new Set([
@@ -95,33 +139,31 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     ]);
 
     const isNcrInfantryWeapon = displayWeapon && (
-      ncrInfantryBonusMap.has(displayWeapon.Название) || ncrInfantryBonusMap.has(displayWeapon.name)
+      ncrInfantryBonusMap.has(weaponName)
     );
 
-    const baseDamage = Number(displayWeapon.Урон) || 0;
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
 
     // Снижение базовой скорострельности на 1 при "Техника спуска" для стрелкового и энергооружия
     const isLightOrEnergy = (weapon?.itemType === 'weapon') && (
       weapon.weapon_type === 'Light' || weapon.weapon_type === 'Energy'
     );
-    const fireRateBase = Number(displayWeapon['Скорость стрельбы']) || 0;
     const fireRateWithTrait = hasTrait('Техника спуска') && isLightOrEnergy ? Math.max(0, fireRateBase - 1) : fireRateBase;
 
     const stats = [
-      { label: 'ТИП УРОНА', value: displayWeapon['Тип урона'] },
+      { label: 'ТИП УРОНА', value: damageType },
       { label: 'УРОН', value: `${damageWithNcr}` },
-      { label: 'ЭФФЕКТ', value: displayWeapon.Эффекты },
+      { label: 'ЭФФЕКТ', value: effectsValue },
       { label: 'СКОРОСТЬ СТРЕЛЬБЫ', value: fireRateWithTrait },
-      { label: 'ДИСТАНЦИЯ', value: displayWeapon['Дистанция'] || 'Близкая' },
-      { label: 'КАЧЕСТВА', value: displayWeapon.Качества },
+      { label: 'ДИСТАНЦИЯ', value: rangeValue },
+      { label: 'КАЧЕСТВА', value: qualitiesValue },
       { label: 'Модификация', type: 'button' }
     ];
   
     return (
       <View style={localStyles.weaponCardContainer}>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { textAlign: 'center', width: '100%' }]}>{displayWeapon.Название}</Text>
+          <Text style={[styles.sectionTitle, { textAlign: 'center', width: '100%' }]}>{weaponName}</Text>
         </View>
         <View>
           {stats.map((stat, index) => (

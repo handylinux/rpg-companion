@@ -8,8 +8,135 @@ import {
   StyleSheet,
   Alert 
 } from 'react-native';
-import { applyModificationToSlot, getAvailableModifications } from './weaponModificationUtils';
-import lightWeaponMods from '../../../assets/Equipment/light_weapon_mods.json';
+import { getSlotsForWeapon, getModsForWeaponSlot, getWeaponModById, getWeaponMods } from '../../../db/Database';
+import { declinePrefix } from './weaponModificationUtils';
+
+function toNumber(v) {
+  if (v === null || v === undefined) return 0;
+  const n = Number(String(v).replace(',', '.'));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function normalizeModRow(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    name: row.name,
+    prefix: row.prefix,
+    slot: row.slot,
+    // БД: weight/cost/effects/effect_description
+    weight: row.weight,
+    cost: row.cost,
+    effects: row.effects,
+    effect_description: row.effect_description,
+  };
+}
+
+function translateModTokenToRu(token) {
+  if (!token) return token;
+  const t = String(token).trim();
+  // Если уже есть кириллица — считаем, что это русская строка
+  if (/[А-Яа-яЁё]/.test(t)) return t;
+
+  const map = {
+    // частые префиксы/названия
+    Hardened: 'Укреплённый',
+    Improved: 'Улучшенный',
+    Advanced: 'Продвинутый',
+    Tuned: 'Чувствительный',
+    Calibrated: 'Калиброванный',
+    Automatic: 'Автоматический',
+    Rapid: 'Быстрый',
+    Quick: 'Быстрый',
+    Suppressed: 'Тихий',
+    Supressed: 'Тихий',
+    Silent: 'Тихий',
+    Long: 'Длинный',
+    Short: 'Короткий',
+    Tactical: 'Тактический',
+    Recon: 'Разведывательный',
+    Night: 'Ночного видения',
+    Bayonet: 'Штыковой',
+    Compensated: 'Компенсированный',
+    Perforated: 'Перфорированный',
+    Vented: 'Вентилируемый',
+    Ribbed: 'Ребристый',
+  };
+  return map[t] || t;
+}
+
+function getModDisplayNameRu(mod, weaponBaseName) {
+  if (!mod) return '';
+  const rawPrefix = mod.prefix || '';
+  const rawName = mod.name || '';
+  const ruPrefix = translateModTokenToRu(rawPrefix || rawName);
+  // склоняем только те префиксы, которые совпадают с таблицей declinePrefix
+  return weaponBaseName ? declinePrefix(ruPrefix, weaponBaseName) : ruPrefix;
+}
+
+function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
+  const selectedMods = Object.values(selectedBySlot).filter(Boolean);
+  const baseName = baseWeapon._baseName ?? baseWeapon.base_name ?? baseWeapon.name ?? baseWeapon.Название ?? '';
+
+  // строим имя только от базового имени, чтобы не дублировать префиксы при повторных открытиях
+  const prefixesRu = [];
+  for (const mod of selectedMods) {
+    const p = getModDisplayNameRu(mod, baseName);
+    if (!p) continue;
+    if (!prefixesRu.includes(p)) prefixesRu.push(p);
+  }
+  const name = prefixesRu.length ? `${prefixesRu.join(' ')} ${baseName}` : baseName;
+
+  const damageBase = toNumber(baseWeapon.damage ?? baseWeapon.Урон);
+  const fireRateBase = toNumber(baseWeapon.fire_rate ?? baseWeapon['Скорость стрельбы']);
+  const weightBase = toNumber(baseWeapon.weight ?? baseWeapon.Вес);
+  const costBase = toNumber(baseWeapon.cost ?? baseWeapon.Цена);
+
+  let damage = damageBase;
+  let fire_rate = fireRateBase;
+  let weight = weightBase;
+  let cost = costBase;
+
+  // Минимальный парсер Effects из seed-данных, напр:
+  // "plus 1 CD Damage, plus 2 Fire Rate"
+  // "minus 1 CD Damage, plus 1 Fire Rate"
+  // Если не распознали — просто сохраняем описание.
+  const extraEffectsText = [];
+  for (const mod of selectedMods) {
+    const eff = String(mod.effects || '');
+    if (eff) extraEffectsText.push(eff);
+
+    const dmgPlus = eff.match(/plus\s+(\d+)\s+CD\s+Damage/i);
+    const dmgMinus = eff.match(/minus\s+(\d+)\s+CD\s+Damage/i);
+    if (dmgPlus) damage += Number(dmgPlus[1]);
+    if (dmgMinus) damage -= Number(dmgMinus[1]);
+
+    const frPlus = eff.match(/plus\s+(\d+)\s+Fire\s+Rate/i);
+    const frMinus = eff.match(/minus\s+(\d+)\s+Fire\s+Rate/i);
+    if (frPlus) fire_rate += Number(frPlus[1]);
+    if (frMinus) fire_rate -= Number(frMinus[1]);
+
+    // Вес/цена модов (если есть)
+    weight += toNumber(mod.weight);
+    cost += toNumber(mod.cost);
+  }
+
+  return {
+    ...baseWeapon,
+    name,
+    _baseName: baseName,
+    damage,
+    fire_rate,
+    weight: String(weight),
+    cost,
+    // сохраняем выбранные моды
+    appliedMods: Object.fromEntries(
+      Object.entries(selectedBySlot).map(([slot, mod]) => [slot, mod?.id]).filter(([, id]) => !!id)
+    ),
+    _selectedModsBySlot: selectedBySlot,
+    _mods_effects_debug: extraEffectsText.join('; '),
+  };
+}
 
 // Компонент для сворачиваемой секции
 const CollapsibleSection = ({ title, children, isExpanded, onToggle }) => {
@@ -29,63 +156,97 @@ const CollapsibleSection = ({ title, children, isExpanded, onToggle }) => {
 };
 
 const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification }) => {
-  const [selectedModifications, setSelectedModifications] = useState({}); // category -> modification
+  const [selectedModifications, setSelectedModifications] = useState({}); // slot -> modRow
   const [modifiedWeapon, setModifiedWeapon] = useState(weapon);
-  const [expandedCategories, setExpandedCategories] = useState({}); // category -> boolean
+  const [expandedCategories, setExpandedCategories] = useState({}); // slot -> boolean
+  const [modsBySlot, setModsBySlot] = useState({}); // slot -> modRow[]
 
   // Обновляем modifiedWeapon при изменении weapon
   React.useEffect(() => {
-    if (weapon && visible) {
-      setModifiedWeapon(weapon);
-      // Загружаем уже установленные моды как выбранные
-      setSelectedModifications(weapon._installedMods || {});
-    }
+    let cancelled = false;
+    if (!weapon || !visible) return undefined;
+
+    (async () => {
+      try {
+        // фиксируем базовое имя один раз (чтобы не ловить дубли префиксов)
+        const weaponWithBase = {
+          ...weapon,
+          _baseName: weapon._baseName ?? weapon.base_name ?? weapon.name ?? weapon.Название ?? '',
+        };
+        setModifiedWeapon(weaponWithBase);
+
+        const weaponId = weaponWithBase.id ?? weaponWithBase.weaponId;
+        if (!weaponId) {
+          setModsBySlot({});
+          setSelectedModifications({});
+          return;
+        }
+
+        const slots = await getSlotsForWeapon(weaponId);
+        const bySlot = {};
+
+        if (slots && slots.length) {
+          for (const slot of slots) {
+            const mods = await getModsForWeaponSlot(weaponId, slot);
+            bySlot[slot] = (mods || []).map(normalizeModRow).filter(Boolean);
+          }
+        } else {
+          // Fallback: если weapon_mod_slots для оружия не заполнен,
+          // используем weapon_mods.applies_to_ids и группируем по slot.
+          const mods = await getWeaponMods(weaponId);
+          for (const m of (mods || [])) {
+            const nm = normalizeModRow(m);
+            if (!nm) continue;
+            const slot = nm.slot || 'Other';
+            if (!bySlot[slot]) bySlot[slot] = [];
+            bySlot[slot].push(nm);
+          }
+        }
+
+        // выбранные моды из appliedMods (если уже есть)
+        const selected = {};
+        const applied = weaponWithBase.appliedMods || {};
+        for (const [slot, modId] of Object.entries(applied)) {
+          const modRow = await getWeaponModById(modId);
+          if (modRow) selected[slot] = normalizeModRow(modRow);
+        }
+
+        if (cancelled) return;
+        setModsBySlot(bySlot);
+        setSelectedModifications(selected);
+
+        const computed = applyDbModEffectsToWeapon(weaponWithBase, selected);
+        setModifiedWeapon(computed);
+      } catch (e) {
+        console.warn('[WeaponModificationModal] load mods failed:', e);
+        if (!cancelled) {
+          setModsBySlot({});
+          setSelectedModifications({});
+          setModifiedWeapon(weapon);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [weapon, visible]);
 
-  // Получаем доступные модификации для данного оружия
-  const availableModifications = weapon && weapon.Модификации ? getAvailableModifications(weapon, lightWeaponMods.Модификации) : {};
-  
-  // Преобразуем в формат для отображения
-  const modificationsForDisplay = Object.entries(availableModifications).flatMap(([category, mods]) =>
-    mods.map(mod => ({
-      name: mod.name,
-      category: category,
-      data: mod.data
-    }))
-  );
-
-  // Группируем модификации по категориям
-  const modificationsByCategory = modificationsForDisplay.reduce((acc, mod) => {
-    if (!acc[mod.category]) {
-      acc[mod.category] = [];
-    }
-    acc[mod.category].push(mod);
-    return acc;
-  }, {});
-
-  const handleToggleCategory = (category) => {
+  const handleToggleCategory = (slot) => {
     setExpandedCategories(prev => ({
       ...prev,
-      [category]: !prev[category]
+      [slot]: !prev[slot]
     }));
   };
 
-  const handleSelectModification = (mod) => {
+  const handleSelectModification = (slot, mod) => {
     if (!weapon) return;
 
     // Строим новый набор выбранных модов (UI-состояние)
-    const newSelected = { ...selectedModifications, [mod.category]: mod };
+    const newSelected = { ...selectedModifications, [slot]: mod };
     setSelectedModifications(newSelected);
 
-    // Пересчитываем оружие от базы, применяя все выбранные моды
-    // Используем applyModificationToSlot последовательно для каждого выбранного мода
-    const categories = Object.keys(newSelected);
-    let result = weapon;
-    for (const cat of categories) {
-      result = applyModificationToSlot(result, cat, newSelected[cat]);
-    }
-
-    setModifiedWeapon(result);
+    setModifiedWeapon(applyDbModEffectsToWeapon(modifiedWeapon || weapon, newSelected));
   };
 
   const handleApplyModification = () => {
@@ -104,11 +265,12 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
   const handleClose = () => {
     setSelectedModifications({});
     setExpandedCategories({});
+    setModsBySlot({});
     onClose();
   };
 
-  // Если оружие не передано или не имеет необходимых свойств, не показываем модальное окно
-  if (!weapon || !weapon.Название || !weapon.Модификации) {
+  // Если оружие не передано или нет id — не показываем модальное окно
+  if (!weapon || !(weapon.id ?? weapon.weaponId)) {
     return null;
   }
 
@@ -131,36 +293,36 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
           <ScrollView style={styles.modalBody}>
             {/* Информация об оружии */}
             <View style={styles.weaponInfo}>
-              <Text style={styles.weaponTitle}>{weapon?.Название || 'Неизвестное оружие'}</Text>
+              <Text style={styles.weaponTitle}>{weapon?.name || weapon?.Название || 'Неизвестное оружие'}</Text>
               <Text style={styles.weaponStats}>
-                Урон: {weapon?.Урон || 0} | Скорость: {weapon?.['Скорость стрельбы'] || 0} | 
-                Дистанция: {weapon?.['Дистанция'] || 'Близкая'} | Вес: {weapon?.Вес || 0} | Цена: {weapon?.Цена || 0}
+                Урон: {weapon?.damage ?? weapon?.Урон ?? 0} | Скорость: {weapon?.fire_rate ?? weapon?.['Скорость стрельбы'] ?? 0} | 
+                Дистанция: {weapon?.range_name ?? weapon?.['Дистанция'] ?? 'Близкая'} | Вес: {weapon?.weight ?? weapon?.Вес ?? 0} | Цена: {weapon?.cost ?? weapon?.Цена ?? 0}
               </Text>
             </View>
 
             {/* Доступные модификации */}
             <View style={styles.modificationsSection}>
               <Text style={styles.sectionTitle}>Доступные модификации:</Text>
-              {Object.entries(modificationsByCategory).map(([category, mods]) => (
+              {Object.entries(modsBySlot).map(([slot, mods]) => (
                 <CollapsibleSection
-                  key={category}
-                  title={`${category} (${mods.length})`}
-                  isExpanded={expandedCategories[category]}
-                  onToggle={() => handleToggleCategory(category)}
+                  key={slot}
+                  title={`${slot} (${mods.length})`}
+                  isExpanded={expandedCategories[slot]}
+                  onToggle={() => handleToggleCategory(slot)}
                 >
                   {mods.map((mod, index) => (
                                          <TouchableOpacity
                        key={index}
                        style={[
                          styles.modificationItem,
-                         selectedModifications[mod.category]?.name === mod.name && styles.selectedModification
+                         selectedModifications[slot]?.id === mod.id && styles.selectedModification
                        ]}
-                       onPress={() => handleSelectModification(mod)}
+                       onPress={() => handleSelectModification(slot, mod)}
                      >
-                       <Text style={styles.modificationName}>{mod.name}</Text>
-                       <Text style={styles.modificationEffects}>{mod.data.Эффекты}</Text>
+                       <Text style={styles.modificationName}>{getModDisplayNameRu(mod, weapon?._baseName ?? weapon?.name ?? weapon?.Название) || mod.name}</Text>
+                       <Text style={styles.modificationEffects}>{mod.effect_description || mod.effects}</Text>
                        <Text style={styles.modificationStats}>
-                         Вес: {mod.data.Вес >= 0 ? '+' : ''}{mod.data.Вес} | Цена: +{mod.data.Цена}
+                         Вес: {toNumber(mod.weight) >= 0 ? '+' : ''}{toNumber(mod.weight)} | Цена: +{toNumber(mod.cost)}
                        </Text>
                      </TouchableOpacity>
                   ))}
@@ -174,17 +336,17 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                 <Text style={styles.sectionTitle}>Предварительный просмотр:</Text>
                 <View style={styles.previewContent}>
                                      <Text style={styles.previewTitle}>
-                     {modifiedWeapon.Название}
+                     {modifiedWeapon.name ?? modifiedWeapon.Название}
                    </Text>
                   <Text style={styles.previewStats}>
-                    Урон: {modifiedWeapon.Урон} | Скорость: {modifiedWeapon['Скорость стрельбы']} | 
-                    Дистанция: {modifiedWeapon['Дистанция'] || 'Близкая'} | Вес: {modifiedWeapon.Вес} | Цена: {modifiedWeapon.Цена}
+                    Урон: {modifiedWeapon.damage ?? modifiedWeapon.Урон} | Скорость: {modifiedWeapon.fire_rate ?? modifiedWeapon['Скорость стрельбы']} | 
+                    Дистанция: {(modifiedWeapon.range_name ?? modifiedWeapon['Дистанция']) || 'Близкая'} | Вес: {modifiedWeapon.weight ?? modifiedWeapon.Вес} | Цена: {modifiedWeapon.cost ?? modifiedWeapon.Цена}
                   </Text>
                   <Text style={styles.previewEffects}>
-                    Эффекты: {modifiedWeapon.Эффекты}
+                    Эффекты: {modifiedWeapon.damage_effects ?? modifiedWeapon.Эффекты ?? modifiedWeapon._mods_effects_debug}
                   </Text>
                   <Text style={styles.previewQualities}>
-                    Качества: {modifiedWeapon.Качества}
+                    Качества: {modifiedWeapon.qualities ?? modifiedWeapon.Качества}
                   </Text>
                 </View>
               </View>

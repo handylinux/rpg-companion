@@ -11,7 +11,6 @@ import {
   calculateCarryWeight
 } from './screens/CharacterScreen/logic/characterLogic';
 import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from './screens/CharacterScreen/logic/perksLogic';
-import { createModifiedWeaponFromId, createWeaponId, getAllWeapons, getWeaponModifications } from './screens/WeaponsAndArmorScreen/weaponModificationUtils';
 
 const CharacterContext = createContext();
 
@@ -244,10 +243,6 @@ export const CharacterProvider = ({ children }) => {
 
   const getModifiedItem = (item) => {
     const itemId = getItemId(item);
-    if (item.itemType === 'weapon' && item.weaponId) {
-      const modifiedWeapon = createModifiedWeaponFromId(item.weaponId, getAllWeapons(), getWeaponModifications());
-      if (modifiedWeapon) return modifiedWeapon;
-    }
     const modifiedItem = modifiedItems.get(itemId);
     if (modifiedItem) return modifiedItem;
     if (item.itemType !== 'weapon' && item.itemType !== 'armor' && item.itemType !== 'clothing') return item;

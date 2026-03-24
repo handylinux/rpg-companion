@@ -211,14 +211,15 @@ const InventoryScreen = () => {
     };
     
     // Проверяем, является ли это модифицированным оружием
-    const isModified = weaponToEquip.uniqueId && weaponToEquip.uniqueId.startsWith('modified-');
+    const isModified = (weaponToEquip.uniqueId && weaponToEquip.uniqueId.startsWith('modified-')) ||
+      (weaponToEquip.appliedMods && Object.keys(weaponToEquip.appliedMods).length > 0);
     const displayWeapon = weaponToEquip;
     
     const itemName = displayWeapon.Название || displayWeapon.name;
     
     // Проверяем количество этого конкретного предмета в инвентаре
     const totalOwned = equipment.items.find(i => (i.Название || i.name) === itemName)?.quantity || 0;
-    const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.Название === itemName)).length;
+    const alreadyEquippedCount = equippedWeapons.filter(w => w && ((w.Название || w.name) === itemName)).length;
 
     if (totalOwned <= alreadyEquippedCount) {
         Alert.alert("Ошибка", "Нет доступных предметов для экипировки.");
@@ -282,11 +283,16 @@ const InventoryScreen = () => {
   const handleUnequipWeapon = (weapon, slot) => {
     setEquippedWeapons(prev => {
         const newEquipped = [...prev];
-        if (newEquipped[slot] && (newEquipped[slot].uniqueId === weapon.uniqueId || newEquipped[slot].Название === weapon.Название)) {
+        if (newEquipped[slot] && (
+          newEquipped[slot].uniqueId === weapon.uniqueId ||
+          (newEquipped[slot].Название && newEquipped[slot].Название === weapon.Название) ||
+          (newEquipped[slot].name && newEquipped[slot].name === weapon.name)
+        )) {
             // Проверяем, является ли это модифицированным оружием
             // Считаем оружие модифицированным если у него есть uniqueId с 'modified-' ИЛИ есть _installedMods (новая система слотов)
             const isModified = (newEquipped[slot].uniqueId && newEquipped[slot].uniqueId.startsWith('modified-')) ||
-                               (newEquipped[slot]._installedMods && Object.keys(newEquipped[slot]._installedMods).length > 0);
+                               (newEquipped[slot]._installedMods && Object.keys(newEquipped[slot]._installedMods).length > 0) ||
+                               (newEquipped[slot].appliedMods && Object.keys(newEquipped[slot].appliedMods).length > 0);
             
             // Добавляем снятое оружие обратно в инвентарь
             const newItems = equipment?.items ? [...equipment.items] : [];
@@ -629,7 +635,11 @@ const InventoryScreen = () => {
         }
     };
     
-    const price = parseFloat(displayItem.Цена !== undefined ? displayItem.Цена : displayItem.price) || 0;
+    const price = parseFloat(
+      displayItem.Цена !== undefined
+        ? displayItem.Цена
+        : (displayItem.price ?? displayItem.cost)
+    ) || 0;
     const weight = parseFloat(String(displayItem.Вес !== undefined ? displayItem.Вес : displayItem.weight).replace(',', '.')) || 0;
 
     return (
@@ -740,7 +750,11 @@ const InventoryScreen = () => {
         const modifiedItem = getModifiedItem(itemWithType);
         const displayItem = modifiedItem || item;
         
-        const price = parseFloat(displayItem.Цена !== undefined ? displayItem.Цена : displayItem.price) || 0;
+        const price = parseFloat(
+          displayItem.Цена !== undefined
+            ? displayItem.Цена
+            : (displayItem.price ?? displayItem.cost)
+        ) || 0;
         return acc + (price * item.quantity);
       }, 0);
     }

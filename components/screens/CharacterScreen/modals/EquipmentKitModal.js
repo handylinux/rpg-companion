@@ -98,8 +98,11 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
 
               const weaponObj = {
                 ...weapon,
-                Название: chosenItem.displayName || chosenItem.name || weapon.name,
-                weaponId: chosenItem.weaponId,
+                // приоритет БД: id/name/damage/...
+                // для совместимости оставляем weaponId, но основное поле — id
+                id: weapon.id || chosenItem.weaponId,
+                name: chosenItem.displayName || chosenItem.name || weapon.name,
+                weaponId: weapon.id || chosenItem.weaponId,
                 appliedMods,
                 quantity: chosenItem.quantity || 1,
                 itemType: 'weapon',

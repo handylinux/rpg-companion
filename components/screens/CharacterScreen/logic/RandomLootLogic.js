@@ -56,7 +56,7 @@ async function resolveItemFromTable(rollResult, tag, lootTable) {
                 if (chem) return { ...chem, name: refName, Название: refName, quantity: 1, itemType: 'chem' };
             } else if (['light_weapons', 'heavy_weapons', 'energy_weapons', 'melee_weapons'].includes(source)) {
                 const weapon = await getWeaponByName(refName);
-                if (weapon) return { ...weapon, name: weapon.name, Название: weapon.name, quantity: 1, itemType: 'weapon' };
+                if (weapon) return { ...weapon, name: weapon.name, quantity: 1, itemType: 'weapon' };
             } else if (source === 'armor') {
                 const allArmorItems = armorData.armor.flatMap(a => a.items);
                 const ar = allArmorItems.find(x => (x.Название === refName || x.name === refName));
@@ -84,7 +84,7 @@ async function resolveItemFromTable(rollResult, tag, lootTable) {
         const fullChemData2 = fullChemsData.find(chem => chem.Название === name || chem.name === name);
         if (fullChemData2) return { ...fullChemData2, name, Название: name, quantity: 1, itemType: 'chem' };
         const weapon = await getWeaponByName(name);
-        if (weapon) return { ...weapon, name: weapon.name, Название: weapon.name, quantity: 1, itemType: 'weapon' };
+        if (weapon) return { ...weapon, name: weapon.name, quantity: 1, itemType: 'weapon' };
         const allArmorItems = armorData.armor.flatMap(a => a.items);
         const armor = allArmorItems.find(i => i.Название === name || i.name === name);
         if (armor) return { ...armor, name: armor.name || armor.Название, Название: armor.Название || armor.name, quantity: 1, itemType: 'armor' };
