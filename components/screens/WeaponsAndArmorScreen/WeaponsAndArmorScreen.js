@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
 import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
+import { TRAITS } from '../CharacterScreen/logic/traitsData';
 import styles from '../../../styles';
 import { renderTextWithIcons } from './textUtils';
 
@@ -135,17 +136,8 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const successValue = attrValue + skillValue;
   
     // Бонус урона для НКР "Пехотинец"
-    const ncrInfantryBonusMap = new Set([
-      'Пистолет-пулемёт Томпсона',
-      'Боевой карабин',
-      'Штурмовая винтовка',
-      'Осколочная граната',
-      'Боевой нож'
-    ]);
-
-    const isNcrInfantryWeapon = displayWeapon && (
-      ncrInfantryBonusMap.has(weaponName)
-    );
+    const ncrInfantryWeaponIds = TRAITS['Пехотинец']?.modifiers?.ncrInfantryWeaponIds || [];
+    const isNcrInfantryWeapon = displayWeapon && ncrInfantryWeaponIds.includes(displayWeapon.id ?? displayWeapon.weaponId);
 
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
 
