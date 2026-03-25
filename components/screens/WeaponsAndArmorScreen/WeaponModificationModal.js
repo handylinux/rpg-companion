@@ -178,7 +178,9 @@ function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
 
   return {
     ...baseWeapon,
+    Name: name,
     name,
+    Название: name,
     _baseName: baseName,
     damage,
     fire_rate,

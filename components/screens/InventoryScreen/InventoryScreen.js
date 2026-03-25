@@ -39,15 +39,23 @@ const InventoryScreen = () => {
   const [selectedItemForSale, setSelectedItemForSale] = useState(null);
   const [isAddItemModalVisible, setAddItemModalVisible] = useState(false);
 
-  const getItemName = (item) => item?.Название || item?.name || '';
-  const isWeaponItem = (item) => (item?.itemType || 'weapon') === 'weapon';
+  const getItemName = (item) => item?.Name || item?.name || item?.Название || '';
+  const getItemType = (item) => {
+    if (item?.itemType) return item.itemType;
+    if (item?.type === 'ammo') return 'ammo';
+    if (item?.weaponId || item?.damage !== undefined || item?.Урон !== undefined) return 'weapon';
+    if (item?.clothingType) return 'clothing';
+    if (item?.protected_area) return 'armor';
+    return 'misc';
+  };
+  const isWeaponItem = (item) => getItemType(item) === 'weapon';
   const getModsSignature = (item) => {
     const applied = item?.appliedMods || {};
     const modIds = Object.values(applied).filter(Boolean).sort();
     return modIds.length ? modIds.join('|') : 'none';
   };
   const getStackKey = (item) => {
-    const itemType = item?.itemType || 'weapon';
+    const itemType = getItemType(item);
     if (itemType === 'weapon') {
       const baseWeaponId = item?.weaponId || item?.id || getItemName(item);
       return `weapon:${baseWeaponId}:mods:${getModsSignature(item)}`;
@@ -193,7 +201,7 @@ const InventoryScreen = () => {
         // Убеждаемся, что у предмета есть itemType
         const itemWithType = {
           ...item,
-          itemType: item.itemType || 'weapon',
+          itemType: getItemType(item),
           stackKey,
           quantity: 1
         };
@@ -309,7 +317,7 @@ const InventoryScreen = () => {
               const weaponToAdd = {
                 ...newEquipped[slot],
                 quantity: 1,
-                itemType: 'weapon',
+                itemType: getItemType(newEquipped[slot]),
                 stackKey,
                 uniqueId: undefined,
               };
@@ -460,7 +468,7 @@ const InventoryScreen = () => {
             // Убеждаемся, что у экипированного оружия есть itemType
             const weaponWithType = {
               ...w,
-              itemType: w.itemType || 'weapon'
+              itemType: getItemType(w)
             };
             
             // Получаем модифицированную версию оружия, если она есть
@@ -469,7 +477,7 @@ const InventoryScreen = () => {
             
             const equippedWeapon = {
               ...displayWeapon,
-              itemType: w.itemType || 'weapon',
+              itemType: getItemType(w),
               isEquipped: true, 
               quantity: 1, 
               slot: i, 
@@ -559,7 +567,7 @@ const InventoryScreen = () => {
             if (remainingQuantity > 0) {
                 return {
                     ...displayItem,
-                    itemType: item.itemType || 'weapon',
+                    itemType: getItemType(item),
                     stackKey: itemStackKey,
                     quantity: remainingQuantity,
                     isEquipped: false,
@@ -588,7 +596,7 @@ const InventoryScreen = () => {
     // Убеждаемся, что у предмета есть itemType
     const itemWithType = {
       ...item,
-      itemType: item.itemType || 'weapon'
+      itemType: getItemType(item)
     };
     
     // Получаем модифицированную версию предмета, если она есть
