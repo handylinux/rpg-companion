@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
 import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
+import { TRAITS } from '../CharacterScreen/logic/traitsData';
 import styles from '../../../styles';
 import { renderTextWithIcons } from './textUtils';
 
@@ -69,7 +70,7 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
 };
 
 const WeaponCard = ({ weapon, onModifyWeapon }) => {
-    const { hasTrait } = useCharacter();
+    const { hasTrait, attributes, skills } = useCharacter();
     if (!weapon) {
       return (
         <View style={localStyles.weaponCardContainer}>
@@ -119,7 +120,7 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     };
 
     // БД-формат (приоритет) + обратная совместимость со старым (русские ключи)
-    const weaponName = displayWeapon.name ?? displayWeapon.Название;
+    const weaponName = displayWeapon.Name ?? displayWeapon.name ?? displayWeapon.Название;
     const damageType = damageTypeRu(displayWeapon.damage_type ?? displayWeapon['Тип урона']);
     const baseDamageRaw = displayWeapon.damage ?? displayWeapon.Урон;
     const baseDamage = Number(baseDamageRaw) || 0;
@@ -128,19 +129,15 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const fireRateBase = Number(fireRateRaw) || 0;
     const rangeValue = displayWeapon.range_name ?? displayWeapon['Дистанция'] ?? 'Близкая';
     const qualitiesValue = qualitiesRu(displayWeapon.qualities ?? displayWeapon.Качества);
+    const mainAttr = displayWeapon.main_attr ?? 'ЛОВ';
+    const mainSkill = displayWeapon.main_skill ?? 'Стрелковое оружие';
+    const attrValue = attributes?.find(a => a.name === mainAttr)?.value ?? 0;
+    const skillValue = skills?.find(s => s.name === mainSkill)?.value ?? 0;
+    const successValue = attrValue + skillValue;
   
     // Бонус урона для НКР "Пехотинец"
-    const ncrInfantryBonusMap = new Set([
-      'Пистолет-пулемёт Томпсона',
-      'Боевой карабин',
-      'Штурмовая винтовка',
-      'Осколочная граната',
-      'Боевой нож'
-    ]);
-
-    const isNcrInfantryWeapon = displayWeapon && (
-      ncrInfantryBonusMap.has(weaponName)
-    );
+    const ncrInfantryWeaponIds = TRAITS['Пехотинец']?.modifiers?.ncrInfantryWeaponIds || [];
+    const isNcrInfantryWeapon = displayWeapon && ncrInfantryWeaponIds.includes(displayWeapon.id ?? displayWeapon.weaponId);
 
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
 
@@ -151,6 +148,7 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const fireRateWithTrait = hasTrait('Техника спуска') && isLightOrEnergy ? Math.max(0, fireRateBase - 1) : fireRateBase;
 
     const stats = [
+      { label: 'ЗНАЧЕНИЕ УСПЕХА', value: `${successValue}` },
       { label: 'ТИП УРОНА', value: damageType },
       { label: 'УРОН', value: `${damageWithNcr}` },
       { label: 'ЭФФЕКТ', value: effectsValue },
