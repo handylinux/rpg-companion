@@ -23,13 +23,43 @@ function normalizeModRow(row) {
     id: row.id,
     name: row.name,
     prefix: row.prefix,
-    slot: row.slot,
+    slot: normalizeSlotKey(row.slot),
+    rawSlot: row.slot,
     // БД: weight/cost/effects/effect_description
     weight: row.weight,
     cost: row.cost,
     effects: row.effects,
     effect_description: row.effect_description,
   };
+}
+
+// CRITICAL INVARIANT:
+// Only ONE installed mod per category(slot) is allowed at any time.
+// If a new mod is selected in the same category, it MUST replace the previous one.
+function normalizeSlotKey(slot) {
+  const raw = String(slot || '').trim();
+  const key = raw.toLowerCase();
+  const map = {
+    barrel: 'Barrels',
+    barrels: 'Barrels',
+    receiver: 'Receivers',
+    receivers: 'Receivers',
+    sight: 'Sights',
+    sights: 'Sights',
+    muzzle: 'Muzzles',
+    muzzles: 'Muzzles',
+    stock: 'Stocks',
+    stocks: 'Stocks',
+    grip: 'Grips',
+    grips: 'Grips',
+    magazine: 'Magazines',
+    magazines: 'Magazines',
+    capacitor: 'Capacitors',
+    capacitors: 'Capacitors',
+    unique: 'Uniques',
+    uniques: 'Uniques',
+  };
+  return map[key] || raw || 'Other';
 }
 
 function translateModTokenToRu(token) {
@@ -198,8 +228,11 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
 
         if (slots && slots.length) {
           for (const slot of slots) {
+            const normalizedSlot = normalizeSlotKey(slot);
             const mods = await getModsForWeaponSlot(resolvedWeaponId, slot);
-            bySlot[slot] = (mods || []).map(normalizeModRow).filter(Boolean);
+            const normalizedMods = (mods || []).map(normalizeModRow).filter(Boolean);
+            if (!bySlot[normalizedSlot]) bySlot[normalizedSlot] = [];
+            bySlot[normalizedSlot].push(...normalizedMods);
           }
         } else {
           // Fallback: если weapon_mod_slots для оружия не заполнен,
@@ -208,7 +241,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
           for (const m of (mods || [])) {
             const nm = normalizeModRow(m);
             if (!nm) continue;
-            const slot = nm.slot || 'Other';
+            const slot = normalizeSlotKey(nm.slot || nm.rawSlot || 'Other');
             if (!bySlot[slot]) bySlot[slot] = [];
             bySlot[slot].push(nm);
           }
@@ -219,7 +252,8 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
         const applied = weaponWithBase.appliedMods || {};
         for (const [slot, modId] of Object.entries(applied)) {
           const modRow = await getWeaponModById(modId);
-          if (modRow) selected[slot] = normalizeModRow(modRow);
+          const normalizedSlot = normalizeSlotKey(slot);
+          if (modRow) selected[normalizedSlot] = normalizeModRow(modRow);
         }
 
         if (cancelled) return;
