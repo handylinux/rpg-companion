@@ -142,3 +142,19 @@ export const TRAITS = {
     carryWeight: 150
   }
 };
+
+export const getTraitDisplayDescription = (trait) => {
+  if (!trait?.name) return "";
+
+  const baseTrait = TRAITS[trait.name] || {};
+  const description = baseTrait.description || trait.description || "";
+  const baseEffects = Array.isArray(baseTrait.effects) ? baseTrait.effects : [];
+  const runtimeEffects = Array.isArray(trait?.modifiers?.effects)
+    ? trait.modifiers.effects
+    : [];
+  const uniqueEffects = [...new Set([...baseEffects, ...runtimeEffects])];
+
+  if (uniqueEffects.length === 0) return description;
+  const effectsText = uniqueEffects.map((effect) => `• ${effect}`).join("\n");
+  return `${description}\n\nЭффекты:\n${effectsText}`;
+};
