@@ -10,20 +10,31 @@ import { renderTextWithIcons } from './textUtils';
 import WeaponModificationModal from './WeaponModificationModal';
 
 
-const HealthCounter = ({ max }) => {
+const HealthCounter = ({ max, isEnabled }) => {
   const { currentHealth, setCurrentHealth } = useCharacter();
 
   const handleAdjustHealth = (amount) => {
+    if (!isEnabled) return;
     setCurrentHealth(prev => Math.max(0, Math.min(max, prev + amount)));
   };
 
+  const healthText = isEnabled ? `${currentHealth}/${max}` : '—/—';
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <TouchableOpacity onPress={() => handleAdjustHealth(-1)} style={styles.counterButton}>
+      <TouchableOpacity
+        onPress={() => handleAdjustHealth(-1)}
+        disabled={!isEnabled}
+        style={[styles.counterButton, !isEnabled && { opacity: 0.5 }]}
+      >
         <Text style={styles.counterButtonText}>-</Text>
       </TouchableOpacity>
-      <Text style={[styles.counterValue, { minWidth: 50, textAlign: 'center' }]}>{`${currentHealth}/${max}`}</Text>
-      <TouchableOpacity onPress={() => handleAdjustHealth(1)} style={styles.counterButton}>
+      <Text style={[styles.counterValue, { minWidth: 50, textAlign: 'center' }]}>{healthText}</Text>
+      <TouchableOpacity
+        onPress={() => handleAdjustHealth(1)}
+        disabled={!isEnabled}
+        style={[styles.counterButton, !isEnabled && { opacity: 0.5 }]}
+      >
         <Text style={styles.counterButtonText}>+</Text>
       </TouchableOpacity>
     </View>
@@ -168,12 +179,25 @@ const armorSlotConfig = {
 // --- Main Component ---
 
 const WeaponsAndArmorScreen = () => {
-  const { attributes, level, equippedWeapons, setEquippedWeapons, equippedArmor, currentHealth, setCurrentHealth, saveModifiedItem, equipment, setEquipment, effects } = useCharacter();
+  const {
+    attributes,
+    level,
+    equippedWeapons,
+    setEquippedWeapons,
+    equippedArmor,
+    currentHealth,
+    setCurrentHealth,
+    saveModifiedItem,
+    equipment,
+    setEquipment,
+    effects,
+    attributesSaved
+  } = useCharacter();
 
   const initiative = calculateInitiative(attributes);
   const defense = calculateDefense(attributes);
   const meleeBonus = calculateMeleeBonus(attributes);
-  const maxHealth = calculateMaxHealth(attributes, level);
+  const maxHealth = attributesSaved ? calculateMaxHealth(attributes, level) : 0;
   
   const hasRadImmunity = effects.includes('Иммунитет к радиации');
   const hasPoisonImmunity = effects.includes('Иммунитет к яду');
@@ -186,12 +210,12 @@ const WeaponsAndArmorScreen = () => {
   
 
   
-  // Инициализируем текущее здоровье, если оно равно 0
+  // Инициализируем здоровье только после сохранения атрибутов
   useEffect(() => {
-    if (currentHealth === 0) {
+    if (attributesSaved && currentHealth === 0) {
       setCurrentHealth(maxHealth);
     }
-  }, [currentHealth, maxHealth, setCurrentHealth]);
+  }, [attributesSaved, currentHealth, maxHealth, setCurrentHealth]);
 
   // Функции для работы с модальным окном модификаций
   const handleOpenModificationModal = (weapon) => {
@@ -268,7 +292,7 @@ const WeaponsAndArmorScreen = () => {
                 <StatBox title="Зависимость" />
                 <StatBox title="Сопр. Яду" value={hasPoisonImmunity ? '∞' : '0'} />
                 <StatBox title="Здоровье" max={maxHealth}>
-                  <HealthCounter max={maxHealth} />
+                  <HealthCounter max={maxHealth} isEnabled={attributesSaved} />
                 </StatBox>
             </View>
             </View>
