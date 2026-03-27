@@ -70,7 +70,6 @@ const EmptyCell = ({ id }) => <View key={id} style={styles.emptyCell} />;
 
 export default function HomeScreen({ navigation }) {
   const locale = useLocale();
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const { getCharactersList, loadCharacter, resetCharacter, deleteCharacter } = useCharacter();
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,8 +77,6 @@ export default function HomeScreen({ navigation }) {
     { code: 'ru-RU', label: tHomeScreen('language.russian', 'Русский'), flag: '🇷🇺' },
     { code: 'en-EN', label: tHomeScreen('language.english', 'English'), flag: '🇬🇧' },
   ];
-  const currentLanguage =
-    languageOptions.find((lang) => lang.code === locale) || languageOptions[0];
 
   const loadList = useCallback(async () => {
     setLoading(true);
@@ -163,32 +160,25 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <View style={styles.languageContainer}>
-          <TouchableOpacity
-            style={styles.languageButton}
-            onPress={() => setShowLanguageMenu(prev => !prev)}
-          >
-            <Text style={styles.languageButtonText}>
-              {currentLanguage.flag}
-            </Text>
-          </TouchableOpacity>
-          {showLanguageMenu && (
-            <View style={styles.languageMenu}>
-              {languageOptions.map((lang) => (
-                <TouchableOpacity
-                  key={lang.code}
-                  style={styles.languageMenuItem}
-                  onPress={() => {
-                    setCurrentLocale(lang.code);
-                    setShowLanguageMenu(false);
-                  }}
-                >
-                  <Text style={styles.languageMenuItemText}>
-                    {lang.flag} {lang.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
+          {languageOptions.map((lang, index) => (
+            <TouchableOpacity
+              key={lang.code}
+              style={[
+                styles.langToggleButton,
+                index === 0 && styles.langToggleButtonFirst,
+                index === languageOptions.length - 1 && styles.langToggleButtonLast,
+                locale === lang.code && styles.langToggleButtonActive,
+              ]}
+              onPress={() => setCurrentLocale(lang.code)}
+            >
+              <Text style={[
+                styles.langToggleText,
+                locale === lang.code && styles.langToggleTextActive,
+              ]}>
+                {lang.code === 'ru-RU' ? 'RU' : 'EN'}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
         <Text style={styles.title}>{tHomeScreen("title", "Менеджер персонажей")}</Text>
         <Text style={styles.subtitle}>{tHomeScreen("subtitle", "Ролевая игра Fallout (2d20)")}</Text>
@@ -255,36 +245,37 @@ const styles = StyleSheet.create({
   languageContainer: {
     position: 'absolute',
     right: 8,
-    top: 8,
-    zIndex: 10,
+    top: 10,
+    flexDirection: 'row',
   },
-  languageButton: {
-    backgroundColor: '#222',
+  langToggleButton: {
+    backgroundColor: '#2a2a2a',
     borderWidth: 1,
     borderColor: '#555',
-    borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
-  languageButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  langToggleButtonFirst: {
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    borderRightWidth: 0,
   },
-  languageMenu: {
-    marginTop: 4,
-    backgroundColor: '#111',
-    borderWidth: 1,
-    borderColor: '#444',
-    borderRadius: 6,
-    overflow: 'hidden',
+  langToggleButtonLast: {
+    borderTopRightRadius: 6,
+    borderBottomRightRadius: 6,
   },
-  languageMenuItem: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+  langToggleButtonActive: {
+    backgroundColor: '#d4af37',
+    borderColor: '#d4af37',
   },
-  languageMenuItemText: {
-    color: '#fff',
-    fontSize: 12,
+  langToggleText: {
+    color: '#aaa',
+    fontSize: 11,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+  },
+  langToggleTextActive: {
+    color: '#1a1a1a',
   },
   scrollView: {
     flex: 1,
