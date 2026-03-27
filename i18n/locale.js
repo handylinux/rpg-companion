@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 const SUPPORTED_LOCALES = ['ru-RU', 'en-EN'];
 const DEFAULT_LOCALE = 'ru-RU';
 
@@ -23,11 +25,41 @@ const detectLocale = () => {
 };
 
 let currentLocale = detectLocale();
+const listeners = new Set();
+
+const emitLocaleChange = () => {
+  listeners.forEach((listener) => {
+    try {
+      listener();
+    } catch (_) {
+      // no-op
+    }
+  });
+};
+
+export const subscribeToLocale = (listener) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
 
 export const getCurrentLocale = () => currentLocale;
 export const setCurrentLocale = (nextLocale) => {
   currentLocale = normalizeLocale(nextLocale);
+  emitLocaleChange();
   return currentLocale;
+};
+
+export const useLocale = () => {
+  const [locale, setLocale] = useState(getCurrentLocale());
+
+  useEffect(() => {
+    const unsubscribe = subscribeToLocale(() => {
+      setLocale(getCurrentLocale());
+    });
+    return unsubscribe;
+  }, []);
+
+  return locale;
 };
 
 export { SUPPORTED_LOCALES, DEFAULT_LOCALE, normalizeLocale };
