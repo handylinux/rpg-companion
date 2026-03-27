@@ -45,7 +45,7 @@ const InventoryScreen = () => {
   const [selectedItemForSale, setSelectedItemForSale] = useState(null);
   const [isAddItemModalVisible, setAddItemModalVisible] = useState(false);
 
-  const getItemName = (item) => item?.Name || item?.name || '';
+  const getItemName = (item) => item?.Name || item?.name || item?.Название || '';
   const getItemType = (item) => {
     if (item?.itemType) return item.itemType;
     if (item?.type === 'ammo') return 'ammo';
@@ -653,11 +653,12 @@ const InventoryScreen = () => {
     };
     
     const price = parseFloat(
-      displayItem.Цена !== undefined
-        ? displayItem.Цена
-        : (displayItem.price ?? displayItem.cost)
+      displayItem.Cost !== undefined
+        ? displayItem.Cost
+        : (displayItem.Цена !== undefined ? displayItem.Цена : (displayItem.price ?? displayItem.cost))
     ) || 0;
-    const weight = parseFloat(String(displayItem.Вес !== undefined ? displayItem.Вес : displayItem.weight).replace(',', '.')) || 0;
+    const weightRaw = displayItem.Weight !== undefined ? displayItem.Weight : (displayItem.Вес !== undefined ? displayItem.Вес : displayItem.weight);
+    const weight = parseFloat(String(weightRaw).replace(',', '.')) || 0;
 
     return (
       <View style={styles.tableRow}>
@@ -727,7 +728,8 @@ const InventoryScreen = () => {
         const modifiedItem = getModifiedItem(itemWithType);
         const displayItem = modifiedItem || item;
         
-        const weight = parseFloat(String(displayItem.Вес !== undefined ? displayItem.Вес : displayItem.weight).replace(',', '.')) || 0;
+        const weightRaw = displayItem.Weight !== undefined ? displayItem.Weight : (displayItem.Вес !== undefined ? displayItem.Вес : displayItem.weight);
+        const weight = parseFloat(String(weightRaw).replace(',', '.')) || 0;
         return acc + (weight * item.quantity);
       }, 0);
     }
@@ -743,7 +745,8 @@ const InventoryScreen = () => {
         const modifiedWeapon = getModifiedItem(weaponWithType);
         const displayWeapon = modifiedWeapon || weapon;
         
-        const weight = parseFloat(String(displayWeapon.Вес !== undefined ? displayWeapon.Вес : displayWeapon.weight).replace(',', '.')) || 0;
+        const weightRaw = displayWeapon.Weight !== undefined ? displayWeapon.Weight : (displayWeapon.Вес !== undefined ? displayWeapon.Вес : displayWeapon.weight);
+        const weight = parseFloat(String(weightRaw).replace(',', '.')) || 0;
         total += weight;
       }
     });
@@ -751,11 +754,13 @@ const InventoryScreen = () => {
     // Вес экипированной брони и одежды
     Object.values(equippedArmor).forEach(slotData => {
       if (slotData.armor) {
-        const weight = parseFloat(String(slotData.armor.Вес !== undefined ? slotData.armor.Вес : slotData.armor.weight).replace(',', '.')) || 0;
+        const weightRaw = slotData.armor.Weight !== undefined ? slotData.armor.Weight : (slotData.armor.Вес !== undefined ? slotData.armor.Вес : slotData.armor.weight);
+        const weight = parseFloat(String(weightRaw).replace(',', '.')) || 0;
         total += weight;
       }
       if (slotData.clothing) {
-        const weight = parseFloat(String(slotData.clothing.Вес !== undefined ? slotData.clothing.Вес : slotData.clothing.weight).replace(',', '.')) || 0;
+        const weightRaw = slotData.clothing.Weight !== undefined ? slotData.clothing.Weight : (slotData.clothing.Вес !== undefined ? slotData.clothing.Вес : slotData.clothing.weight);
+        const weight = parseFloat(String(weightRaw).replace(',', '.')) || 0;
         total += weight;
       }
     });
@@ -778,9 +783,9 @@ const InventoryScreen = () => {
         const displayItem = modifiedItem || item;
         
         const price = parseFloat(
-          displayItem.Цена !== undefined
-            ? displayItem.Цена
-            : (displayItem.price ?? displayItem.cost)
+          displayItem.Cost !== undefined
+            ? displayItem.Cost
+            : (displayItem.Цена !== undefined ? displayItem.Цена : (displayItem.price ?? displayItem.cost))
         ) || 0;
         return acc + (price * item.quantity);
       }, 0);
@@ -797,7 +802,7 @@ const InventoryScreen = () => {
         const modifiedWeapon = getModifiedItem(weaponWithType);
         const displayWeapon = modifiedWeapon || weapon;
         
-        const price = parseFloat(displayWeapon.Цена !== undefined ? displayWeapon.Цена : displayWeapon.price) || 0;
+        const price = parseFloat(displayWeapon.Cost !== undefined ? displayWeapon.Cost : (displayWeapon.Цена !== undefined ? displayWeapon.Цена : displayWeapon.price)) || 0;
         total += price;
       }
     });
@@ -805,11 +810,11 @@ const InventoryScreen = () => {
     // Цена экипированной брони и одежды
     Object.values(equippedArmor).forEach(slotData => {
       if (slotData.armor) {
-        const price = parseFloat(slotData.armor.Цена !== undefined ? slotData.armor.Цена : slotData.armor.price) || 0;
+        const price = parseFloat(slotData.armor.Cost !== undefined ? slotData.armor.Cost : (slotData.armor.Цена !== undefined ? slotData.armor.Цена : slotData.armor.price)) || 0;
         total += price;
       }
       if (slotData.clothing) {
-        const price = parseFloat(slotData.clothing.Цена !== undefined ? slotData.clothing.Цена : slotData.clothing.price) || 0;
+        const price = parseFloat(slotData.clothing.Cost !== undefined ? slotData.clothing.Cost : (slotData.clothing.Цена !== undefined ? slotData.clothing.Цена : slotData.clothing.price)) || 0;
         total += price;
       }
     });
@@ -855,7 +860,7 @@ const InventoryScreen = () => {
             ) : (
               activeTimedEffects.map((effect) => (
                 <Text key={effect.id} style={styles.effectItemText}>
-                  {effect.effectKind === 'positive' ? '🟢' : '🔴'} {effect.effectName} — {getEffectTimeText(effect.scenesLeft)}
+                  {effect.effectKind === 'positive' ? '🟢' : '🔴'} {effect.effectName || effect.effectLabel} — {getEffectTimeText(effect.scenesLeft)}
                 </Text>
               ))
             )}

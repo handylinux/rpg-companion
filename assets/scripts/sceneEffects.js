@@ -37,9 +37,10 @@ const normalizeRemovalEffects = (list) => {
     .filter(Boolean);
 };
 
-const buildTimedEffect = ({ effectName, effectKind, scenes, sourceName }) => ({
+const buildTimedEffect = ({ effectName, effectLabel, effectKind, scenes, sourceName }) => ({
   id: `${effectKind}-${effectName}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   effectName,
+  effectLabel,
   effectKind,
   sourceName,
   scenesLeft: scenes,
@@ -58,18 +59,20 @@ const applyOrStackEffect = (activeEffects, newEffect) => {
   const next = [...activeEffects];
   next[existingIndex] = {
     ...next[existingIndex],
+    effectLabel: newEffect.effectLabel || next[existingIndex].effectLabel,
     scenesLeft: (Number(next[existingIndex].scenesLeft) || 0) + (Number(newEffect.scenesLeft) || 0),
   };
   return next;
 };
 
 export const applyConsumableToEffects = (item, currentEffects = []) => {
-  const name = toStringSafe(item?.Название || item?.Name || item?.name);
+  const name = toStringSafe(item?.Name || item?.name || item?.Название);
   let nextEffects = [...currentEffects];
   const events = [];
 
   const removeNegativeEffects = normalizeRemovalEffects(
-    item?.['Снимает отрицательные эффекты']
+    item?.['Removes negative effects']
+      ?? item?.['Снимает отрицательные эффекты']
       ?? item?.removeNegativeEffects
       ?? item?.['removesNegativeEffects']
   );
@@ -79,7 +82,8 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
     nextEffects = nextEffects.filter((effect) => {
       if (effect.effectKind !== 'negative') return true;
       if (removeNegativeEffects.includes('all')) return false;
-      return !removeNegativeEffects.includes(effect.effectName);
+      const comparableNames = [effect.effectName, effect.effectLabel].filter(Boolean);
+      return !comparableNames.some((value) => removeNegativeEffects.includes(value));
     });
 
     if (nextEffects.length !== beforeLength) {
@@ -87,8 +91,9 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
     }
   }
 
-  const positiveName = toStringSafe(item?.['Эффект положительный'] ?? item?.positiveEffect);
-  const positiveDuration = normalizeDuration(item?.['Действие положительного эффекта'] ?? item?.positiveEffectDuration);
+  const positiveName = toStringSafe(item?.['Positive effect'] ?? item?.['Эффект положительный'] ?? item?.positiveEffect);
+  const positiveLabel = toStringSafe(item?.['Positive effect label'] ?? item?.positiveEffectLabel);
+  const positiveDuration = normalizeDuration(item?.['Positive effect duration'] ?? item?.['Действие положительного эффекта'] ?? item?.positiveEffectDuration);
 
   if (positiveName && positiveDuration.type !== 'none') {
     if (positiveDuration.type === 'instant') {
@@ -96,6 +101,7 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
     } else if (positiveDuration.scenes > 0) {
       nextEffects = applyOrStackEffect(nextEffects, buildTimedEffect({
         effectName: positiveName,
+        effectLabel: positiveLabel,
         effectKind: 'positive',
         scenes: positiveDuration.scenes,
         sourceName: name,
@@ -104,8 +110,9 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
     }
   }
 
-  const negativeName = toStringSafe(item?.['Эффект отрицательный'] ?? item?.negativeEffect);
-  const negativeDuration = normalizeDuration(item?.['Действие отрицательного эффекта'] ?? item?.negativeEffectDuration);
+  const negativeName = toStringSafe(item?.['Negative effect'] ?? item?.['Эффект отрицательный'] ?? item?.negativeEffect);
+  const negativeLabel = toStringSafe(item?.['Negative effect label'] ?? item?.negativeEffectLabel);
+  const negativeDuration = normalizeDuration(item?.['Negative effect duration'] ?? item?.['Действие отрицательного эффекта'] ?? item?.negativeEffectDuration);
 
   if (negativeName && negativeDuration.type !== 'none') {
     if (negativeDuration.type === 'instant') {
@@ -113,6 +120,7 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
     } else if (negativeDuration.scenes > 0) {
       nextEffects = applyOrStackEffect(nextEffects, buildTimedEffect({
         effectName: negativeName,
+        effectLabel: negativeLabel,
         effectKind: 'negative',
         scenes: negativeDuration.scenes,
         sourceName: name,
