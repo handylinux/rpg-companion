@@ -72,9 +72,7 @@ const styles = StyleSheet.create({
   },
   leftColumn: {
     width: '40%',
-    marginRight: 8,
-    alignSelf: 'stretch',
-    flexDirection: 'column',
+    marginRight: 8
   },
   rightColumn: {
     width: '60%'
@@ -276,14 +274,13 @@ const styles = StyleSheet.create({
   },
   imageSection: {
     width: '100%',
-    flex: 1,
-    overflow: 'hidden',
+    marginBottom: 16,
     backgroundColor: '#e0e0e0',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#5a5a5a',
     padding: 5,
-    minHeight: 80,
+    aspectRatio: 2 / 3,
   },
   taggedSkillsHint: {
     color: '#f0e68c',
