@@ -69,10 +69,12 @@ export const AttributesSection = ({
         <Text style={styles.sectionTitle}>
           {tCharacterScreen('labels.attributes', 'Атрибуты').toUpperCase()}
         </Text>
-        {(!attributesSaved || isPerkMode) && (
-          <Text style={styles.pointsText}>{tCharacterScreen('labels.points', 'Очки')}: {remainingAttributePoints}</Text>
-        )}
       </View>
+      {(!attributesSaved || isPerkMode) && remainingAttributePoints > 0 && (
+        <Text style={styles.pointsHint}>
+          {tCharacterScreen('labels.points', 'Очки')}: {remainingAttributePoints}
+        </Text>
+      )}
       {attributes.map((attr, index) => (
         <AttributeRow 
           key={index}
@@ -141,10 +143,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
-  pointsText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
+  pointsHint: {
+    color: '#f0e68c',
+    fontSize: 11,
+    textAlign: 'right',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    backgroundColor: '#1a1a1a',
   },
   attributeRow: {
     flexDirection: 'row',

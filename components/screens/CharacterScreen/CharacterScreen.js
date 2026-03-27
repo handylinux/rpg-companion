@@ -231,7 +231,7 @@ const LuckPointsRow = ({ luckPoints, maxLuckPoints, onSpend, onRestore }) => {
         </TouchableOpacity>
         <Text
           style={styles.derivedValue}
-        >{`${luckPoints} / ${maxLuckPoints}`}</Text>
+        >{`${luckPoints}`}</Text>
         <TouchableOpacity
           onPress={onRestore}
           style={[styles.luckButton, !canRestore && styles.disabledLuckButton]}
@@ -1115,38 +1115,6 @@ export default function CharacterScreen() {
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>ХАРАКТЕРИСТИКИ</Text>
                 </View>
-                <DerivedRow
-                  title={tCharacterScreen("labels.attributePoints", "Очки атрибутов")}
-                  value={remainingAttributePoints}
-                />
-                <DerivedRow
-                  title={tCharacterScreen("labels.taggedSkills", "Отмечено навыков")}
-                  value={(() => {
-                    const extraSkillsFromTrait =
-                      trait?.extraSkills || trait?.modifiers?.extraSkills || 0;
-                    const goodSoulSelected =
-                      trait?.modifiers?.goodSoulSelectedSkills || [];
-                    const mainSelected = selectedSkills.filter(
-                      (s) =>
-                        !forcedSelectedSkills.includes(s) &&
-                        !goodSoulSelected.includes(s),
-                    ).length;
-                    const totalSelected = selectedSkills.length;
-                    const maxTotal =
-                      BASE_TAGGED_SKILLS +
-                      extraSkillsFromTrait +
-                      (goodSoulSelected.length > 0 ? 2 : 0);
-                    return `${mainSelected}/${BASE_TAGGED_SKILLS} основных${extraSkillsFromTrait > 0 ? ` + ${extraSkillsFromTrait} экстра` : ""} (всего: ${totalSelected}/${maxTotal})`;
-                  })()}
-                />
-                <DerivedRow
-                  title={tCharacterScreen("labels.skillPoints", "Очки навыков")}
-                  value={
-                    attributesSaved
-                      ? `${skillPointsLeft} / ${skillPointsAvailable}`
-                      : "—"
-                  }
-                />
                 <LuckPointsRow
                   luckPoints={luckPoints}
                   maxLuckPoints={maxLuckPoints}
@@ -1164,10 +1132,20 @@ export default function CharacterScreen() {
                   <Text style={styles.sectionTitle}>{tCharacterScreen("labels.skills", "Навыки").toUpperCase()}</Text>
                   {attributesSaved && !skillsSaved && (
                     <Text style={styles.skillsCount}>
-                      Доступно: {skillPointsLeft} очков
+                      {tCharacterScreen("labels.available", "Доступно")}: {skillPointsLeft} {tCharacterScreen("labels.pointsShort", "очков")}
                     </Text>
                   )}
                 </View>
+                {attributesSaved && !skillsSaved && (() => {
+                  const extraSkillsFromTrait = trait?.extraSkills || trait?.modifiers?.extraSkills || 0;
+                  const maxTagged = BASE_TAGGED_SKILLS + extraSkillsFromTrait;
+                  const taggedCount = selectedSkills.length;
+                  return (
+                    <Text style={styles.taggedSkillsHint}>
+                      {tCharacterScreen("labels.taggedSkills", "Отмечено навыков")}: {taggedCount}/{maxTagged}
+                    </Text>
+                  );
+                })()}
                 <View style={styles.skillsHeader}>
                   <Text style={styles.skillsHeaderText}>{tCharacterScreen("labels.skill", "Навык")}</Text>
                   <Text style={styles.skillsHeaderText}>{tCharacterScreen("labels.value", "Значение")}</Text>

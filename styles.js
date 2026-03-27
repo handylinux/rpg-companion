@@ -72,7 +72,9 @@ const styles = StyleSheet.create({
   },
   leftColumn: {
     width: '40%',
-    marginRight: 8
+    marginRight: 8,
+    alignSelf: 'stretch',
+    flexDirection: 'column',
   },
   rightColumn: {
     width: '60%'
@@ -274,13 +276,22 @@ const styles = StyleSheet.create({
   },
   imageSection: {
     width: '100%',
-    marginBottom: 16,
+    flex: 1,
+    overflow: 'hidden',
     backgroundColor: '#e0e0e0',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#5a5a5a',
     padding: 5,
-    aspectRatio: 2 / 3,
+    minHeight: 80,
+  },
+  taggedSkillsHint: {
+    color: '#f0e68c',
+    fontSize: 11,
+    textAlign: 'right',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    backgroundColor: '#1a1a1a',
   },
   image: {
     width: '100%',
