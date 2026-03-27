@@ -976,6 +976,7 @@ export default function CharacterScreen() {
                   characterName.length > 0 && !isSaved
                     ? styles.saveNameButtonActive
                     : styles.saveNameButtonDisabled,
+                  { opacity: 1 },
                 ]}
                 onPress={() => {
                   if (characterName.length > 0) {

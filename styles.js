@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderWidth: 1,
     borderColor: '#000',
-    marginHorizontal: 2,
+    marginHorizontal: 14,
   },
   luckButtonText: {
     fontSize: 12,
