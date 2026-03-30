@@ -6,6 +6,17 @@ const normalizeModifierValue = (mod) => {
   return sign * Number(mod.value || 0);
 };
 
+export const formatModBonuses = (mod) => {
+  const p = normalizeModifierValue(mod?.statModifiers?.physicalDamageRating);
+  const e = normalizeModifierValue(mod?.statModifiers?.energyDamageRating);
+  const r = normalizeModifierValue(mod?.statModifiers?.radiationDamageRating);
+  const effectsText = (mod?.specialEffects || []).map((x) => x.description).filter(Boolean).join(' | ');
+  return {
+    bonuses: `Улучшения: ${p >= 0 ? '+' : ''}${p} Физ. Су.; ${e >= 0 ? '+' : ''}${e} Энерго Су.; ${r >= 0 ? '+' : ''}${r} Рад. Су.`,
+    effects: effectsText ? `Эффекты: ${effectsText}` : 'Эффекты: —',
+  };
+};
+
 export const applyArmorModToItem = (armorItem, mod) => {
   if (!armorItem || !mod) return armorItem;
   const next = { ...armorItem };
@@ -18,11 +29,13 @@ export const applyArmorModToItem = (armorItem, mod) => {
   return next;
 };
 
-export const applyArmorMods = (armorItem, catalog) => {
+export const applyArmorMods = (armorItem, catalog, opts = {}) => {
   if (!armorItem) return { item: armorItem, effects: DEFAULT_EFFECTS };
 
-  const stdModId = armorItem.appliedArmorModId || armorItem.appliedArmorMod?.id;
-  const uniqModId = armorItem.appliedUniqueArmorModId || armorItem.appliedUniqueArmorMod?.id;
+  const stdKey = opts.standardKey || 'appliedArmorModId';
+  const uniqKey = opts.uniqueKey || 'appliedUniqueArmorModId';
+  const stdModId = armorItem[stdKey] || armorItem.appliedArmorMod?.id;
+  const uniqModId = armorItem[uniqKey] || armorItem.appliedUniqueArmorMod?.id;
 
   const allStd = Array.isArray(catalog?.armorMods) ? catalog.armorMods : [];
   const allUniq = Array.isArray(catalog?.uniqArmorMods) ? catalog.uniqArmorMods : [];
