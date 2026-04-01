@@ -10,6 +10,7 @@ import {
   calculateMeleeBonus,
   calculateCarryWeight
 } from './screens/CharacterScreen/logic/characterLogic';
+import { ORIGINS } from './screens/CharacterScreen/logic/originsData';
 import { getAttributeValue } from './screens/CharacterScreen/logic/attributeKeyUtils';
 import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from './screens/CharacterScreen/logic/perksLogic';
 import { applyConsumableToEffects, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../assets/scripts/sceneEffects';
@@ -18,15 +19,29 @@ const CharacterContext = createContext();
 
 const generateId = () => `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+const resolveOrigin = (storedOrigin) => {
+  if (!storedOrigin) return null;
+
+  const identity = typeof storedOrigin === 'string'
+    ? storedOrigin
+    : (storedOrigin.id || storedOrigin.originId || storedOrigin.name);
+
+  return ORIGINS.find((origin) => (
+    origin.id === identity || origin.name === identity
+  )) || null;
+};
+
 const serializeState = (state) => ({
   ...state,
-  modifiedItems: state.modifiedItems instanceof Map 
+  origin: state.origin?.id ? { id: state.origin.id } : null,
+  modifiedItems: state.modifiedItems instanceof Map
     ? Array.from(state.modifiedItems.entries())
     : (Array.isArray(state.modifiedItems) ? state.modifiedItems : []),
 });
 
 const deserializeState = (data) => ({
   ...data,
+  origin: resolveOrigin(data.origin),
   modifiedItems: new Map(Array.isArray(data.modifiedItems) ? data.modifiedItems : []),
 });
 
