@@ -26,7 +26,7 @@ const WEAPON_TYPE_GROUPS = {
   explosive: ['Explosive', 'Explosives'],
 };
 
-const AddItemModal = ({ visible, onClose, onSelectItem }) => {
+const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.addItemModal.title' }) => {
   const locale = useLocale();
   const [currentPath, setCurrentPath] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,14 +47,18 @@ const AddItemModal = ({ visible, onClose, onSelectItem }) => {
       [tInventory('modals.addItemModal.categories.ammo')]: {
         [tInventory('modals.addItemModal.categories.all')]: Array.isArray(equipmentCatalog.ammoData) ? equipmentCatalog.ammoData : [],
       },
-      [tInventory('modals.addItemModal.categories.food')]: {},
+      [tInventory('modals.addItemModal.categories.food')]: {
+        [tInventory('modals.addItemModal.categories.all')]: [],
+      },
       [tInventory('modals.addItemModal.categories.drinks')]: {
         [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.drinks || [],
       },
       [tInventory('modals.addItemModal.categories.chems')]: {
         [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.chems || [],
       },
-      [tInventory('modals.addItemModal.categories.materials')]: {},
+      [tInventory('modals.addItemModal.categories.materials')]: {
+        [tInventory('modals.addItemModal.categories.all')]: [],
+      },
     };
   }, [locale]);
 
@@ -162,7 +166,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem }) => {
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <SafeAreaView style={styles.modalContent}>
-          <Text style={styles.title}>{currentPath.length > 0 ? currentPath[currentPath.length - 1] : tInventory('modals.addItemModal.title')}</Text>
+          <Text style={styles.title}>{currentPath.length > 0 ? currentPath[currentPath.length - 1] : tInventory(rootTitleKey)}</Text>
 
           {currentPath.length > 0 && !searchTerm && (
             <TouchableOpacity style={styles.backButton} onPress={() => setCurrentPath(currentPath.slice(0, -1))}>
@@ -193,8 +197,8 @@ const AddItemModal = ({ visible, onClose, onSelectItem }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' },
-  modalContent: { width: '90%', height: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 },
+  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', paddingHorizontal: 16, paddingVertical: 24 },
+  modalContent: { width: '100%', maxWidth: 560, height: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 },
   title: { fontSize: 22, fontWeight: 'bold', marginBottom: 12, textAlign: 'center' },
   backButton: { alignSelf: 'flex-start', marginBottom: 8 },
   backButtonText: { color: '#1A73E8', fontSize: 14 },

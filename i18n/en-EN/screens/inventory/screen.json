@@ -33,7 +33,9 @@
     "unequip": "↓ Unequip",
     "equip": "↑ Equip",
     "apply": "Use",
-    "sell": "Sell"
+    "sell": "Sell",
+    "addLoot": "Add loot",
+    "buyItems": "Buy items"
   },
   "labels": {
     "leftArm": "Left bracer",

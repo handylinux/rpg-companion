@@ -32,5 +32,6 @@
   "back": "...Back",
   "searchPlaceholder": "Search all items...",
   "emptyCategory": "Category is empty",
-  "close": "Close"
+  "close": "Close",
+  "buyTitle": "Buy items"
 }

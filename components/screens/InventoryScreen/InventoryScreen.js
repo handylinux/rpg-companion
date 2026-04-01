@@ -4,6 +4,7 @@ import { useCharacter } from '../../CharacterContext';
 import CapsModal from './modals/CapsModal';
 import SellItemModal from './modals/SellItemModal';
 import AddItemModal from './modals/AddItemModal';
+import BuyItemModal from './modals/BuyItemModal';
 import { calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
 import { formatInventoryText, tInventory } from './logic/inventoryI18n';
 import { useLocale } from '../../../i18n/locale';
@@ -38,6 +39,9 @@ const InventoryScreen = () => {
   const [isSellModalVisible, setIsSellModalVisible] = useState(false);
   const [selectedItemForSale, setSelectedItemForSale] = useState(null);
   const [isAddItemModalVisible, setAddItemModalVisible] = useState(false);
+  const [itemSelectionMode, setItemSelectionMode] = useState('loot');
+  const [isBuyItemModalVisible, setIsBuyItemModalVisible] = useState(false);
+  const [selectedItemForBuy, setSelectedItemForBuy] = useState(null);
 
   useLocale();
 
@@ -209,20 +213,20 @@ const InventoryScreen = () => {
     }));
   }
 
-  const handleAddItem = (item) => {
+  const handleAddItem = (item, quantity = 1) => {
     const newItems = equipment?.items ? [...equipment.items] : [];
     const stackKey = getStackKey(item);
     const existingItemIndex = newItems.findIndex(existingItem => (existingItem.stackKey || getStackKey(existingItem)) === stackKey);
 
     if (existingItemIndex > -1) {
-        newItems[existingItemIndex].quantity += 1;
+        newItems[existingItemIndex].quantity += quantity;
     } else {
         // Убеждаемся, что у предмета есть itemType
         const itemWithType = {
           ...item,
           itemType: getItemType(item),
           stackKey,
-          quantity: 1
+          quantity
         };
         newItems.push(itemWithType);
     }
@@ -230,6 +234,24 @@ const InventoryScreen = () => {
   };
 
 
+
+
+  const handleSelectCatalogItem = (item) => {
+    if (itemSelectionMode === 'buy') {
+      setSelectedItemForBuy(item);
+      setIsBuyItemModalVisible(true);
+      return;
+    }
+    handleAddItem(item, 1);
+  };
+
+  const handleConfirmBuy = (quantity, unitPrice) => {
+    const finalCost = quantity * unitPrice;
+    setCaps((prev) => prev - finalCost);
+    handleAddItem({ ...selectedItemForBuy, price: unitPrice, cost: unitPrice }, quantity);
+    setIsBuyItemModalVisible(false);
+    setSelectedItemForBuy(null);
+  };
 
   const parseProtectedAreas = (item) => {
     if (Array.isArray(item?.protectedAreas) && item.protectedAreas.length > 0) {
@@ -327,7 +349,7 @@ const InventoryScreen = () => {
                     ...replacedWeapon,
                     itemType: getItemType(replacedWeapon),
                     stackKey: replacedStackKey,
-                    quantity: 1,
+                    quantity,
                     uniqueId: undefined,
                 });
             }
@@ -390,7 +412,7 @@ const InventoryScreen = () => {
             } else {
               const weaponToAdd = {
                 ...newEquipped[slot],
-                quantity: 1,
+                quantity,
                 itemType: getItemType(newEquipped[slot]),
                 stackKey,
                 uniqueId: undefined,
@@ -587,7 +609,7 @@ const InventoryScreen = () => {
               ...displayWeapon,
               itemType: getItemType(w),
               isEquipped: true, 
-              quantity: 1, 
+              quantity, 
               slot: i, 
               stackKey: w.stackKey || getStackKey(w),
               uniqueId: w.uniqueId || `weapon-${getItemName(w)}-${i}`
@@ -614,7 +636,7 @@ const InventoryScreen = () => {
             stackKey,
             equipInstanceId: item.equipInstanceId,
             isEquipped: true,
-            quantity: 1,
+            quantity,
             uniqueId: item.equipInstanceId || `${type}-${getItemName(item)}-${stackKey}`
         });
     });
@@ -750,9 +772,26 @@ const InventoryScreen = () => {
   };
 
   const renderFooter = () => (
-    <TouchableOpacity style={styles.addButtonRow} onPress={() => setAddItemModalVisible(true)}>
-      <Text style={styles.addButtonText}>+</Text>
-    </TouchableOpacity>
+    <View style={styles.footerActions}>
+      <TouchableOpacity
+        style={styles.secondaryActionButton}
+        onPress={() => {
+          setItemSelectionMode('loot');
+          setAddItemModalVisible(true);
+        }}
+      >
+        <Text style={styles.secondaryActionButtonText}>{tInventory('screen.actions.addLoot')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.secondaryActionButton}
+        onPress={() => {
+          setItemSelectionMode('buy');
+          setAddItemModalVisible(true);
+        }}
+      >
+        <Text style={styles.secondaryActionButtonText}>{tInventory('screen.actions.buyItems')}</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   const totalWeight = useMemo(() => {
@@ -905,7 +944,18 @@ const InventoryScreen = () => {
         <AddItemModal
           visible={isAddItemModalVisible}
           onClose={() => setAddItemModalVisible(false)}
-          onSelectItem={handleAddItem}
+          onSelectItem={handleSelectCatalogItem}
+          rootTitleKey={itemSelectionMode === 'buy' ? 'modals.addItemModal.buyTitle' : 'modals.addItemModal.title'}
+        />
+        <BuyItemModal
+          visible={isBuyItemModalVisible}
+          onClose={() => {
+            setIsBuyItemModalVisible(false);
+            setSelectedItemForBuy(null);
+          }}
+          item={selectedItemForBuy}
+          caps={caps}
+          onConfirmBuy={handleConfirmBuy}
         />
 
       </SafeAreaView>
@@ -1068,19 +1118,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
   },
-  addButtonRow: {
-    backgroundColor: 'rgba(0, 255, 0, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-    borderStyle: 'dashed',
+  footerActions: {
+    marginTop: 12,
+    gap: 10,
+    paddingBottom: 8,
   },
-  addButtonText: {
-    fontSize: 24,
-    color: '#000',
-    fontWeight: 'bold',
+  secondaryActionButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#333',
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  secondaryActionButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   }
 });
 

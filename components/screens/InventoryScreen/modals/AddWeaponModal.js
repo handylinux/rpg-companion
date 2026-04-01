@@ -37,8 +37,8 @@ const AddWeaponModal = ({ visible, onClose, weapons, onSelectWeapon }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' },
-  modalContent: { width: '90%', height: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 },
+  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', paddingHorizontal: 16, paddingVertical: 24 },
+  modalContent: { width: '100%', maxWidth: 560, height: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 },
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
   itemContainer: { padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee' },
   itemName: { fontSize: 16 },

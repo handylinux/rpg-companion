@@ -8,6 +8,8 @@ import ruSellItemModal from '../../../../i18n/ru-RU/screens/inventory/modals/sel
 import enSellItemModal from '../../../../i18n/en-EN/screens/inventory/modals/sellItemModal.json';
 import ruAddWeaponModal from '../../../../i18n/ru-RU/screens/inventory/modals/addWeaponModal.json';
 import enAddWeaponModal from '../../../../i18n/en-EN/screens/inventory/modals/addWeaponModal.json';
+import ruBuyItemModal from '../../../../i18n/ru-RU/screens/inventory/modals/buyItemModal.json';
+import enBuyItemModal from '../../../../i18n/en-EN/screens/inventory/modals/buyItemModal.json';
 import { getCurrentLocale } from '../../../../i18n/locale';
 
 const DICTIONARIES = {
@@ -18,6 +20,7 @@ const DICTIONARIES = {
       capsModal: ruCapsModal,
       sellItemModal: ruSellItemModal,
       addWeaponModal: ruAddWeaponModal,
+      buyItemModal: ruBuyItemModal,
     },
   },
   'en-EN': {
@@ -27,6 +30,7 @@ const DICTIONARIES = {
       capsModal: enCapsModal,
       sellItemModal: enSellItemModal,
       addWeaponModal: enAddWeaponModal,
+      buyItemModal: enBuyItemModal,
     },
   },
 };
