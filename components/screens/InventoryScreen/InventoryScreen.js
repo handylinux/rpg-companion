@@ -349,7 +349,7 @@ const InventoryScreen = () => {
                     ...replacedWeapon,
                     itemType: getItemType(replacedWeapon),
                     stackKey: replacedStackKey,
-                    quantity,
+                    quantity: 1,
                     uniqueId: undefined,
                 });
             }
@@ -412,7 +412,7 @@ const InventoryScreen = () => {
             } else {
               const weaponToAdd = {
                 ...newEquipped[slot],
-                quantity,
+                quantity: 1,
                 itemType: getItemType(newEquipped[slot]),
                 stackKey,
                 uniqueId: undefined,
@@ -609,7 +609,7 @@ const InventoryScreen = () => {
               ...displayWeapon,
               itemType: getItemType(w),
               isEquipped: true, 
-              quantity, 
+              quantity: 1, 
               slot: i, 
               stackKey: w.stackKey || getStackKey(w),
               uniqueId: w.uniqueId || `weapon-${getItemName(w)}-${i}`
@@ -636,7 +636,7 @@ const InventoryScreen = () => {
             stackKey,
             equipInstanceId: item.equipInstanceId,
             isEquipped: true,
-            quantity,
+            quantity: 1,
             uniqueId: item.equipInstanceId || `${type}-${getItemName(item)}-${stackKey}`
         });
     });
