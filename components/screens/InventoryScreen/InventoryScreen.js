@@ -772,24 +772,43 @@ const InventoryScreen = () => {
   };
 
   const renderFooter = () => (
+<<<<<<< codex/upgrade-inventory-to-full-i18n-support-mj7y24
+    <View style={styles.footerActionsRow}>
+      <TouchableOpacity
+        style={styles.addActionCell}
+=======
     <View style={styles.footerActions}>
       <TouchableOpacity
         style={styles.secondaryActionButton}
+>>>>>>> main
         onPress={() => {
           setItemSelectionMode('loot');
           setAddItemModalVisible(true);
         }}
       >
+<<<<<<< codex/upgrade-inventory-to-full-i18n-support-mj7y24
+        <Text style={styles.addActionIcon}>+</Text>
+        <Text style={styles.addActionLabel}>{tInventory('screen.actions.addLoot')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addActionCell}
+=======
         <Text style={styles.secondaryActionButtonText}>{tInventory('screen.actions.addLoot')}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.secondaryActionButton}
+>>>>>>> main
         onPress={() => {
           setItemSelectionMode('buy');
           setAddItemModalVisible(true);
         }}
       >
+<<<<<<< codex/upgrade-inventory-to-full-i18n-support-mj7y24
+        <Text style={styles.addActionIcon}>+</Text>
+        <Text style={styles.addActionLabel}>{tInventory('screen.actions.buyItems')}</Text>
+=======
         <Text style={styles.secondaryActionButtonText}>{tInventory('screen.actions.buyItems')}</Text>
+>>>>>>> main
       </TouchableOpacity>
     </View>
   );
@@ -1118,6 +1137,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
   },
+<<<<<<< codex/upgrade-inventory-to-full-i18n-support-mj7y24
+  footerActionsRow: {
+    marginTop: 12,
+    flexDirection: 'row',
+    columnGap: 10,
+  },
+  addActionCell: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 255, 0, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#333',
+    borderStyle: 'dashed',
+    borderRadius: 4,
+  },
+  addActionIcon: {
+    fontSize: 24,
+    color: '#000',
+    fontWeight: 'bold',
+    lineHeight: 26,
+  },
+  addActionLabel: {
+    marginTop: 4,
+    fontSize: 12,
+    color: '#000',
+    fontWeight: '600',
+    textAlign: 'center',
+=======
   footerActions: {
     marginTop: 12,
     gap: 10,
@@ -1134,6 +1183,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+>>>>>>> main
   }
 });
 

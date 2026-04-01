@@ -92,8 +92,8 @@ const BuyItemModal = ({ visible, onClose, item, caps, onConfirmBuy }) => {
 
 const styles = StyleSheet.create({
   modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.6)', paddingHorizontal: 16 },
-  modalContent: { width: '100%', maxWidth: 520, backgroundColor: '#fff', borderRadius: 10, padding: 20, alignItems: 'center' },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 8, textAlign: 'center' },
+  modalContent: { width: '80%', height: '78%', backgroundColor: '#fff', borderRadius: 10, paddingVertical: 20, paddingHorizontal: 24, alignItems: 'center' },
+  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 8, textAlign: 'center', paddingHorizontal: 8 },
   balance: { fontSize: 14, color: '#444', marginBottom: 16 },
   controlContainer: { width: '100%', marginBottom: 15, alignItems: 'center' },
   label: { fontSize: 16, color: '#666', marginBottom: 8 },

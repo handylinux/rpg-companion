@@ -29,6 +29,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
   const locale = useLocale();
   const [currentPath, setCurrentPath] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [weaponsByType, setWeaponsByType] = useState({});
 
   const staticData = useMemo(() => {
     const equipmentCatalog = getEquipmentCatalog(locale);
@@ -41,7 +42,6 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     });
 
     return {
-      [tInventory('modals.addItemModal.categories.weapon')]: groupedWeapons,
       [tInventory('modals.addItemModal.categories.armor')]: (equipmentCatalog.armor?.armor || []).reduce((acc, category) => {
         acc[category.type] = category.items;
         return acc;
@@ -75,7 +75,10 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     }
   }, [visible]);
 
-  const allData = useMemo(() => staticData, [staticData]);
+  const allData = useMemo(() => ({
+    [tInventory('modals.addItemModal.categories.weapon')]: weaponsByType,
+    ...staticData,
+  }), [locale, weaponsByType, staticData]);
 
   const getTypeLabelAndIcon = (itemType) => {
     if (itemType === 'weapon') return tInventory('modals.addItemModal.itemTypes.weapon');
@@ -187,8 +190,8 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
 
 const styles = StyleSheet.create({
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', paddingHorizontal: 16, paddingVertical: 24 },
-  modalContent: { width: '100%', maxWidth: 560, height: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 12, textAlign: 'center' },
+  modalContent: { width: '80%', height: '80%', backgroundColor: 'white', borderRadius: 10, paddingVertical: 20, paddingHorizontal: 24 },
+  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 12, textAlign: 'center', paddingHorizontal: 8 },
   backButton: { alignSelf: 'flex-start', marginBottom: 8 },
   backButtonText: { color: '#1A73E8', fontSize: 14 },
   searchInput: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 12 },
