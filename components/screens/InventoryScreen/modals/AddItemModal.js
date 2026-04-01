@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, TextInput } from 'react-native';
-import { getWeapons } from '../../../../db/Database';
 import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
 import { tInventory } from '../logic/inventoryI18n';
 import { useLocale } from '../../../../i18n/locale';
@@ -30,12 +29,19 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
   const locale = useLocale();
   const [currentPath, setCurrentPath] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [weaponsByType, setWeaponsByType] = useState({});
 
   const staticData = useMemo(() => {
-    const equipmentCatalog = getEquipmentCatalog();
+    const equipmentCatalog = getEquipmentCatalog(locale);
+    const groupedWeapons = {};
+    (equipmentCatalog.weapons || []).forEach((weapon) => {
+      const groupKey = Object.entries(WEAPON_TYPE_GROUPS).find(([, values]) => values.includes(weapon.weaponType))?.[0] || 'other';
+      const label = tInventory(`modals.addItemModal.weaponTypeLabels.${groupKey}`);
+      if (!groupedWeapons[label]) groupedWeapons[label] = [];
+      groupedWeapons[label].push(weapon);
+    });
 
     return {
+      [tInventory('modals.addItemModal.categories.weapon')]: groupedWeapons,
       [tInventory('modals.addItemModal.categories.armor')]: (equipmentCatalog.armor?.armor || []).reduce((acc, category) => {
         acc[category.type] = category.items;
         return acc;
@@ -63,30 +69,13 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
   }, [locale]);
 
   useEffect(() => {
-    if (!visible) return;
-    getWeapons().then((weapons) => {
-      const grouped = {};
-      (weapons || []).forEach((weapon) => {
-        const groupKey = Object.entries(WEAPON_TYPE_GROUPS).find(([, values]) => values.includes(weapon.weapon_type))?.[0] || 'other';
-        const label = tInventory(`modals.addItemModal.weaponTypeLabels.${groupKey}`);
-        if (!grouped[label]) grouped[label] = [];
-        grouped[label].push({ ...weapon, itemType: 'weapon' });
-      });
-      setWeaponsByType(grouped);
-    });
-  }, [locale, visible]);
-
-  useEffect(() => {
     if (visible) {
       setCurrentPath([]);
       setSearchTerm('');
     }
   }, [visible]);
 
-  const allData = useMemo(() => ({
-    [tInventory('modals.addItemModal.categories.weapon')]: weaponsByType,
-    ...staticData,
-  }), [locale, weaponsByType, staticData]);
+  const allData = useMemo(() => staticData, [staticData]);
 
   const getTypeLabelAndIcon = (itemType) => {
     if (itemType === 'weapon') return tInventory('modals.addItemModal.itemTypes.weapon');
