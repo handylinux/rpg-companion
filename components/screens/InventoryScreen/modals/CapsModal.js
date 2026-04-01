@@ -50,8 +50,8 @@ const CapsModal = ({ visible, onClose, onSave, operationType }) => {
 };
 
 const styles = StyleSheet.create({
-  modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.6)', paddingHorizontal: 16 },
-  modalContent: { width: '100%', maxWidth: 520, backgroundColor: '#fff', borderRadius: 10, padding: 20, alignItems: 'center' },
+  modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+  modalContent: { width: '80%', backgroundColor: '#fff', borderRadius: 10, padding: 20, alignItems: 'center' },
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20 },
   input: { width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', fontSize: 18, textAlign: 'center', marginBottom: 20, paddingVertical: 10 },
   buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', width: '100%' },

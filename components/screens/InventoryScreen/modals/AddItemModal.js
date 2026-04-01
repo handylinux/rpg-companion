@@ -67,23 +67,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     getWeapons().then((weapons) => {
       const grouped = {};
       (weapons || []).forEach((weapon) => {
-        const normalizedType = String(weapon.weapon_type || '')
-          .toLowerCase()
-          .replace(/ё/g, 'е')
-          .replace(/[^a-zа-я0-9]+/g, ' ')
-          .trim();
-        const aliases = {
-          light: ['light', 'small guns', 'стрелковое оружие'],
-          heavy: ['heavy', 'big guns', 'тяжелое оружие'],
-          energy: ['energy', 'energy weapons', 'энергооружие'],
-          melee: ['melee', 'melee weapons', 'ближний бой'],
-          unarmed: ['unarmed'],
-          thrown: ['thrown', 'throwing', 'athletics'],
-          explosive: ['explosive', 'explosives'],
-        };
-        const groupKey = Object.entries(aliases).find(([, values]) => values.includes(normalizedType))?.[0]
-          || Object.entries(WEAPON_TYPE_GROUPS).find(([, values]) => values.map((v) => v.toLowerCase()).includes(String(weapon.weapon_type || '').toLowerCase()))?.[0]
-          || 'other';
+        const groupKey = Object.entries(WEAPON_TYPE_GROUPS).find(([, values]) => values.includes(weapon.weapon_type))?.[0] || 'other';
         const label = tInventory(`modals.addItemModal.weaponTypeLabels.${groupKey}`);
         if (!grouped[label]) grouped[label] = [];
         grouped[label].push({ ...weapon, itemType: 'weapon' });
