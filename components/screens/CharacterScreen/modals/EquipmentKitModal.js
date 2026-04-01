@@ -9,11 +9,13 @@ const CATEGORY_LABELS = {
   chem: 'Химия',
   misc: 'Разное',
   food: 'Провизия',
-  loot: 'Лут',
+  loot: 'Прочее',
   currency: 'Валюта',
   currency_ncr: 'Валюта',
   ammo: 'Патроны',
 };
+
+const CATEGORY_ORDER = ['armor', 'clothing', 'weapon', 'chem', 'food', 'ammo', 'misc', 'loot', 'currency', 'currency_ncr'];
 
 const toChoiceKey = (kitId, itemIndex) => `${kitId}-${itemIndex}`;
 const toGroupKey = (group = []) => `group-${group.map((item) => item?.itemId || item?.weaponId || item?.name).join('+')}`;
@@ -108,6 +110,7 @@ const summarizeItems = (items) => {
 };
 
 const getDisplayName = (item) => item.displayName || item.Название || item.name || item.itemId || item.weaponId || 'Неизвестный предмет';
+const getItemCategory = (item) => item?.itemType || (item?.weaponId ? 'weapon' : 'misc');
 
 const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => {
   const [expandedKit, setExpandedKit] = useState(null);
@@ -180,6 +183,25 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
     onClose();
   };
 
+  const getGroupedEntries = (kit) => {
+    const groups = {};
+
+    (kit.items || []).forEach((entry, index) => {
+      if (entry?.type === 'choice') {
+        const firstOption = (entry.items || [])[0];
+        const category = getItemCategory(firstOption);
+        if (!groups[category]) groups[category] = [];
+        groups[category].push({ ...entry, _entryIndex: index });
+      } else {
+        const category = getItemCategory(entry);
+        if (!groups[category]) groups[category] = [];
+        groups[category].push({ ...entry, _entryIndex: index });
+      }
+    });
+
+    return groups;
+  };
+
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.modalContainer}>
@@ -190,62 +212,74 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
             <ActivityIndicator size="large" color="#005A9C" style={{ marginVertical: 30 }} />
           ) : (
             <ScrollView>
-              {calculatedKits.map((kit) => (
-                <View key={kit.id || kit.name} style={styles.kitContainer}>
-                  <TouchableOpacity onPress={() => setExpandedKit((prev) => (prev === kit.id ? null : kit.id))}>
-                    <Text style={styles.kitName}>{kit.name}</Text>
-                  </TouchableOpacity>
+              {calculatedKits.map((kit) => {
+                const groups = getGroupedEntries(kit);
+                return (
+                  <View key={kit.id || kit.name} style={styles.kitContainer}>
+                    <TouchableOpacity onPress={() => setExpandedKit((prev) => (prev === kit.id ? null : kit.id))}>
+                      <Text style={styles.kitName}>{kit.name}</Text>
+                    </TouchableOpacity>
 
-                  {expandedKit === kit.id && (
-                    <View style={styles.kitDetails}>
-                      {(kit.items || []).map((entry, itemIndex) => {
-                        if (entry?.type === 'choice') {
+                    {expandedKit === kit.id && (
+                      <View style={styles.kitDetails}>
+                        {CATEGORY_ORDER.map((category) => {
+                          if (!groups[category]?.length) return null;
+
                           return (
-                            <View key={`choice-${itemIndex}`} style={styles.choiceContainer}>
-                              <Text style={styles.categoryTitle}>Выбор:</Text>
-                              {(entry.items || []).map((option, optionIndex) => {
-                                const optionKey = getOptionKey(option, optionIndex);
-                                const choiceKey = toChoiceKey(kit.id, itemIndex);
-                                const selected = selectedChoices[choiceKey] === optionKey;
+                            <View key={category} style={styles.categoryContainer}>
+                              <Text style={styles.categoryTitle}>{CATEGORY_LABELS[category] || 'Снаряжение'}:</Text>
+                              {groups[category].map((entry) => {
+                                if (entry?.type === 'choice') {
+                                  return (
+                                    <View key={`choice-${entry._entryIndex}`} style={styles.choiceContainer}>
+                                      {(entry.items || []).map((option, optionIndex) => {
+                                        const optionKey = getOptionKey(option, optionIndex);
+                                        const choiceKey = toChoiceKey(kit.id, entry._entryIndex);
+                                        const selected = selectedChoices[choiceKey] === optionKey;
 
-                                const optionLabel = option.group
-                                  ? option.group.map((groupItem) => getDisplayName(groupItem)).join(' + ')
-                                  : getDisplayName(option);
+                                        const optionLabel = option.group
+                                          ? option.group.map((groupItem) => getDisplayName(groupItem)).join(' + ')
+                                          : getDisplayName(option);
+
+                                        return (
+                                          <TouchableOpacity
+                                            key={optionKey}
+                                            style={styles.radioContainer}
+                                            onPress={() => handleSelectChoice(kit.id, entry._entryIndex, option, optionIndex)}
+                                          >
+                                            <View style={[styles.radio, selected && styles.radioSelected]} />
+                                            <Text>{optionLabel}</Text>
+                                            {option?.resolvedAmmunition && (
+                                              <Text style={styles.ammoText}> ({option.resolvedAmmunition.quantity}шт. {option.resolvedAmmunition.name})</Text>
+                                            )}
+                                          </TouchableOpacity>
+                                        );
+                                      })}
+                                    </View>
+                                  );
+                                }
 
                                 return (
-                                  <TouchableOpacity
-                                    key={optionKey}
-                                    style={styles.radioContainer}
-                                    onPress={() => handleSelectChoice(kit.id, itemIndex, option, optionIndex)}
-                                  >
-                                    <View style={[styles.radio, selected && styles.radioSelected]} />
-                                    <Text>{optionLabel}</Text>
-                                  </TouchableOpacity>
+                                  <View key={`fixed-${entry._entryIndex}`} style={styles.fixedItem}>
+                                    <Text>{getDisplayName(entry)}</Text>
+                                    {entry.resolvedAmmunition && (
+                                      <Text style={styles.ammoText}> ({entry.resolvedAmmunition.quantity}шт. {entry.resolvedAmmunition.name})</Text>
+                                    )}
+                                  </View>
                                 );
                               })}
                             </View>
                           );
-                        }
+                        })}
 
-                        const category = CATEGORY_LABELS[entry?.itemType] || 'Снаряжение';
-                        return (
-                          <View key={`fixed-${itemIndex}`} style={styles.fixedItem}>
-                            <Text style={styles.categoryPill}>{category}</Text>
-                            <Text>{getDisplayName(entry)}</Text>
-                            {entry.resolvedAmmunition && (
-                              <Text style={styles.ammoText}> ({entry.resolvedAmmunition.quantity} шт. {entry.resolvedAmmunition.name})</Text>
-                            )}
-                          </View>
-                        );
-                      })}
-
-                      <TouchableOpacity style={styles.selectButton} onPress={() => handleSelectKit(kit)}>
-                        <Text style={styles.selectButtonText}>Выбрать</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              ))}
+                        <TouchableOpacity style={styles.selectButton} onPress={() => handleSelectKit(kit)}>
+                          <Text style={styles.selectButtonText}>Выбрать</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
             </ScrollView>
           )}
 
@@ -299,6 +333,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 15,
   },
+  categoryContainer: {
+    marginBottom: 10,
+  },
   categoryTitle: {
     fontSize: 16,
     fontWeight: '600',
@@ -306,65 +343,64 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   fixedItem: {
-    marginBottom: 8,
+    marginLeft: 10,
+    marginBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 6,
-  },
-  categoryPill: {
-    fontSize: 12,
-    color: '#005A9C',
-    borderWidth: 1,
-    borderColor: '#005A9C',
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
   },
   choiceContainer: {
-    marginVertical: 8,
+    marginVertical: 5,
   },
   radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 8,
+    marginLeft: 10,
+    flexWrap: 'wrap',
   },
   radio: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    height: 22,
+    width: 22,
+    borderRadius: 11,
     borderWidth: 2,
-    borderColor: '#999',
-    marginRight: 8,
+    borderColor: '#005A9C',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
   },
   radioSelected: {
-    borderColor: '#005A9C',
     backgroundColor: '#005A9C',
   },
+  ammoText: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    marginLeft: 5,
+  },
   selectButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 8,
+    backgroundColor: '#2E7D32',
+    paddingVertical: 12,
     borderRadius: 8,
-    marginTop: 10,
+    marginTop: 15,
     alignItems: 'center',
   },
   selectButtonText: {
     color: 'white',
-    fontWeight: '700',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   closeButton: {
-    marginTop: 15,
-    backgroundColor: '#D9534F',
-    paddingVertical: 10,
+    backgroundColor: '#C62828',
+    paddingVertical: 12,
     borderRadius: 8,
+    marginTop: 20,
     alignItems: 'center',
   },
   closeButtonText: {
     color: 'white',
-    fontWeight: '700',
-  },
-  ammoText: {
-    color: '#666',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
