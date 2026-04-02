@@ -3,6 +3,7 @@ import {
   View,
   Text,
   ScrollView,
+  Pressable,
   TouchableOpacity,
   StyleSheet,
   Image,
@@ -270,7 +271,7 @@ export default function HomeScreen({ navigation }) {
             const isFirst = index === 0;
             const isLast = index === languageOptions.length - 1;
             return (
-              <Text
+              <Pressable
                 key={lang.code}
                 style={[
                   styles.langSegment,
@@ -279,9 +280,12 @@ export default function HomeScreen({ navigation }) {
                   locale === lang.code && styles.langSegmentActive,
                 ]}
                 onPress={() => setCurrentLocale(lang.code)}
+                hitSlop={4}
               >
-                {lang.code === 'ru-RU' ? 'ru' : 'en'}
-              </Text>
+                <Text style={[styles.langSegmentText, locale === lang.code && styles.langSegmentTextActive]}>
+                  {lang.code === 'ru-RU' ? 'ru' : 'en'}
+                </Text>
+              </Pressable>
             );
           })}
         </View>
@@ -377,13 +381,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(17,24,39,0.85)',
   },
   langSegment: {
-    color: '#9ca3af',
-    fontSize: 13,
-    textTransform: 'uppercase',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRightWidth: 1,
     borderRightColor: '#6b7280',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  langSegmentText: {
+    color: '#9ca3af',
+    fontSize: 13,
+    textTransform: 'uppercase',
   },
   langSegmentLeft: {
     borderTopLeftRadius: 8,
@@ -395,8 +403,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
   },
   langSegmentActive: {
-    color: '#111827',
     backgroundColor: '#f0e68c',
+  },
+  langSegmentTextActive: {
+    color: '#111827',
     fontWeight: '700',
   },
   scrollView: {
