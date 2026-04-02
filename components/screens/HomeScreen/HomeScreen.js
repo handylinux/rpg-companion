@@ -280,7 +280,7 @@ export default function HomeScreen({ navigation }) {
                   locale === lang.code && styles.langSegmentActive,
                 ]}
                 onPress={() => setCurrentLocale(lang.code)}
-                hitSlop={4}
+                hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
               >
                 <Text style={[styles.langSegmentText, locale === lang.code && styles.langSegmentTextActive]}>
                   {lang.code === 'ru-RU' ? 'ru' : 'en'}
@@ -373,6 +373,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 8,
     top: 8,
+    zIndex: 20,
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#6b7280',
@@ -381,8 +382,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(17,24,39,0.85)',
   },
   langSegment: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    minHeight: 34,
     borderRightWidth: 1,
     borderRightColor: '#6b7280',
     justifyContent: 'center',
