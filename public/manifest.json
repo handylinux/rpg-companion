@@ -3,7 +3,7 @@
   "name": "Fallout 2d20 Companion App",
   "short_name": "RPG Companion",
   "description": "Companion app for Fallout 2d20 RPG sessions.",
-  "start_url": ".",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -12,23 +12,10 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Crect width='600' height='600' fill='%231b1b1b'/%3E%3Ccircle cx='300' cy='300' r='220' fill='%23d4af37'/%3E%3Ccircle cx='300' cy='300' r='165' fill='%231b1b1b'/%3E%3Ctext x='300' y='355' text-anchor='middle' font-family='Arial,sans-serif' font-size='220' fill='%23d4af37'%3ER%3C/text%3E%3C/svg%3E",
-      "sizes": "600x600",
+      "src": "/pwa-icon.svg",
+      "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'%3E%3Crect width='1280' height='720' fill='%230f0f0f'/%3E%3Ctext x='640' y='360' text-anchor='middle' dominant-baseline='middle' font-family='Arial,sans-serif' font-size='72' fill='%23d4af37'%3ERPG Companion (Wide)%3C/text%3E%3C/svg%3E",
-      "sizes": "1280x720",
-      "type": "image/svg+xml",
-      "form_factor": "wide"
-    },
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 1280'%3E%3Crect width='720' height='1280' fill='%230f0f0f'/%3E%3Ctext x='360' y='640' text-anchor='middle' dominant-baseline='middle' font-family='Arial,sans-serif' font-size='64' fill='%23d4af37'%3ERPG Companion%3C/text%3E%3C/svg%3E",
-      "sizes": "720x1280",
-      "type": "image/svg+xml"
     }
   ]
 }
