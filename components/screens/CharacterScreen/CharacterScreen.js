@@ -453,7 +453,9 @@ export default function CharacterScreen() {
       "Наука",
       "Бартер",
     ];
-    const isGoodSoul = trait?.name === "Добрая Душа";
+    const isGoodSoul =
+      Array.isArray(trait?.modifiers?.goodSoulSelectedSkills) &&
+      trait.modifiers.goodSoulSelectedSkills.length > 0;
     const goodSoulSelected = trait?.modifiers?.goodSoulSelectedSkills || [];
     const isBonusFromGoodSoul =
       isGoodSoul && goodSoulSelected.includes(skillName);
@@ -517,11 +519,7 @@ export default function CharacterScreen() {
           if (i !== skillIndex) return s;
           let next = s.value + 2;
           // Good Soul group cap
-          if (
-            isGoodSoul &&
-            goodSoulGroup.includes(s.name) &&
-            !isBonusFromGoodSoul
-          ) {
+      if (isGoodSoul && goodSoulGroup.includes(s.name) && !isBonusFromGoodSoul) {
             next = Math.min(next, 4);
           }
           return { ...s, value: next };
@@ -574,7 +572,9 @@ export default function CharacterScreen() {
         "Наука",
         "Бартер",
       ];
-      const isGoodSoul = trait?.name === "Добрая Душа";
+      const isGoodSoul =
+        Array.isArray(trait?.modifiers?.goodSoulSelectedSkills) &&
+        trait.modifiers.goodSoulSelectedSkills.length > 0;
       const isInGroup = goodSoulGroup.includes(skill.name);
       const isBonus =
         isGoodSoul &&
@@ -758,23 +758,6 @@ export default function CharacterScreen() {
     setTrait(newTrait);
     setIsTraitModalVisible(false);
 
-    if (newTrait.name === "Одаренный") {
-      // Prompt user to choose two attributes
-      // For simplicity, assume a modal or something, but since it's not specified, placeholder
-      const chosenAttrs = ["STR", "INT"]; // Example
-      chosenAttrs.forEach((attr) => {
-        setAttributes((prev) =>
-          prev.map((a) => (a.name === attr ? { ...a, value: a.value + 1 } : a)),
-        );
-      });
-      setMaxLuckPoints((prev) => prev - 1);
-    }
-
-    // For Small Frame
-    if (newTrait.name === "Миниатюрный") {
-      const str = attributes.find((a) => a.name === "STR")?.value;
-      // setCarryWeight(150 + (5 * str)); // This line was not in the original file, so it's commented out.
-    }
   };
 
   // Обработчик нажатия на строку черты

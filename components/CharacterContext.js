@@ -339,7 +339,7 @@ export const CharacterProvider = ({ children }) => {
     setMaxLuckPoints(newLuck);
     setLuckPoints(prevLuck => Math.min(prevLuck, newLuck));
     setCarryWeight(calculateCarryWeight(newAttributes, trait));
-    setMeleeBonus(calculateMeleeBonus(newAttributes));
+    setMeleeBonus(calculateMeleeBonus(newAttributes, trait));
     setInitiative(calculateInitiative(newAttributes));
     setDefense(calculateDefense(newAttributes));
     const newMaxHealth = calculateMaxHealth(newAttributes, level);
@@ -426,7 +426,13 @@ export const CharacterProvider = ({ children }) => {
     meleeBonus,
     initiative,
     defense,
-    hasTrait: (traitName) => !!(trait && (trait.name === traitName)),
+    hasTrait: (traitName) => !!(
+      trait &&
+      (
+        trait.name === traitName ||
+        (Array.isArray(trait?.modifiers?.selectedTraitNames) && trait.modifiers.selectedTraitNames.includes(traitName))
+      )
+    ),
     getItemId,
     getModifiedItem,
     saveModifiedItem,
