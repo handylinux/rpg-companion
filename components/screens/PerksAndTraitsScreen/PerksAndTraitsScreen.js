@@ -4,6 +4,7 @@ import { useCharacter } from '../../CharacterContext';
 import { getTraitDisplayDescription, TRAITS } from '../CharacterScreen/logic/traitsData';
 import perksData from '../../../assets/Perks/perks.json';
 import PerkSelectModal from './PerkSelectModal';
+import { renderTextWithIcons } from '../WeaponsAndArmorScreen/textUtils';
 
 const PerksAndTraitsScreen = () => {
   const { 
@@ -99,9 +100,10 @@ const PerksAndTraitsScreen = () => {
                   <View key={`trait-${idx}-${name}`} style={styles.row}>
                     <Text style={[styles.cell, styles.nameColumn]}>{name}</Text>
                     <Text style={[styles.cell, styles.rankColumn]}></Text>
-                    <Text style={[styles.cell, styles.descriptionColumn]}>
-                      {getTraitDisplayDescription({ name, modifiers: baseTrait.modifiers })}
-                    </Text>
+                    {renderTextWithIcons(
+                      getTraitDisplayDescription({ name, modifiers: baseTrait.modifiers }),
+                      [styles.cell, styles.descriptionColumn]
+                    )}
                   </View>
                 );
               });
@@ -110,9 +112,10 @@ const PerksAndTraitsScreen = () => {
               <View style={styles.row}>
                 <Text style={[styles.cell, styles.nameColumn]}>{trait.name}</Text>
                 <Text style={[styles.cell, styles.rankColumn]}></Text>
-                <Text style={[styles.cell, styles.descriptionColumn]}>
-                  {getTraitDisplayDescription(trait)}
-                </Text>
+                {renderTextWithIcons(
+                  getTraitDisplayDescription(trait),
+                  [styles.cell, styles.descriptionColumn]
+                )}
               </View>
             );
           })()}
@@ -122,7 +125,7 @@ const PerksAndTraitsScreen = () => {
             <View key={`perk-${idx}`} style={styles.row}>
               <Text style={[styles.cell, styles.nameColumn]}>{perk.perk_name}</Text>
               <Text style={[styles.cell, styles.rankColumn]}>{perk.rank ?? ''}</Text>
-              <Text style={[styles.cell, styles.descriptionColumn]}>{perk.description}</Text>
+              {renderTextWithIcons(perk.description, [styles.cell, styles.descriptionColumn])}
             </View>
           ))}
 
