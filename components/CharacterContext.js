@@ -335,7 +335,7 @@ export const CharacterProvider = ({ children }) => {
   const commitAttributeChanges = (newAttributes, pointsSpent) => {
     setAttributes(newAttributes);
     setAvailablePerkAttributePoints(prev => prev - pointsSpent);
-    const newLuck = getLuckPoints(newAttributes);
+    const newLuck = getLuckPoints(newAttributes, trait);
     setMaxLuckPoints(newLuck);
     setLuckPoints(prevLuck => Math.min(prevLuck, newLuck));
     setCarryWeight(calculateCarryWeight(newAttributes, trait));

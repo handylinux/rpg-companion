@@ -332,7 +332,7 @@ export default function CharacterScreen() {
   }, [availablePerkAttributePoints, attributesSaved, attributes]);
 
   useEffect(() => {
-    const newMaxLuck = getLuckPoints(attributes);
+    const newMaxLuck = getLuckPoints(attributes, trait);
     if (newMaxLuck !== maxLuckPoints) {
       setMaxLuckPoints(newMaxLuck);
       if (!attributesSaved) {
@@ -341,6 +341,7 @@ export default function CharacterScreen() {
     }
   }, [
     attributes,
+    trait,
     maxLuckPoints,
     attributesSaved,
     setMaxLuckPoints,
