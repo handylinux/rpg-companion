@@ -11,6 +11,8 @@ const PerksAndTraitsScreen = () => {
     addPerkAttributePoints, attributesSaved 
   } = useCharacter();
   const [isPerkModalVisible, setPerkModalVisible] = useState(false);
+  const extraPerkSlots = trait?.modifiers?.extraPerkSlots || 0;
+  const perkLimit = level + extraPerkSlots;
 
   // Создаем массив из 20 строк
   const emptyRows = Array(20).fill(null);
@@ -18,7 +20,7 @@ const PerksAndTraitsScreen = () => {
   const annotatedPerks = useMemo(() => annotatePerks(perksData), [annotatePerks]);
 
   const handleAddPerkPress = () => {
-    if (selectedPerks.length >= level) {
+    if (selectedPerks.length >= perkLimit) {
       const message = 'На текущем уровне больше перков взять нельзя';
       if (Platform.OS === 'web') {
         window.alert(message);
@@ -34,7 +36,7 @@ const PerksAndTraitsScreen = () => {
     if (!perk) return;
     
     // Блокируем выбор, если уже взяли максимум на уровне (доп. защита)
-    if (selectedPerks.length >= level) {
+    if (selectedPerks.length >= perkLimit) {
       const message = 'На текущем уровне больше перков взять нельзя';
       if (Platform.OS === 'web') {
         window.alert(message);

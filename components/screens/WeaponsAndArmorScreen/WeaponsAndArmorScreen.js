@@ -97,7 +97,7 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
 };
 
 const WeaponCard = ({ weapon, onModifyWeapon }) => {
-    const { hasTrait, attributes, skills } = useCharacter();
+    const { hasTrait, attributes, skills, equippedWeapons } = useCharacter();
     if (!weapon) {
       return (
         <View style={localStyles.weaponCardContainer}>
@@ -164,10 +164,17 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
 
     // Снижение базовой скорострельности на 1 при "Техника спуска" для стрелкового и энергооружия
+    const equippedWeaponTypes = (equippedWeapons || [])
+      .filter(Boolean)
+      .map((w) => w?.weapon_type);
+    const hasLightAndEnergyEquipped =
+      equippedWeaponTypes.includes('Light') && equippedWeaponTypes.includes('Energy');
     const isLightOrEnergy = (weapon?.itemType === 'weapon') && (
       weapon.weapon_type === 'Light' || weapon.weapon_type === 'Energy'
     );
-    const fireRateWithTrait = hasTrait('Техника спуска') && isLightOrEnergy ? Math.max(0, fireRateBase - 1) : fireRateBase;
+    const fireRateWithTrait = hasTrait('Техника спуска') && hasLightAndEnergyEquipped && isLightOrEnergy
+      ? Math.max(0, fireRateBase - 1)
+      : fireRateBase;
 
     const stats = [
       { label: tWeaponsAndArmorScreen('weapon.fields.success'), value: `${successValue}` },
@@ -263,13 +270,14 @@ const WeaponsAndArmorScreen = () => {
     saveModifiedItem,
     effects,
     activeTimedEffects,
-    attributesSaved
+    attributesSaved,
+    trait,
   } = useCharacter();
   const locale = useLocale();
 
   const initiative = calculateInitiative(attributes);
   const defense = calculateDefense(attributes);
-  const meleeBonus = calculateMeleeBonus(attributes);
+  const meleeBonus = calculateMeleeBonus(attributes, trait);
   const maxHealth = attributesSaved ? calculateMaxHealth(attributes, level) : 0;
   
   const hasRadImmunity = effects.includes('Иммунитет к радиации');
