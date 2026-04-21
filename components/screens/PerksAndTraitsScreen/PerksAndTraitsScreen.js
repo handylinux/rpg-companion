@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
-import { getTraitDisplayDescription } from '../CharacterScreen/logic/traitsData';
+import { getTraitDisplayDescription, TRAITS } from '../CharacterScreen/logic/traitsData';
 import perksData from '../../../assets/Perks/perks.json';
 import PerkSelectModal from './PerkSelectModal';
 
@@ -90,15 +90,32 @@ const PerksAndTraitsScreen = () => {
           </View>
 
           {/* Строка с чертой, если она есть */}
-          {trait && (
-            <View style={styles.row}>
-              <Text style={[styles.cell, styles.nameColumn]}>{trait.name}</Text>
-              <Text style={[styles.cell, styles.rankColumn]}></Text>
-              <Text style={[styles.cell, styles.descriptionColumn]}>
-                {getTraitDisplayDescription(trait)}
-              </Text>
-            </View>
-          )}
+          {trait && (() => {
+            const selectedNames = trait?.modifiers?.selectedTraitNames;
+            if (Array.isArray(selectedNames) && selectedNames.length > 0) {
+              return selectedNames.map((name, idx) => {
+                const baseTrait = TRAITS[name] || {};
+                return (
+                  <View key={`trait-${idx}-${name}`} style={styles.row}>
+                    <Text style={[styles.cell, styles.nameColumn]}>{name}</Text>
+                    <Text style={[styles.cell, styles.rankColumn]}></Text>
+                    <Text style={[styles.cell, styles.descriptionColumn]}>
+                      {getTraitDisplayDescription({ name, modifiers: baseTrait.modifiers })}
+                    </Text>
+                  </View>
+                );
+              });
+            }
+            return (
+              <View style={styles.row}>
+                <Text style={[styles.cell, styles.nameColumn]}>{trait.name}</Text>
+                <Text style={[styles.cell, styles.rankColumn]}></Text>
+                <Text style={[styles.cell, styles.descriptionColumn]}>
+                  {getTraitDisplayDescription(trait)}
+                </Text>
+              </View>
+            );
+          })()}
 
           {/* Выбранные перки (по уровням) */}
           {selectedPerks.map((perk, idx) => (
