@@ -42,13 +42,9 @@ const SurvivorModal = ({
 
   const canConfirm = () => {
     if (selectionMode === 'two_traits') {
-      return !!survivorTrait && !!ncrTrait;
-    }
-    if (selectionMode === 'two_survivor') {
-      return Array.isArray(survivorTrait) && survivorTrait.length === 2;
-    }
-    if (selectionMode === 'two_ncr') {
-      return Array.isArray(ncrTrait) && ncrTrait.length === 2;
+      const survList = Array.isArray(survivorTrait) ? survivorTrait : [];
+      const ncrList = Array.isArray(ncrTrait) ? ncrTrait : [];
+      return survList.length + ncrList.length === 2;
     }
     if (selectionMode === 'trait_and_perk') {
       return !!singleTraitPick;
@@ -66,10 +62,13 @@ const SurvivorModal = ({
     if (!canConfirm()) return;
 
     let selectedNames = [];
-    if (selectionMode === 'two_traits') selectedNames = [survivorTrait, ncrTrait];
-    else if (selectionMode === 'two_survivor') selectedNames = [...survivorTrait];
-    else if (selectionMode === 'two_ncr') selectedNames = [...ncrTrait];
-    else if (selectionMode === 'trait_and_perk') selectedNames = [singleTraitPick];
+    if (selectionMode === 'two_traits') {
+      const survList = Array.isArray(survivorTrait) ? survivorTrait : [];
+      const ncrList = Array.isArray(ncrTrait) ? ncrTrait : [];
+      selectedNames = [...survList, ...ncrList];
+    } else if (selectionMode === 'trait_and_perk') {
+      selectedNames = [singleTraitPick];
+    }
 
     const mergedModifiers = selectedNames.reduce((acc, traitName) => {
       const baseModifiers = TRAITS[traitName]?.modifiers || {};
@@ -98,12 +97,9 @@ const SurvivorModal = ({
       mergedModifiers.goodSoulGroup = [...goodSoulGroup];
     }
 
-    const traitTitle = (() => {
-      if (selectionMode === 'two_traits') return `${originLabel}: ${survivorTrait} + ${ncrTrait}`;
-      if (selectionMode === 'two_survivor') return `${originLabel}: ${survivorTrait[0]} + ${survivorTrait[1]}`;
-      if (selectionMode === 'two_ncr') return `${originLabel}: ${ncrTrait[0]} + ${ncrTrait[1]}`;
-      return `${originLabel}: ${singleTraitPick} + 1 перк`;
-    })();
+    const traitTitle = selectionMode === 'two_traits'
+      ? `${originLabel}: ${selectedNames.join(' + ')}`
+      : `${originLabel}: ${singleTraitPick} + 1 перк`;
 
     onSelect(traitTitle, {
       ...mergedModifiers,
