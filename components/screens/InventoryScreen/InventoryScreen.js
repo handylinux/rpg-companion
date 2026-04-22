@@ -86,8 +86,16 @@ const InventoryScreen = () => {
     return '📦';
   };
 
-  const isRobotCharacter = Boolean(trait?.modifiers?.isRobot);
-  const robotBodyPlan = trait?.modifiers?.robotBodyPlan || null;
+  const equippedRobotBodyPart = useMemo(() => {
+    const items = Array.isArray(equipment?.items) ? equipment.items : [];
+    return items.find((item) => String(item?.id || '').startsWith('robot_body_') || item?.itemType === 'robotPart') || null;
+  }, [equipment?.items]);
+
+  const robotBodyPlan = trait?.modifiers?.robotBodyPlan
+    || equippedRobotBodyPart?.robotBodyPlan
+    || null;
+
+  const isRobotCharacter = Boolean(trait?.modifiers?.isRobot || robotBodyPlan);
   const robotBodyUpgrade = useMemo(() => {
     if (!robotBodyPlan) return null;
     const parts = Array.isArray(equipmentCatalog?.robotPartsUpgrade) ? equipmentCatalog.robotPartsUpgrade : [];

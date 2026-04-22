@@ -258,9 +258,16 @@ const findLocalizedClothing = (catalog, clothingItem) => {
   };
 };
 
-const findRobotBodyUpgradeByPlan = (catalog, robotBodyPlan) => {
-  if (!robotBodyPlan) return null;
-  return (catalog?.robotPartsUpgrade || []).find((entry) => entry?.robotBodyPlan === robotBodyPlan) || null;
+const findRobotBodyUpgrade = (catalog, robotBodyPlan, inventoryItems = []) => {
+  const parts = catalog?.robotPartsUpgrade || [];
+  if (robotBodyPlan) {
+    const byPlan = parts.find((entry) => entry?.robotBodyPlan === robotBodyPlan);
+    if (byPlan) return byPlan;
+  }
+
+  const bodyPartId = (inventoryItems || []).find((item) => String(item?.id || '').startsWith('robot_body_'))?.id;
+  if (!bodyPartId) return null;
+  return parts.find((entry) => entry?.id === bodyPartId) || null;
 };
 
 
@@ -274,6 +281,7 @@ const WeaponsAndArmorScreen = () => {
     setEquippedWeapons,
     equippedArmor,
     setEquippedArmor,
+    equipment,
     saveModifiedItem,
     effects,
     activeTimedEffects,
@@ -292,7 +300,11 @@ const WeaponsAndArmorScreen = () => {
   const hasPoisonImmunity = effects.includes('Иммунитет к яду');
   const hasTimedEffects = (activeTimedEffects || []).length > 0;
   const equipmentCatalog = getEquipmentCatalog(locale);
-  const robotBodyUpgrade = findRobotBodyUpgradeByPlan(equipmentCatalog, trait?.modifiers?.robotBodyPlan);
+  const robotBodyUpgrade = findRobotBodyUpgrade(
+    equipmentCatalog,
+    trait?.modifiers?.robotBodyPlan,
+    equipment?.items || [],
+  );
   const localizedEquippedWeapons = equippedWeapons.map((weapon) => findLocalizedWeapon(equipmentCatalog, weapon));
   
   // Состояние для модального окна модификаций
