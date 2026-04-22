@@ -86,7 +86,21 @@ const InventoryScreen = () => {
     return '📦';
   };
 
-  const isRobotCharacter = Boolean(trait?.modifiers?.isRobot);
+  const equippedRobotBodyPart = useMemo(() => {
+    const items = Array.isArray(equipment?.items) ? equipment.items : [];
+    return items.find((item) => String(item?.id || '').startsWith('robot_body_') || item?.itemType === 'robotPart') || null;
+  }, [equipment?.items]);
+
+  const robotBodyPlan = trait?.modifiers?.robotBodyPlan
+    || equippedRobotBodyPart?.robotBodyPlan
+    || null;
+
+  const isRobotCharacter = Boolean(trait?.modifiers?.isRobot || robotBodyPlan);
+  const robotBodyUpgrade = useMemo(() => {
+    if (!robotBodyPlan) return null;
+    const parts = Array.isArray(equipmentCatalog?.robotPartsUpgrade) ? equipmentCatalog.robotPartsUpgrade : [];
+    return parts.find((part) => part?.robotBodyPlan === robotBodyPlan) || null;
+  }, [equipmentCatalog, robotBodyPlan]);
   const isRobotOnlyItem = (item) => Boolean(item?.robotOnly || String(item?.id || '').startsWith('robot_'));
   const isPowerArmorItem = (item) => {
     const category = String(item?.category || item?.armorCategoryKey || '').toLowerCase();
@@ -412,16 +426,44 @@ const InventoryScreen = () => {
   const handleEquipWeapon = (weaponToEquip) => {
     const displayWeapon = weaponToEquip;
     
+    if (isRobotCharacter && isRobotOnlyItem(displayWeapon) && Array.isArray(robotBodyUpgrade?.allowedRobotWeaponIds)) {
+      const allowedWeaponIds = robotBodyUpgrade.allowedRobotWeaponIds;
+      if (displayWeapon?.id && !allowedWeaponIds.includes(displayWeapon.id)) {
+        Alert.alert(
+          tInventory('screen.alerts.robotBodyWeaponMismatchTitle'),
+          tInventory('screen.alerts.robotBodyWeaponMismatchMessage')
+        );
+        return;
+      }
+    }
+
     if (isRobotOnlyItem(displayWeapon) && !isRobotCharacter) {
       Alert.alert(tInventory('screen.alerts.robotOnlyWeaponTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotOnlyWeaponMessage', 'Это оружие могут использовать только роботы.'));
       return;
     }
     if (!isRobotOnlyItem(displayWeapon) && isRobotCharacter) {
-      const hasManipulatorEquipped = equippedWeapons.some((w) => Boolean(w?.builtinManipulator));
-      if (hasManipulatorEquipped) {
+      const requiresManipulator = Boolean(robotBodyUpgrade?.requiresManipulatorForStandardWeapons);
+      const equippedManipulator = equippedWeapons.find((w) => Boolean(w?.id === 'robot_weapon_manipulator'));
+
+      if (requiresManipulator) {
+        if (!equippedManipulator) {
+          Alert.alert(
+            tInventory('screen.alerts.manipulatorRequiredTitle'),
+            tInventory('screen.alerts.manipulatorRequiredMessage')
+          );
+          return;
+        }
+
         const candidateWeight = toWeight(displayWeapon.weight);
-        if (candidateWeight > 40) {
-          Alert.alert(tInventory('screen.alerts.manipulatorWeightTitle', 'Перегрузка манипулятора'), tInventory('screen.alerts.manipulatorWeightMessage', 'Это оружие превышает допустимый удерживаемый вес манипулятора (40 фунтов).'));
+        const maxHeldWeight = Number(equippedManipulator?.manipulatorMaxHeldWeight ?? 40) || 40;
+        if (candidateWeight > maxHeldWeight) {
+          Alert.alert(
+            tInventory('screen.alerts.manipulatorWeightTitle'),
+            formatInventoryText(
+              tInventory('screen.alerts.manipulatorWeightMessage'),
+              { maxHeldWeight },
+            ),
+          );
           return;
         }
       }
