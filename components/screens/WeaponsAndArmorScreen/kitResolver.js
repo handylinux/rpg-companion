@@ -64,10 +64,11 @@ const resolveAmmoObject = async (ammoSpec, weaponAmmoId) => {
   const ammoData = ammo || fallbackAmmo;
   if (!ammoData) return null;
 
+  const normalizedAmmoName = fallbackAmmo?.name || ammoData.name;
   const quantity = resolveRollQuantity(ammoSpec.quantity);
   return {
-    name: ammoData.name,
-    Название: ammoData.name,
+    name: normalizedAmmoName,
+    Название: normalizedAmmoName,
     quantity,
     type: 'ammo',
     itemType: 'ammo',
