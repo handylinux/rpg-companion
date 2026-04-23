@@ -110,7 +110,7 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 4.3, 7.2, 10.1, 10.2_
 
-- [ ] 7. Создать domain/traits.js и обновить CharacterContext
+- [x] 7. Создать domain/traits.js и обновить CharacterContext
 
 
 
@@ -118,7 +118,8 @@
 
 
 
-- [ ] 7.1 Создать domain/traits.js
+- [x] 7.1 Создать domain/traits.js
+
   - Создать `domain/traits.js` — логика применения черт
   - Реализовать `getTraitModifiers(trait)` — возвращает все модификаторы черты (атрибуты, навыки, лимиты, иммунитеты)
   - Реализовать `getTraitDisplayDescription(trait)` — перенести из `traitsData.js`; функция возвращает i18n-ключ или вызывает t(), но не хардкоженную кириллическую строку
@@ -129,7 +130,7 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 2.1, 2.2, 2.3, 8.2_
 
-- [ ] 7.2 Обновить CharacterContext — делегировать в domain/
+- [x] 7.2 Обновить CharacterContext — делегировать в domain/
   - Обновить все импорты в `CharacterContext.js`: заменить импорты из `components/screens/CharacterScreen/logic/` на импорты из `domain/`
   - Убедиться что все расчёты (calculateMaxHealth, calculateCarryWeight, calculateInitiative и т.д.) вызывают функции из `domain/characterCreation.js`
   - Убедиться что логика перков вызывает функции из `domain/perks.js`
@@ -137,8 +138,8 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 7.1, 7.2, 7.4, 8.3_
 
-- [ ] 8. Организовать стили в styles/
-- [ ] 8.1 Создать файлы стилей для экранов
+- [x] 8. Организовать стили в styles/
+- [x] 8.1 Создать файлы стилей для экранов
   - Создать `styles/CharacterScreen.styles.js` — перенести StyleSheet из `CharacterScreen.js` и `AttributesSection.js`
   - Создать `styles/WeaponsAndArmorScreen.styles.js` — перенести StyleSheet из `WeaponsAndArmorScreen.js`
   - Создать `styles/InventoryScreen.styles.js` — перенести StyleSheet из `InventoryScreen.js`
@@ -148,7 +149,7 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 8.2 Создать файлы стилей для модалок
+- [x] 8.2 Создать файлы стилей для модалок
   - Создать `styles/OriginModal.styles.js`, `styles/TraitSkillModal.styles.js`, `styles/EquipmentKitModal.styles.js`
   - Создать `styles/WeaponModificationModal.styles.js`, `styles/ArmorModificationModal.styles.js`
   - Создать `styles/AddItemModal.styles.js`, `styles/PerkSelectModal.styles.js`

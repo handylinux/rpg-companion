@@ -44,7 +44,7 @@ import {
 } from "./logic/characterScreenI18n";
 import { getCurrentLocale } from "../../../i18n/locale";
 import { AttributesSection } from "./AttributesSection";
-import styles from "../../../styles";
+import styles from "../../../styles/CharacterScreen.styles";
 import { getTimedAttributeModifiers } from "../../../domain/effects";
 
 // Определяем константу BASE_TAGGED_SKILLS для исправления ReferenceError

@@ -175,29 +175,12 @@ export function getTraitNameKey(trait) {
 }
 
 /**
- * Legacy compatibility shim: returns a display description string.
- * Prefers the cyrillicName-keyed description from the legacy TRAITS map
- * (passed in as legacyTraitsMap) when available, so existing UI is unaffected.
+ * Returns the trait description i18n key for UI display.
+ * The UI can pass this key to t() directly.
  *
- * This function intentionally accepts a legacyTraitsMap parameter so that
- * domain/traits.js itself contains no hardcoded Cyrillic strings.
- *
- * @param {object} trait - runtime trait object with `name` field
- * @param {object} legacyTraitsMap - the TRAITS map from traitsData.js
+ * @param {object} trait - runtime or data trait object
  * @returns {string}
  */
-export function getTraitDisplayDescription(trait, legacyTraitsMap = {}) {
-  if (!trait?.name) return '';
-
-  const baseTrait = legacyTraitsMap[trait.name] || {};
-  const description = baseTrait.description || trait.description || '';
-  const baseEffects = Array.isArray(baseTrait.effects) ? baseTrait.effects : [];
-  const runtimeEffects = Array.isArray(trait?.modifiers?.effects)
-    ? trait.modifiers.effects
-    : [];
-  const uniqueEffects = [...new Set([...baseEffects, ...runtimeEffects])];
-
-  if (uniqueEffects.length === 0) return description;
-  const effectsText = uniqueEffects.map((effect) => `\u2022 ${effect}`).join('\n');
-  return `${description}\n\n\u042d\u0444\u0444\u0435\u043a\u0442\u044b:\n${effectsText}`;
+export function getTraitDisplayDescription(trait) {
+  return getTraitDescriptionKey(trait);
 }

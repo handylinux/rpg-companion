@@ -11,12 +11,13 @@ import {
   calculateCarryWeight,
   getAttributeValue,
 } from '../domain/characterCreation';
-import { ORIGINS } from './screens/CharacterScreen/logic/originsData';
+import { loadOriginsData } from '../domain/traits';
 import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from '../domain/perks';
 import { applyConsumableToEffects, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../domain/effects';
 import { syncCharacterToCloudIfEnabled } from './cloudSync/googleDriveSync';
 
 const CharacterContext = createContext();
+const ORIGINS = loadOriginsData();
 
 const generateId = () => `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -104,7 +105,7 @@ export const CharacterProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Собираем снапшот всего состояния персонажа
+  // Build a full character state snapshot.
   const buildSnapshot = useCallback(() => ({
     characterName,
     level,
@@ -143,7 +144,7 @@ export const CharacterProvider = ({ children }) => {
     carryWeight, meleeBonus, initiative, defense,
   ]);
 
-  // Realtime сохранение — запускается при любом изменении состояния если персонаж уже сохранён
+  // Realtime save for already persisted characters.
   const saveTimeoutRef = useRef(null);
   useEffect(() => {
     if (!isSavedRef.current || !characterIdRef.current) return;
@@ -156,7 +157,7 @@ export const CharacterProvider = ({ children }) => {
           characterIdRef.current,
           snapshot.characterName,
           snapshot.level ?? 1,
-          snapshot.origin?.name || null,
+          snapshot.origin?.name || snapshot.origin?.id || null,
           serialized
         );
         await syncCharacterToCloudIfEnabled(characterIdRef.current);
@@ -173,7 +174,7 @@ export const CharacterProvider = ({ children }) => {
     carryWeight, meleeBonus, initiative, defense, buildSnapshot,
   ]);
 
-  // Первичное сохранение персонажа (вызывается из CharacterScreen при нажатии "Сохранить")
+  // Initial save triggered from CharacterScreen.
   const saveCharacter = useCallback(async (name) => {
     try {
       const id = characterIdRef.current || generateId();
@@ -188,7 +189,7 @@ export const CharacterProvider = ({ children }) => {
         id,
         name,
         snapshot.level ?? 1,
-        snapshot.origin?.name || null,
+        snapshot.origin?.name || snapshot.origin?.id || null,
         serialized
       );
       await syncCharacterToCloudIfEnabled(id);
@@ -201,7 +202,7 @@ export const CharacterProvider = ({ children }) => {
     }
   }, [buildSnapshot]);
 
-  // Загрузка персонажа по ID
+  // Load character by ID.
   const loadCharacter = useCallback(async (id) => {
     try {
       const row = await db.loadCharacterById(id);
@@ -253,7 +254,7 @@ export const CharacterProvider = ({ children }) => {
     }
   }, []);
 
-  // Получить список всех персонажей
+  // Get all character records.
   const getCharactersList = useCallback(async () => {
     try {
       return await db.getCharactersList();
@@ -262,7 +263,7 @@ export const CharacterProvider = ({ children }) => {
     }
   }, []);
 
-  // Удалить персонажа
+  // Delete character by ID.
   const deleteCharacter = useCallback(async (id) => {
     try {
       await db.deleteCharacter(id);
@@ -311,11 +312,11 @@ export const CharacterProvider = ({ children }) => {
 
     if (normalizedResult.effects.length > 0) {
       const timerPreview = normalizedResult.effects
-        .map((effect) => `${effect.effectName || effect.effectLabel}: ${effect.scenesLeft} сцен`)
+        .map((effect) => `${effect.effectName || effect.effectLabel}: ${effect.scenesLeft} scenes`)
         .join(' | ');
       console.log(`[TimedEffects] ${timerPreview}`);
     } else {
-      console.log('[TimedEffects] Активных эффектов нет.');
+      console.log('[TimedEffects] No active effects.');
     }
 
     return {
@@ -381,7 +382,7 @@ export const CharacterProvider = ({ children }) => {
     const currentMaxHealth = calculateMaxHealth(initialAttributes, level);
     setCurrentHealth(currentMaxHealth);
     setModifiedItems(new Map());
-    // Сбрасываем статус сохранения
+    // Reset save status.
     setCharacterName('');
     setCharacterId(null);
     setIsSaved(false);
