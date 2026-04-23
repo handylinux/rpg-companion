@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView, Modal } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
-import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
+import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth, getAttributeValue } from '../../../domain/characterCreation';
 import { TRAITS } from '../CharacterScreen/logic/traitsData';
 import styles from '../../../styles';
 import { renderTextWithIcons } from './textUtils';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
-import { applyArmorMods } from './armorModificationUtils';
-import { getAttributeValue } from '../CharacterScreen/logic/attributeKeyUtils';
+import { applyArmorMods } from '../../../domain/modsEquip';
 import { getSkillDisplayName } from '../CharacterScreen/logic/characterScreenI18n';
-import { getEffectTimeText } from '../../../assets/scripts/sceneEffects';
+import { getEffectTimeText } from '../../../domain/effects';
 import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
 
 // Импортируем модальное окно модификаций

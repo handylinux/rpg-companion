@@ -5,7 +5,7 @@ import CapsModal from './modals/CapsModal';
 import SellItemModal from './modals/SellItemModal';
 import AddItemModal from './modals/AddItemModal';
 import BuyItemModal from './modals/BuyItemModal';
-import { calculateMaxHealth } from '../CharacterScreen/logic/characterLogic';
+import { calculateMaxHealth } from '../../../domain/characterCreation';
 import { formatInventoryText, tInventory } from './logic/inventoryI18n';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';

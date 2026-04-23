@@ -11,10 +11,20 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 4 Uncommon x 2",
     "Cost": 30,
-    "Effects": "minus 1 CD Damage, plus 2 Fire Rate",
     "EffectDescription": "Урон -1 БК, скорострельность +2",
     "Weight": 1,
-    "applies_to_ids": ["weapon_008"]
+    "applies_to_ids": [
+      "weapon_008"
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 2 Fire Rate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_002",
@@ -28,10 +38,23 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 5 Uncommon x 3",
     "Cost": 35,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "EffectDescription": "Урон +1 БК, получает качество Проникающий 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_008"]
+    "applies_to_ids": [
+      "weapon_008"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_003",
@@ -45,9 +68,19 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 4 Uncommon x 2",
     "Cost": 27,
-    "Effects": "plus 1 CD Damage, plus 1 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_007"]
+    "applies_to_ids": [
+      "weapon_007"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, plus 1 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_004",
@@ -61,9 +94,25 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 20,
-    "Effects": "plus 1 CD Damage",
     "Weight": null,
-    "applies_to_ids": ["weapon_001", "weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_005",
@@ -77,9 +126,25 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 25,
-    "Effects": "plus 2 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_001", "weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_006",
@@ -93,9 +158,24 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 35,
-    "Effects": "plus 3 CD Damage, plus 1 Fire Rate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_001", "weapon_002", "weapon_004", "weapon_005", "weapon_009", "weapon_010"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_009",
+      "weapon_010"
+    ],
+    "effectsLegacy": "plus 3 CD Damage, plus 1 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 3
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_007",
@@ -109,10 +189,25 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 25,
-    "Effects": "gain Vicious",
     "EffectDescription": "Получает качество Порочный",
     "Weight": null,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "gain Vicious",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_008",
@@ -126,9 +221,33 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 30,
-    "Effects": "minus 1 CD Damage, plus 2 Fire Rate, gain Burst, gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_009", "weapon_012"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_009",
+      "weapon_012"
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 2 Fire Rate, gain Burst, gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Burst"
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_009",
@@ -142,9 +261,20 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 20,
-    "Effects": "plus 1 Fire Rate",
     "Weight": null,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_009", "weapon_010", "weapon_012"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_009",
+      "weapon_010",
+      "weapon_012"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_010",
@@ -158,9 +288,19 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 20,
-    "Effects": "Set 4 CD Damage, Ammo .38",
     "Weight": 3,
-    "applies_to_ids": ["weapon_005", "weapon_007", "weapon_011", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_005",
+      "weapon_007",
+      "weapon_011",
+      "weapon_013"
+    ],
+    "effectsLegacy": "Set 4 CD Damage, Ammo .38",
+    "damageModifier": {
+      "op": "set",
+      "value": 4
+    },
+    "ammoOverride": ".38"
   },
   {
     "id": "mod_011",
@@ -174,9 +314,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 40,
-    "Effects": "Set 7 CD Damage, Ammo .308",
     "Weight": 4,
-    "applies_to_ids": ["weapon_005", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_005",
+      "weapon_013"
+    ],
+    "effectsLegacy": "Set 7 CD Damage, Ammo .308",
+    "damageModifier": {
+      "op": "set",
+      "value": 7
+    },
+    "ammoOverride": ".308"
   },
   {
     "id": "mod_012",
@@ -190,9 +338,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 19,
-    "Effects": "Set 4 CD Damage, Ammo .45",
     "Weight": 2,
-    "applies_to_ids": ["weapon_012"]
+    "applies_to_ids": [
+      "weapon_012"
+    ],
+    "effectsLegacy": "Set 4 CD Damage, Ammo .45",
+    "damageModifier": {
+      "op": "set",
+      "value": 4
+    },
+    "ammoOverride": ".45"
   },
   {
     "id": "mod_013",
@@ -206,9 +361,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 30,
-    "Effects": "Set 8 CD Damage, Ammo .50",
     "Weight": 4,
-    "applies_to_ids": ["weapon_007", "weapon_011"]
+    "applies_to_ids": [
+      "weapon_007",
+      "weapon_011"
+    ],
+    "effectsLegacy": "Set 8 CD Damage, Ammo .50",
+    "damageModifier": {
+      "op": "set",
+      "value": 8
+    },
+    "ammoOverride": ".50"
   },
   {
     "id": "mod_014",
@@ -222,9 +385,19 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 75,
-    "Effects": "plus 2 Fire Rate, minus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_014"]
+    "applies_to_ids": [
+      "weapon_014"
+    ],
+    "effectsLegacy": "plus 2 Fire Rate, minus 1 Range",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "rangeModifier": {
+      "op": "-",
+      "value": 1
+    }
   },
   {
     "id": "mod_015",
@@ -238,9 +411,20 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 0,
-    "Effects": "gain Inaccurate",
     "Weight": -1,
-    "applies_to_ids": ["weapon_001", "weapon_008", "weapon_011", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_008",
+      "weapon_011",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_016",
@@ -254,9 +438,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 10,
-    "Effects": "gain Reliable",
     "Weight": null,
-    "applies_to_ids": ["weapon_001"]
+    "applies_to_ids": [
+      "weapon_001"
+    ],
+    "effectsLegacy": "gain Reliable",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Reliable"
+      }
+    ]
   },
   {
     "id": "mod_017",
@@ -270,9 +462,25 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 20,
-    "Effects": "plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_018",
@@ -286,9 +494,26 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 35,
-    "Effects": "plus 1 Range, plus 1 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "plus 1 Range, plus 1 Fire Rate",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_019",
@@ -302,9 +527,27 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 36,
-    "Effects": "plus 1 Range, plus 1 Fire Rate, gain Reliable",
     "Weight": 1,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_007"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_007"
+    ],
+    "effectsLegacy": "plus 1 Range, plus 1 Fire Rate, gain Reliable",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Reliable"
+      }
+    ]
   },
   {
     "id": "mod_020",
@@ -318,9 +561,21 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 3,
-    "Effects": "gain Close Quarters, lose Two-Handed",
     "Weight": -2,
-    "applies_to_ids": ["weapon_010"]
+    "applies_to_ids": [
+      "weapon_010"
+    ],
+    "effectsLegacy": "gain Close Quarters, lose Two-Handed",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Close Quarters"
+      },
+      {
+        "op": "lose",
+        "name": "Two-Handed"
+      }
+    ]
   },
   {
     "id": "mod_021",
@@ -334,9 +589,15 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 37,
-    "Effects": "plus 1 CD Damage",
     "Weight": null,
-    "applies_to_ids": ["weapon_006"]
+    "applies_to_ids": [
+      "weapon_006"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_022",
@@ -350,9 +611,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 15,
-    "Effects": "plus 1 CD Damage, plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, plus 1 Range",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_023",
@@ -366,9 +639,27 @@
     "Rarity": "?Common",
     "Materials": "?Common x 5 Uncommon x 3",
     "Cost": -3,
-    "Effects": "plus 1 Fire Rate, gain Unreliable",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_012"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_012"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate, gain Unreliable",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Unreliable"
+      }
+    ]
   },
   {
     "id": "mod_024",
@@ -382,9 +673,23 @@
     "Rarity": "?Common",
     "Materials": "?Common x 4 Uncommon x 2",
     "Cost": 8,
-    "Effects": "gain Reliable",
     "Weight": null,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_012"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_012"
+    ],
+    "effectsLegacy": "gain Reliable",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Reliable"
+      }
+    ]
   },
   {
     "id": "mod_025",
@@ -398,9 +703,21 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 23,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_012"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_012"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_026",
@@ -414,9 +731,18 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 6,
-    "Effects": "lose Inaccurate",
     "Weight": null,
-    "applies_to_ids": ["weapon_001", "weapon_002"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002"
+    ],
+    "effectsLegacy": "lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_027",
@@ -430,9 +756,25 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 10,
-    "Effects": "gain Piercing 1, lose Inaccurate",
     "Weight": null,
-    "applies_to_ids": ["weapon_002", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "gain Piercing 1, lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_028",
@@ -446,9 +788,29 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 10,
-    "Effects": "gain Two-Handed, lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_007", "weapon_008", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "gain Two-Handed, lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_029",
@@ -462,9 +824,32 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 20,
-    "Effects": "gain Two-Handed, gain Accurate, lose Inaccurate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Two-Handed, gain Accurate, lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_030",
@@ -478,9 +863,34 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 3,
-    "Effects": "gain Two-Handed, plus 1 Fire Rate, lose Inaccurate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_006", "weapon_008", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_008",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Two-Handed, plus 1 Fire Rate, lose Inaccurate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_031",
@@ -494,9 +904,21 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 40,
-    "Effects": "plus 1 CD Damage, gain Vicious",
     "Weight": 3,
-    "applies_to_ids": ["weapon_006"]
+    "applies_to_ids": [
+      "weapon_006"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_032",
@@ -510,9 +932,19 @@
     "Rarity": "?Uncommon",
     "Materials": "?Common x 3",
     "Cost": 35,
-    "Effects": "plus 1 CD Damage, minus 1 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_006"]
+    "applies_to_ids": [
+      "weapon_006"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, minus 1 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    }
   },
   {
     "id": "mod_033",
@@ -526,9 +958,30 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 14,
-    "Effects": "gain Re-roll Hit Location",
     "Weight": null,
-    "applies_to_ids": ["weapon_001", "weapon_002", "weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_008", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_034",
@@ -542,9 +995,27 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 11,
-    "Effects": "gain Accurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_001", "weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Accurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_035",
@@ -558,9 +1029,30 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 29,
-    "Effects": "gain Accurate, plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Accurate, plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_036",
@@ -574,9 +1066,30 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 38,
-    "Effects": "gain Accurate, gain Night Vision",
     "Weight": 1,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Accurate, gain Night Vision",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Night Vision"
+      }
+    ]
   },
   {
     "id": "mod_037",
@@ -590,9 +1103,34 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 50,
-    "Effects": "gain Accurate, gain Night Vision, plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Accurate, gain Night Vision, plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Night Vision"
+      }
+    ]
   },
   {
     "id": "mod_038",
@@ -606,9 +1144,32 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 59,
-    "Effects": "gain Accurate, gain Recon",
     "Weight": 1,
-    "applies_to_ids": ["weapon_001", "weapon_002", "weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014", "weapon_015"]
+    "applies_to_ids": [
+      "weapon_001",
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014",
+      "weapon_015"
+    ],
+    "effectsLegacy": "gain Accurate, gain Recon",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Recon"
+      }
+    ]
   },
   {
     "id": "mod_039",
@@ -622,9 +1183,23 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 10,
-    "Effects": "gain Bayonet",
     "Weight": 2,
-    "applies_to_ids": ["weapon_005", "weapon_007", "weapon_009", "weapon_011", "weapon_012", "weapon_013", "weapon_014"]
+    "applies_to_ids": [
+      "weapon_005",
+      "weapon_007",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013",
+      "weapon_014"
+    ],
+    "effectsLegacy": "gain Bayonet",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Bayonet"
+      }
+    ]
   },
   {
     "id": "mod_040",
@@ -638,9 +1213,24 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 15,
-    "Effects": "lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_008", "weapon_009", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_008",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_041",
@@ -654,9 +1244,26 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 30,
-    "Effects": "lose Inaccurate, plus 1 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_008", "weapon_009", "weapon_010", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_008",
+      "weapon_009",
+      "weapon_010",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "lose Inaccurate, plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_042",
@@ -670,9 +1277,26 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 45,
-    "Effects": "gain Supressed",
     "Weight": 2,
-    "applies_to_ids": ["weapon_002", "weapon_004", "weapon_005", "weapon_006", "weapon_007", "weapon_008", "weapon_009", "weapon_011", "weapon_012", "weapon_013"]
+    "applies_to_ids": [
+      "weapon_002",
+      "weapon_004",
+      "weapon_005",
+      "weapon_006",
+      "weapon_007",
+      "weapon_008",
+      "weapon_009",
+      "weapon_011",
+      "weapon_012",
+      "weapon_013"
+    ],
+    "effectsLegacy": "gain Supressed",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Supressed"
+      }
+    ]
   },
   {
     "id": "mod_043",
@@ -686,9 +1310,19 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 30,
-    "Effects": "gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_044",
@@ -702,9 +1336,21 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 35,
-    "Effects": "plus 1 CD Damage, minus 1 Fire Rate",
     "Weight": null,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, minus 1 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    }
   },
   {
     "id": "mod_045",
@@ -718,9 +1364,19 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 30,
-    "Effects": "gain Vicious",
     "Weight": null,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Vicious",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_046",
@@ -734,9 +1390,23 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 35,
-    "Effects": "plus 1 CD Damage, gain Vicious",
     "Weight": null,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_047",
@@ -750,9 +1420,22 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 4,
-    "Effects": "plus 1 CD Damage, gain Crank 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Crank 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_048",
@@ -766,9 +1449,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 8,
-    "Effects": "plus 2 CD Damage, gain Crank 2",
     "Weight": 1,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Crank 2",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 2
+      }
+    ]
   },
   {
     "id": "mod_049",
@@ -782,9 +1478,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 12,
-    "Effects": "plus 3 CD Damage, gain Crank 3 ",
     "Weight": 1,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "plus 3 CD Damage, gain Crank 3 ",
+    "damageModifier": {
+      "op": "+",
+      "value": 3
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 3
+      }
+    ]
   },
   {
     "id": "mod_050",
@@ -798,9 +1507,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 16,
-    "Effects": "plus 4 CD Damage, gain Crank 4",
     "Weight": 2,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "plus 4 CD Damage, gain Crank 4",
+    "damageModifier": {
+      "op": "+",
+      "value": 4
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 4
+      }
+    ]
   },
   {
     "id": "mod_051",
@@ -814,9 +1536,21 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 6,
-    "Effects": "plus 1 Range, lose Close Quarters",
     "Weight": null,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "plus 1 Range, lose Close Quarters",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_052",
@@ -830,9 +1564,25 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 31,
-    "Effects": "minus 1 CD Damage, gain Spread, gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_019"]
+    "applies_to_ids": [
+      "weapon_019"
+    ],
+    "effectsLegacy": "minus 1 CD Damage, gain Spread, gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Spread"
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_053",
@@ -846,9 +1596,31 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 24,
-    "Effects": "minus 1 CD Damage, plus 1 Range, plus 1 Fire Rate, lose Close Quarters",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 1 Range, plus 1 Fire Rate, lose Close Quarters",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_054",
@@ -862,9 +1634,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 26,
-    "Effects": "plus 1 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_055",
@@ -878,9 +1658,30 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 30,
-    "Effects": "plus 2 CD Damage, plus 1 Range, minus 1 Fire Rate, lose Close Quarters",
     "Weight": 2,
-    "applies_to_ids": ["weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, plus 1 Range, minus 1 Fire Rate, lose Close Quarters",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_056",
@@ -894,9 +1695,37 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 35,
-    "Effects": "minus 2 CD Damage, plus 1 Range, plus 2 Fire Rate, gain Burst, gain Spread, gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_019"]
+    "applies_to_ids": [
+      "weapon_019"
+    ],
+    "effectsLegacy": "minus 2 CD Damage, plus 1 Range, plus 2 Fire Rate, gain Burst, gain Spread, gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 2
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Burst"
+      },
+      {
+        "op": "gain",
+        "name": "Spread"
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_057",
@@ -910,9 +1739,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 10,
-    "Effects": "gain Piercing 1, lose Inaccurate",
     "Weight": null,
-    "applies_to_ids": ["weapon_018"]
+    "applies_to_ids": [
+      "weapon_018"
+    ],
+    "effectsLegacy": "gain Piercing 1, lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_058",
@@ -926,9 +1768,27 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 10,
-    "Effects": "gain Two-Handed, lose Inaccurate, lose Close Quarters",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Two-Handed, lose Inaccurate, lose Close Quarters",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      },
+      {
+        "op": "lose",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_059",
@@ -942,9 +1802,22 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 15,
-    "Effects": "gain Piercing 1, lose Close Quarters",
     "Weight": 1,
-    "applies_to_ids": ["weapon_017"]
+    "applies_to_ids": [
+      "weapon_017"
+    ],
+    "effectsLegacy": "gain Piercing 1, lose Close Quarters",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      },
+      {
+        "op": "lose",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_060",
@@ -958,9 +1831,30 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 20,
-    "Effects": "gain Two-Handed, gain Accurate, lose Inaccurate, gain Close Quarters",
     "Weight": 2,
-    "applies_to_ids": ["weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Two-Handed, gain Accurate, lose Inaccurate, gain Close Quarters",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      },
+      {
+        "op": "gain",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_061",
@@ -974,9 +1868,30 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 3,
-    "Effects": "plus 1 Range, gain Two-Handed, lose Inaccurate, gain Close Quarters",
     "Weight": 2,
-    "applies_to_ids": ["weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "plus 1 Range, gain Two-Handed, lose Inaccurate, gain Close Quarters",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      },
+      {
+        "op": "gain",
+        "name": "Close Quarters"
+      }
+    ]
   },
   {
     "id": "mod_062",
@@ -990,9 +1905,20 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 14,
-    "Effects": "gain Re-roll Hit Location",
     "Weight": null,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_063",
@@ -1006,9 +1932,20 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 11,
-    "Effects": "gain Accurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Accurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_064",
@@ -1022,9 +1959,24 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 29,
-    "Effects": "gain Accurate, plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Accurate, plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_065",
@@ -1038,9 +1990,24 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 38,
-    "Effects": "gain Accurate, gain Night Vision",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Accurate, gain Night Vision",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Night Vision"
+      }
+    ]
   },
   {
     "id": "mod_066",
@@ -1054,9 +2021,28 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 50,
-    "Effects": "gain Accurate, gain Night Vision, plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Accurate, gain Night Vision, plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Night Vision"
+      }
+    ]
   },
   {
     "id": "mod_067",
@@ -1070,9 +2056,24 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 59,
-    "Effects": "gain Accurate, gain Recon",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018", "weapon_019"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018",
+      "weapon_019"
+    ],
+    "effectsLegacy": "gain Accurate, gain Recon",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Recon"
+      }
+    ]
   },
   {
     "id": "mod_068",
@@ -1086,9 +2087,35 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 15,
-    "Effects": "minus 1 CD Damage, plus 1 Fire Rate, minus 1 Range, gain Spread, gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018"
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 1 Fire Rate, minus 1 Range, gain Spread, gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "rangeModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Spread"
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_069",
@@ -1102,9 +2129,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 20,
-    "Effects": "plus 1 Range",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_070",
@@ -1118,9 +2153,23 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 25,
-    "Effects": "plus 1 Fire Rate, lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_016", "weapon_017", "weapon_018"]
+    "applies_to_ids": [
+      "weapon_016",
+      "weapon_017",
+      "weapon_018"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate, lose Inaccurate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_071",
@@ -1134,9 +2183,19 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 72,
-    "Effects": "plus 1 CD Damage, plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_020"]
+    "applies_to_ids": [
+      "weapon_020"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, plus 1 Range",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_072",
@@ -1150,9 +2209,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 30,
-    "Effects": "Set 7 CD Damage, Damage Type Energy, gain Radioactive",
     "Weight": null,
-    "applies_to_ids": ["weapon_020"]
+    "applies_to_ids": [
+      "weapon_020"
+    ],
+    "effectsLegacy": "Set 7 CD Damage, Damage Type Energy, gain Radioactive",
+    "damageModifier": {
+      "op": "set",
+      "value": 7
+    },
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Radioactive"
+      }
+    ]
   },
   {
     "id": "mod_073",
@@ -1166,9 +2238,25 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 60,
-    "Effects": "plus 2 Fire Rate, gain Burst, lose Blast",
     "Weight": null,
-    "applies_to_ids": ["weapon_020"]
+    "applies_to_ids": [
+      "weapon_020"
+    ],
+    "effectsLegacy": "plus 2 Fire Rate, gain Burst, lose Blast",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Burst"
+      },
+      {
+        "op": "lose",
+        "name": "Blast"
+      }
+    ]
   },
   {
     "id": "mod_074",
@@ -1182,9 +2270,15 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 59,
-    "Effects": "plus 1 CD Damage",
     "Weight": 7,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_075",
@@ -1198,9 +2292,17 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 28,
-    "Effects": "lose Inaccurate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_076",
@@ -1214,9 +2316,15 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 28,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 3,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_077",
@@ -1230,9 +2338,15 @@
     "Rarity": "Common",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 34,
-    "Effects": "plus 2 Fire Rate",
     "Weight": 6,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "plus 2 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_078",
@@ -1246,9 +2360,15 @@
     "Rarity": "Common",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 22,
-    "Effects": "plus 1 CD Damage",
     "Weight": null,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_079",
@@ -1262,9 +2382,21 @@
     "Rarity": "Common",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 47,
-    "Effects": "plus 1 CD Damage, gain Vicious",
     "Weight": null,
-    "applies_to_ids": ["weapon_022"]
+    "applies_to_ids": [
+      "weapon_022"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_080",
@@ -1278,9 +2410,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 19,
-    "Effects": "gain Vicious",
     "Weight": 1,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "gain Vicious",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_081",
@@ -1294,9 +2434,17 @@
     "Rarity": "Common",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 57,
-    "Effects": "gain Persistent",
     "Weight": 1,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_082",
@@ -1310,9 +2458,15 @@
     "Rarity": "Common",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 94,
-    "Effects": "plus 1 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_083",
@@ -1326,9 +2480,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 132,
-    "Effects": "plus 1 CD Damage, gain Vicious",
     "Weight": 3,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_084",
@@ -1342,9 +2508,23 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 8 Uncommon x 6 Rare x 4",
     "Cost": 357,
-    "Effects": "plus 4 CD Damage, plus 1 Range, minus 3 Fire Rate",
     "Weight": 10,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 4 CD Damage, plus 1 Range, minus 3 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 4
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 3
+    }
   },
   {
     "id": "mod_085",
@@ -1358,9 +2538,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 8 Uncommon x 6 Rare x 4",
     "Cost": 169,
-    "Effects": "lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_086",
@@ -1374,9 +2562,22 @@
     "Rarity": "Common",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 22,
-    "Effects": "plus 1 Range, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 1 Range, gain Piercing 1",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_087",
@@ -1390,9 +2591,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 20,
-    "Effects": "plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_023"]
+    "applies_to_ids": [
+      "weapon_023"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_088",
@@ -1406,9 +2613,15 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 40,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_023"]
+    "applies_to_ids": [
+      "weapon_023"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_089",
@@ -1422,9 +2635,17 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 5,
-    "Effects": "gain Re-roll Hit Location",
     "Weight": 1,
-    "applies_to_ids": ["weapon_023"]
+    "applies_to_ids": [
+      "weapon_023"
+    ],
+    "effectsLegacy": "gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_090",
@@ -1438,9 +2659,18 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 70,
-    "Effects": "gain Vicious, Damage Type Energy",
     "Weight": 1,
-    "applies_to_ids": ["weapon_023"]
+    "applies_to_ids": [
+      "weapon_023"
+    ],
+    "effectsLegacy": "gain Vicious, Damage Type Energy",
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_091",
@@ -1454,9 +2684,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 8 Uncommon x 6 Rare x 4",
     "Cost": 130,
-    "Effects": "gain Persistent",
     "Weight": 1,
-    "applies_to_ids": ["weapon_023"]
+    "applies_to_ids": [
+      "weapon_023"
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_092",
@@ -1470,9 +2708,23 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 45,
-    "Effects": "plus 1 CD Damage, plus 1 Fire Rate, minus 1 Range",
     "Weight": 5,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, plus 1 Fire Rate, minus 1 Range",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "rangeModifier": {
+      "op": "-",
+      "value": 1
+    }
   },
   {
     "id": "mod_093",
@@ -1486,9 +2738,19 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 75,
-    "Effects": "plus 2 CD Damage, minus 2 Fire Rate",
     "Weight": 3,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, minus 2 Fire Rate",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 2
+    }
   },
   {
     "id": "mod_094",
@@ -1502,9 +2764,17 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 68,
-    "Effects": "lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_095",
@@ -1518,9 +2788,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 5,
-    "Effects": "gain Shredder",
     "Weight": 5,
-    "applies_to_ids": ["weapon_026"]
+    "applies_to_ids": [
+      "weapon_026"
+    ],
+    "effectsLegacy": "gain Shredder",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Shredder"
+      }
+    ]
   },
   {
     "id": "mod_096",
@@ -1534,9 +2812,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 143,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 16,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_097",
@@ -1550,9 +2834,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 218,
-    "Effects": "plus 2 Fire Rate",
     "Weight": 20,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "plus 2 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_098",
@@ -1566,9 +2856,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 143,
-    "Effects": "gain Accurate",
     "Weight": 6,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "gain Accurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_099",
@@ -1582,9 +2880,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 248,
-    "Effects": "gain Accurate, gain Night Vision",
     "Weight": 6,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "gain Accurate, gain Night Vision",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      },
+      {
+        "op": "gain",
+        "name": "Night Vision"
+      }
+    ]
   },
   {
     "id": "mod_100",
@@ -1598,9 +2908,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 7 Uncommon x 5 Rare x 3",
     "Cost": 293,
-    "Effects": "gain Targetting Computer",
     "Weight": 7,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "gain Targetting Computer",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Targetting Computer"
+      }
+    ]
   },
   {
     "id": "mod_101",
@@ -1614,9 +2932,17 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 30,
-    "Effects": "gain Bayonet",
     "Weight": 1,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "gain Bayonet",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Bayonet"
+      }
+    ]
   },
   {
     "id": "mod_102",
@@ -1630,9 +2956,18 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 60,
-    "Effects": "gain Piercing 1",
     "Weight": 2,
-    "applies_to_ids": ["weapon_027"]
+    "applies_to_ids": [
+      "weapon_027"
+    ],
+    "effectsLegacy": "gain Piercing 1",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_103",
@@ -1646,9 +2981,17 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 25,
-    "Effects": "gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_028"]
+    "applies_to_ids": [
+      "weapon_028"
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_104",
@@ -1662,9 +3005,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 50,
-    "Effects": "plus 1 CD Damage, damage type Energy",
     "Weight": null,
-    "applies_to_ids": ["weapon_028"]
+    "applies_to_ids": [
+      "weapon_028"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, damage type Energy",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "damageTypeOverride": "Energy"
   },
   {
     "id": "mod_105",
@@ -1678,9 +3028,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 75,
-    "Effects": "plus 1 CD Damage, damage type Energy, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_028"]
+    "applies_to_ids": [
+      "weapon_028"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, damage type Energy, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_106",
@@ -1694,9 +3057,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 100,
-    "Effects": "plus 2 CD Damage, damage type Energy, gain Stun",
     "Weight": null,
-    "applies_to_ids": ["weapon_028"]
+    "applies_to_ids": [
+      "weapon_028"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, damage type Energy, gain Stun",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Stun"
+      }
+    ]
   },
   {
     "id": "mod_107",
@@ -1710,9 +3086,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 12,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_029"]
+    "applies_to_ids": [
+      "weapon_029"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_108",
@@ -1726,9 +3114,25 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 18,
-    "Effects": "plus 1 CD Damage, gain Sneak Attack, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_029"]
+    "applies_to_ids": [
+      "weapon_029"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Sneak Attack, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Sneak Attack"
+      },
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_109",
@@ -1742,9 +3146,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 12,
-    "Effects": "plus 2 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_030"]
+    "applies_to_ids": [
+      "weapon_030"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_110",
@@ -1758,9 +3174,21 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 15,
-    "Effects": "plus 1 CD Damage, gain Disarm",
     "Weight": 1,
-    "applies_to_ids": ["weapon_031"]
+    "applies_to_ids": [
+      "weapon_031"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Disarm",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Disarm"
+      }
+    ]
   },
   {
     "id": "mod_111",
@@ -1774,9 +3202,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 25,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": 3,
-    "applies_to_ids": ["weapon_031"]
+    "applies_to_ids": [
+      "weapon_031"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_112",
@@ -1789,9 +3229,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 100,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_032"]
+    "applies_to_ids": [
+      "weapon_032"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_113",
@@ -1805,9 +3257,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 10,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_033"]
+    "applies_to_ids": [
+      "weapon_033"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_114",
@@ -1821,9 +3285,19 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 5,
-    "Effects": "gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_034", "weapon_035"]
+    "applies_to_ids": [
+      "weapon_034",
+      "weapon_035"
+    ],
+    "effectsLegacy": "gain Piercing 1",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_115",
@@ -1837,9 +3311,23 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 7,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_034", "weapon_035"]
+    "applies_to_ids": [
+      "weapon_034",
+      "weapon_035"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_116",
@@ -1853,9 +3341,22 @@
     "Rarity": "Common",
     "Materials": "Common x 3",
     "Cost": 7,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": 1,
-    "applies_to_ids": ["weapon_034", "weapon_035"]
+    "applies_to_ids": [
+      "weapon_034",
+      "weapon_035"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_117",
@@ -1869,9 +3370,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 10,
-    "Effects": "plus 2 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_034", "weapon_035"]
+    "applies_to_ids": [
+      "weapon_034",
+      "weapon_035"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_118",
@@ -1885,9 +3393,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 12,
-    "Effects": "plus 2 CD Damage, gain Persistent",
     "Weight": 2,
-    "applies_to_ids": ["weapon_034", "weapon_035"]
+    "applies_to_ids": [
+      "weapon_034",
+      "weapon_035"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_119",
@@ -1901,9 +3422,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 6,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_036"]
+    "applies_to_ids": [
+      "weapon_036"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_120",
@@ -1917,9 +3451,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 9,
-    "Effects": "plus 2 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_036"]
+    "applies_to_ids": [
+      "weapon_036"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_121",
@@ -1933,9 +3473,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 10,
-    "Effects": "plus 2 CD Damage, gain Persistent",
     "Weight": 2,
-    "applies_to_ids": ["weapon_036"]
+    "applies_to_ids": [
+      "weapon_036"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_122",
@@ -1949,9 +3501,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 4,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_037"]
+    "applies_to_ids": [
+      "weapon_037"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_123",
@@ -1965,9 +3530,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 11,
-    "Effects": "plus 2 CD Damage",
     "Weight": 2,
-    "applies_to_ids": ["weapon_037"]
+    "applies_to_ids": [
+      "weapon_037"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_124",
@@ -1981,9 +3552,21 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 9,
-    "Effects": "plus 1 CD Damage, gain Disarm",
     "Weight": null,
-    "applies_to_ids": ["weapon_038"]
+    "applies_to_ids": [
+      "weapon_038"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Disarm",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Disarm"
+      }
+    ]
   },
   {
     "id": "mod_125",
@@ -1997,9 +3580,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 12,
-    "Effects": "plus 2 CD Damage",
     "Weight": 7,
-    "applies_to_ids": ["weapon_038"]
+    "applies_to_ids": [
+      "weapon_038"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_126",
@@ -2013,9 +3602,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 13,
-    "Effects": "plus 2 CD Damage, gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_038"]
+    "applies_to_ids": [
+      "weapon_038"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_127",
@@ -2029,9 +3631,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 22,
-    "Effects": "plus 3 CD Damage",
     "Weight": 2,
-    "applies_to_ids": ["weapon_038"]
+    "applies_to_ids": [
+      "weapon_038"
+    ],
+    "effectsLegacy": "plus 3 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 3
+    }
   },
   {
     "id": "mod_128",
@@ -2045,9 +3653,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 2,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_039"]
+    "applies_to_ids": [
+      "weapon_039"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_129",
@@ -2061,9 +3682,21 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_039"]
+    "applies_to_ids": [
+      "weapon_039"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_130",
@@ -2077,9 +3710,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_040"]
+    "applies_to_ids": [
+      "weapon_040"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_131",
@@ -2093,9 +3739,21 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_040"]
+    "applies_to_ids": [
+      "weapon_040"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_132",
@@ -2109,9 +3767,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 15,
-    "Effects": "plus 2 CD Damage, damage type Energy",
     "Weight": null,
-    "applies_to_ids": ["weapon_041"]
+    "applies_to_ids": [
+      "weapon_041"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, damage type Energy",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "damageTypeOverride": "Energy"
   },
   {
     "id": "mod_133",
@@ -2125,9 +3790,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 30,
-    "Effects": "plus 3 CD Damage, damage type Energy, gain Stun",
     "Weight": null,
-    "applies_to_ids": ["weapon_041"]
+    "applies_to_ids": [
+      "weapon_041"
+    ],
+    "effectsLegacy": "plus 3 CD Damage, damage type Energy, gain Stun",
+    "damageModifier": {
+      "op": "+",
+      "value": 3
+    },
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Stun"
+      }
+    ]
   },
   {
     "id": "mod_134",
@@ -2141,9 +3819,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 18,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": 5,
-    "applies_to_ids": ["weapon_042"]
+    "applies_to_ids": [
+      "weapon_042"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_135",
@@ -2157,9 +3848,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 30,
-    "Effects": "plus 2 CD Damage",
     "Weight": 9,
-    "applies_to_ids": ["weapon_042"]
+    "applies_to_ids": [
+      "weapon_042"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_136",
@@ -2173,9 +3870,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 180,
-    "Effects": "plus 1 CD Damage, damage type Energy",
     "Weight": null,
-    "applies_to_ids": ["weapon_043"]
+    "applies_to_ids": [
+      "weapon_043"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, damage type Energy",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "damageTypeOverride": "Energy"
   },
   {
     "id": "mod_137",
@@ -2189,9 +3893,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 6 Uncommon x 4 Rare x 2",
     "Cost": 360,
-    "Effects": "plus 2 CD Damage, damage type Energy, gain Stun",
     "Weight": null,
-    "applies_to_ids": ["weapon_043"]
+    "applies_to_ids": [
+      "weapon_043"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, damage type Energy, gain Stun",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Stun"
+      }
+    ]
   },
   {
     "id": "mod_138",
@@ -2205,9 +3922,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 12,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": 1,
-    "applies_to_ids": ["weapon_044"]
+    "applies_to_ids": [
+      "weapon_044"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_139",
@@ -2221,9 +3950,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_045"]
+    "applies_to_ids": [
+      "weapon_045"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_140",
@@ -2237,9 +3979,22 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_045"]
+    "applies_to_ids": [
+      "weapon_045"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_141",
@@ -2253,9 +4008,18 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_046"]
+    "applies_to_ids": [
+      "weapon_046"
+    ],
+    "effectsLegacy": "gain Piercing 1",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_142",
@@ -2269,9 +4033,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 4,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_046"]
+    "applies_to_ids": [
+      "weapon_046"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_143",
@@ -2285,9 +4062,15 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 7,
-    "Effects": "plus 2 CD Damage",
     "Weight": 1,
-    "applies_to_ids": ["weapon_046"]
+    "applies_to_ids": [
+      "weapon_046"
+    ],
+    "effectsLegacy": "plus 2 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_144",
@@ -2301,9 +4084,21 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 22,
-    "Effects": "plus 1 CD Damage, gain Disarm",
     "Weight": 2,
-    "applies_to_ids": ["weapon_047"]
+    "applies_to_ids": [
+      "weapon_047"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Disarm",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Disarm"
+      }
+    ]
   },
   {
     "id": "mod_145",
@@ -2317,9 +4112,17 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_048"]
+    "applies_to_ids": [
+      "weapon_048"
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_146",
@@ -2333,9 +4136,18 @@
     "Rarity": "Common",
     "Materials": "Common x 2",
     "Cost": 3,
-    "Effects": "gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_048"]
+    "applies_to_ids": [
+      "weapon_048"
+    ],
+    "effectsLegacy": "gain Piercing 1",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_147",
@@ -2349,9 +4161,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 4,
-    "Effects": "plus 1 CD Damage, gain Piercing 1",
     "Weight": null,
-    "applies_to_ids": ["weapon_048"]
+    "applies_to_ids": [
+      "weapon_048"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_148",
@@ -2365,9 +4190,21 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 3",
     "Cost": 5,
-    "Effects": "plus 1 CD Damage, gain Persistent",
     "Weight": null,
-    "applies_to_ids": ["weapon_048"]
+    "applies_to_ids": [
+      "weapon_048"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Persistent",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_149",
@@ -2381,9 +4218,22 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 4 Uncommon x 2",
     "Cost": 45,
-    "Effects": "plus 2 CD Damage, Gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": ["weapon_049"]
+    "applies_to_ids": [
+      "weapon_049"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, Gain Piercing 1",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_150",
@@ -2397,9 +4247,16 @@
     "Rarity": "Uncommon",
     "Materials": "Common x 5 Uncommon x 3",
     "Cost": 100,
-    "Effects": "plus 2 CD Damage, Damage Type Energy",
     "Weight": null,
-    "applies_to_ids": ["weapon_049"]
+    "applies_to_ids": [
+      "weapon_049"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, Damage Type Energy",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "damageTypeOverride": "Energy"
   },
   {
     "id": "mod_151",
@@ -2413,9 +4270,15 @@
     "Rarity": "",
     "Materials": "",
     "Cost": 20,
-    "Effects": "plus 1 Range",
     "Weight": null,
-    "applies_to_ids": ["weapon_025"]
+    "applies_to_ids": [
+      "weapon_025"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_152",
@@ -2429,9 +4292,15 @@
     "Rarity": "",
     "Materials": "",
     "Cost": 40,
-    "Effects": "plus 1 Fire Rate",
     "Weight": null,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_153",
@@ -2445,9 +4314,17 @@
     "Rarity": "",
     "Materials": "",
     "Cost": 5,
-    "Effects": "gain Re-roll Hit Location",
     "Weight": null,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_154",
@@ -2461,9 +4338,18 @@
     "Rarity": "",
     "Materials": "",
     "Cost": 70,
-    "Effects": "gain Vicious, Damage Type Energy",
     "Weight": null,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "gain Vicious, Damage Type Energy",
+    "damageTypeOverride": "Energy",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_155",
@@ -2477,9 +4363,17 @@
     "Rarity": "",
     "Materials": "",
     "Cost": 130,
-    "Effects": "gain Persistent",
     "Weight": null,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_156",
@@ -2493,9 +4387,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 40,
-    "Effects": "plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_065"]
+    "applies_to_ids": [
+      "weapon_065"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_157",
@@ -2509,9 +4409,21 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 10,
-    "Effects": "Gain Two-Handed, Lose Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_065"]
+    "applies_to_ids": [
+      "weapon_065"
+    ],
+    "effectsLegacy": "Gain Two-Handed, Lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Two-Handed"
+      },
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_158",
@@ -2525,9 +4437,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 30,
-    "Effects": "plus 1 CD Damage",
     "Weight": 2,
-    "applies_to_ids": ["weapon_066"]
+    "applies_to_ids": [
+      "weapon_066"
+    ],
+    "effectsLegacy": "plus 1 CD Damage",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_159",
@@ -2541,9 +4459,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 22,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_066"]
+    "applies_to_ids": [
+      "weapon_066"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_160",
@@ -2557,9 +4481,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 40,
-    "Effects": "plus 3 Fire Rate",
     "Weight": 4,
-    "applies_to_ids": ["weapon_066"]
+    "applies_to_ids": [
+      "weapon_066"
+    ],
+    "effectsLegacy": "plus 3 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 3
+    }
   },
   {
     "id": "mod_161",
@@ -2573,9 +4503,20 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 21,
-    "Effects": "Set 3 CD Damage, minus 1 Fire Rate, Ammo changes to Fusion Cell",
     "Weight": 0,
-    "applies_to_ids": ["weapon_067"]
+    "applies_to_ids": [
+      "weapon_067"
+    ],
+    "effectsLegacy": "Set 3 CD Damage, minus 1 Fire Rate, Ammo changes to Fusion Cell",
+    "damageModifier": {
+      "op": "set",
+      "value": 3
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "ammoOverride": "changes to Fusion Cell"
   },
   {
     "id": "mod_162",
@@ -2589,9 +4530,22 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 4,
-    "Effects": "plus 1 CD Damage, gain Crank 3",
     "Weight": 0,
-    "applies_to_ids": ["weapon_068"]
+    "applies_to_ids": [
+      "weapon_068"
+    ],
+    "effectsLegacy": "plus 1 CD Damage, gain Crank 3",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 3
+      }
+    ]
   },
   {
     "id": "mod_163",
@@ -2605,9 +4559,22 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 8,
-    "Effects": "plus 2 CD Damage, gain Crank 4",
     "Weight": 1,
-    "applies_to_ids": ["weapon_068"]
+    "applies_to_ids": [
+      "weapon_068"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, gain Crank 4",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 4
+      }
+    ]
   },
   {
     "id": "mod_164",
@@ -2621,9 +4588,22 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 12,
-    "Effects": "plus 3 CD Damage, gain Crank 5",
     "Weight": 1,
-    "applies_to_ids": ["weapon_068"]
+    "applies_to_ids": [
+      "weapon_068"
+    ],
+    "effectsLegacy": "plus 3 CD Damage, gain Crank 5",
+    "damageModifier": {
+      "op": "+",
+      "value": 3
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 5
+      }
+    ]
   },
   {
     "id": "mod_165",
@@ -2637,9 +4617,22 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 16,
-    "Effects": "plus 4 CD Damage, gain Crank 6",
     "Weight": 2,
-    "applies_to_ids": ["weapon_068"]
+    "applies_to_ids": [
+      "weapon_068"
+    ],
+    "effectsLegacy": "plus 4 CD Damage, gain Crank 6",
+    "damageModifier": {
+      "op": "+",
+      "value": 4
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Crank",
+        "value": 6
+      }
+    ]
   },
   {
     "id": "mod_166",
@@ -2653,9 +4646,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 40,
-    "Effects": "plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_069"]
+    "applies_to_ids": [
+      "weapon_069"
+    ],
+    "effectsLegacy": "plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_167",
@@ -2669,9 +4668,21 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 30,
-    "Effects": "plus 2 CD Damage, Lose Blast",
     "Weight": 3,
-    "applies_to_ids": ["weapon_069"]
+    "applies_to_ids": [
+      "weapon_069"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, Lose Blast",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Blast"
+      }
+    ]
   },
   {
     "id": "mod_168",
@@ -2685,9 +4696,21 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 45,
-    "Effects": "plus 1 Fire Rate, Gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_069"]
+    "applies_to_ids": [
+      "weapon_069"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate, Gain Inaccurate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_169",
@@ -2701,9 +4724,16 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 3,
-    "Effects": "plus 1 Range, ammo 40mm Grenades",
     "Weight": 0,
-    "applies_to_ids": ["weapon_069"]
+    "applies_to_ids": [
+      "weapon_069"
+    ],
+    "effectsLegacy": "plus 1 Range, ammo 40mm Grenades",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "ammoOverride": "40mm Grenades"
   },
   {
     "id": "mod_170",
@@ -2717,9 +4747,33 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 40,
-    "Effects": "plus 2 CD Damage, plus 1 Range, minus 1 Fire Rate, Lose Stun, Lose Unreliable",
     "Weight": 5,
-    "applies_to_ids": ["weapon_070"]
+    "applies_to_ids": [
+      "weapon_070"
+    ],
+    "effectsLegacy": "plus 2 CD Damage, plus 1 Range, minus 1 Fire Rate, Lose Stun, Lose Unreliable",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Stun"
+      },
+      {
+        "op": "lose",
+        "name": "Unreliable"
+      }
+    ]
   },
   {
     "id": "mod_171",
@@ -2733,9 +4787,20 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 21,
-    "Effects": "Set 2 CD Damage, minus 1 Fire Rate, Ammo fusion cell",
     "Weight": 0,
-    "applies_to_ids": ["weapon_070"]
+    "applies_to_ids": [
+      "weapon_070"
+    ],
+    "effectsLegacy": "Set 2 CD Damage, minus 1 Fire Rate, Ammo fusion cell",
+    "damageModifier": {
+      "op": "set",
+      "value": 2
+    },
+    "fireRateModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "ammoOverride": "fusion cell"
   },
   {
     "id": "mod_172",
@@ -2749,9 +4814,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 45,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 2,
-    "applies_to_ids": ["weapon_070"]
+    "applies_to_ids": [
+      "weapon_070"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_173",
@@ -2765,9 +4836,17 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 17,
-    "Effects": "Gain Re-roll Hit Location",
     "Weight": 0,
-    "applies_to_ids": ["weapon_070"]
+    "applies_to_ids": [
+      "weapon_070"
+    ],
+    "effectsLegacy": "Gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_174",
@@ -2781,9 +4860,21 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 21,
-    "Effects": "Gain Vicious, Gain Persistent",
     "Weight": 0,
-    "applies_to_ids": ["weapon_071"]
+    "applies_to_ids": [
+      "weapon_071"
+    ],
+    "effectsLegacy": "Gain Vicious, Gain Persistent",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      },
+      {
+        "op": "gain",
+        "name": "Persistent"
+      }
+    ]
   },
   {
     "id": "mod_175",
@@ -2797,9 +4888,21 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 15,
-    "Effects": "Gain Spread, minus 1 Range",
     "Weight": 0,
-    "applies_to_ids": ["weapon_071"]
+    "applies_to_ids": [
+      "weapon_071"
+    ],
+    "effectsLegacy": "Gain Spread, minus 1 Range",
+    "rangeModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Spread"
+      }
+    ]
   },
   {
     "id": "mod_176",
@@ -2813,9 +4916,15 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 45,
-    "Effects": "plus 1 Fire Rate",
     "Weight": 15,
-    "applies_to_ids": ["weapon_071"]
+    "applies_to_ids": [
+      "weapon_071"
+    ],
+    "effectsLegacy": "plus 1 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_177",
@@ -2829,9 +4938,17 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 17,
-    "Effects": "Gain Re-roll Hit Location",
     "Weight": 0,
-    "applies_to_ids": ["weapon_071"]
+    "applies_to_ids": [
+      "weapon_071"
+    ],
+    "effectsLegacy": "Gain Re-roll Hit Location",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Re-roll Hit Location"
+      }
+    ]
   },
   {
     "id": "mod_178",
@@ -2845,9 +4962,17 @@
     "Rarity": null,
     "Materials": null,
     "Cost": 28,
-    "Effects": "Gain Accurate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_071"]
+    "applies_to_ids": [
+      "weapon_071"
+    ],
+    "effectsLegacy": "Gain Accurate",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Accurate"
+      }
+    ]
   },
   {
     "id": "mod_179",
@@ -2855,9 +4980,18 @@
     "Prefix": "Armor Piercing",
     "Slot": "Receivers",
     "Cost": 3,
-    "Effects": "Gain Piercing 1",
     "Weight": 1,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Gain Piercing 1",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      }
+    ]
   },
   {
     "id": "mod_180",
@@ -2865,9 +4999,30 @@
     "Prefix": "AP Auto",
     "Slot": "Receivers",
     "Cost": 40,
-    "Effects": "minus 1 CD Damage, plus 2 Fire Rate, gain Piercing 1, gain Inaccurate",
     "Weight": 1,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 2 Fire Rate, gain Piercing 1, gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_181",
@@ -2875,9 +5030,21 @@
     "Prefix": "Hardened Auto",
     "Slot": "Receivers",
     "Cost": 58,
-    "Effects": "plus 2 Fire Rate, gain Inaccurate",
     "Weight": 2,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "plus 2 Fire Rate, gain Inaccurate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_182",
@@ -2885,9 +5052,25 @@
     "Prefix": "Rapid",
     "Slot": "Receivers",
     "Cost": 63,
-    "Effects": "minus 1 CD Damage, plus 3 Fire Rate, Gain Inaccurate",
     "Weight": 2,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "minus 1 CD Damage, plus 3 Fire Rate, Gain Inaccurate",
+    "damageModifier": {
+      "op": "-",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 3
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_183",
@@ -2895,9 +5078,21 @@
     "Prefix": "Calibrated Powerful",
     "Slot": "Receivers",
     "Cost": 68,
-    "Effects": "plus 2 CD Damage, Gain Vicious",
     "Weight": 3,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "plus 2 CD Damage, Gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_184",
@@ -2905,9 +5100,25 @@
     "Prefix": "Powerful Auto",
     "Slot": "Receivers",
     "Cost": 88,
-    "Effects": "plus 1 CD Damage, plus 2 Fire Rate, Gain Inaccurate",
     "Weight": 4,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "plus 1 CD Damage, plus 2 Fire Rate, Gain Inaccurate",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_185",
@@ -2915,9 +5126,26 @@
     "Prefix": "Hardened AP Auto",
     "Slot": "Receivers",
     "Cost": 78,
-    "Effects": "plus 2 Fire Rate, Gain Piercing 1, Gain Inaccurate",
     "Weight": 3,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "plus 2 Fire Rate, Gain Piercing 1, Gain Inaccurate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Piercing",
+        "value": 1
+      },
+      {
+        "op": "gain",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_186",
@@ -2925,9 +5153,20 @@
     "Prefix": "9mm",
     "Slot": "Receivers",
     "Cost": 10,
-    "Effects": "Set 3 CD Damage, Ammo 9mm, plus 1 Fire Rate",
     "Weight": -1,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Set 3 CD Damage, Ammo 9mm, plus 1 Fire Rate",
+    "damageModifier": {
+      "op": "set",
+      "value": 3
+    },
+    "ammoOverride": "9mm",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_187",
@@ -2935,9 +5174,22 @@
     "Prefix": ".357",
     "Slot": "Receivers",
     "Cost": 35,
-    "Effects": "Set 5 CD Damage, ammo .357, gain Vicious",
     "Weight": 1,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Set 5 CD Damage, ammo .357, gain Vicious",
+    "damageModifier": {
+      "op": "set",
+      "value": 5
+    },
+    "ammoOverride": ".357",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_188",
@@ -2945,9 +5197,21 @@
     "Prefix": "",
     "Slot": "Barrels",
     "Cost": 35,
-    "Effects": "Plus 1 CD Damage, gain Vicious",
     "Weight": 3,
-    "applies_to_ids": ["weapon_062"]
+    "applies_to_ids": [
+      "weapon_062"
+    ],
+    "effectsLegacy": "Plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_189",
@@ -2955,9 +5219,21 @@
     "Prefix": "",
     "Slot": "Barrels",
     "Cost": 135,
-    "Effects": "Plus 1 CD Damage, gain Vicious",
     "Weight": 3,
-    "applies_to_ids": ["weapon_063"]
+    "applies_to_ids": [
+      "weapon_063"
+    ],
+    "effectsLegacy": "Plus 1 CD Damage, gain Vicious",
+    "damageModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Vicious"
+      }
+    ]
   },
   {
     "id": "mod_190",
@@ -2965,9 +5241,15 @@
     "Prefix": "",
     "Slot": "Barrels",
     "Cost": 45,
-    "Effects": "Plus 1 Range",
     "Weight": 3,
-    "applies_to_ids": ["weapon_063"]
+    "applies_to_ids": [
+      "weapon_063"
+    ],
+    "effectsLegacy": "Plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_191",
@@ -2975,9 +5257,20 @@
     "Prefix": "",
     "Slot": "Receivers",
     "Cost": 135,
-    "Effects": "Set 4 CD Damage, Ammo 25mm Grenade, plus 2 Fire Rate",
     "Weight": 3,
-    "applies_to_ids": ["weapon_063"]
+    "applies_to_ids": [
+      "weapon_063"
+    ],
+    "effectsLegacy": "Set 4 CD Damage, Ammo 25mm Grenade, plus 2 Fire Rate",
+    "damageModifier": {
+      "op": "set",
+      "value": 4
+    },
+    "ammoOverride": "25mm Grenade",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_192",
@@ -2985,9 +5278,15 @@
     "Prefix": "",
     "Slot": "Receivers",
     "Cost": 35,
-    "Effects": "plus 2 Fire Rate",
     "Weight": 1,
-    "applies_to_ids": ["weapon_073"]
+    "applies_to_ids": [
+      "weapon_073"
+    ],
+    "effectsLegacy": "plus 2 Fire Rate",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 2
+    }
   },
   {
     "id": "mod_193",
@@ -2995,9 +5294,15 @@
     "Prefix": "Long",
     "Slot": "Barrel",
     "Cost": 158,
-    "Effects": "Plus 1 Range",
     "Weight": 2,
-    "applies_to_ids": ["weapon_073"]
+    "applies_to_ids": [
+      "weapon_073"
+    ],
+    "effectsLegacy": "Plus 1 Range",
+    "rangeModifier": {
+      "op": "+",
+      "value": 1
+    }
   },
   {
     "id": "mod_194",
@@ -3005,9 +5310,17 @@
     "Prefix": "Comfort Grip",
     "Slot": "Grip",
     "Cost": 90,
-    "Effects": "Lose Recoil 6",
     "Weight": 3,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Lose Recoil 6",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Recoil 6"
+      }
+    ]
   },
   {
     "id": "mod_195",
@@ -3015,9 +5328,21 @@
     "Prefix": "",
     "Slot": "Magazine",
     "Cost": 28,
-    "Effects": "Plus 1 Fire Rate, Gain Unreliable",
     "Weight": 2,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Plus 1 Fire Rate, Gain Unreliable",
+    "fireRateModifier": {
+      "op": "+",
+      "value": 1
+    },
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Unreliable"
+      }
+    ]
   },
   {
     "id": "mod_196",
@@ -3025,9 +5350,17 @@
     "Prefix": "Sighted",
     "Slot": "Sight",
     "Cost": 158,
-    "Effects": "Lose Inaccurate",
     "Weight": 2,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "Lose Inaccurate",
+    "qualityChanges": [
+      {
+        "op": "lose",
+        "name": "Inaccurate"
+      }
+    ]
   },
   {
     "id": "mod_197",
@@ -3035,8 +5368,16 @@
     "Prefix": "Bayoneted",
     "Slot": "Muzzle",
     "Cost": 18,
-    "Effects": "gain Bayonet",
     "Weight": 5,
-    "applies_to_ids": [""]
+    "applies_to_ids": [
+      ""
+    ],
+    "effectsLegacy": "gain Bayonet",
+    "qualityChanges": [
+      {
+        "op": "gain",
+        "name": "Bayonet"
+      }
+    ]
   }
 ]

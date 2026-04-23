@@ -79,6 +79,19 @@
     "apply": "Apply",
     "improvements": "Improvements",
     "clothingReinforced": "Reinforced seams",
-    "clothingInsulated": "Insulated lining"
+    "clothingInsulated": "Insulated lining",
+    "weaponModification": "Weapon Modifications",
+    "unknownWeapon": "Unknown weapon",
+    "weaponDamage": "Damage",
+    "weaponFireRate": "Rate",
+    "weaponRange": "Range",
+    "weaponWeight": "Weight",
+    "weaponCost": "Cost",
+    "availableModificationsLabel": "Available modifications:",
+    "previewLabel": "Preview:",
+    "previewEffects": "Effects",
+    "previewQualities": "Qualities",
+    "errorTitle": "Error",
+    "errorSelectMod": "Please select at least one modification"
   }
 }

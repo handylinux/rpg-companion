@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  Modal, 
-  TouchableOpacity, 
-  ScrollView, 
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
   StyleSheet,
-  Alert 
+  Alert
 } from 'react-native';
 import { getSlotsForWeapon, getModsForWeaponSlot, getWeaponById, getWeaponModById, getWeaponMods } from '../../../db/Database';
-import { declinePrefix } from './weaponModificationUtils';
+import { declinePrefix } from '../../../domain/modsEquip';
+import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
 
 function toNumber(v) {
   if (v === null || v === undefined) return 0;
@@ -326,12 +327,12 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
     if (!weapon) {
       return;
     }
-    
+
     const modificationsArray = Object.values(selectedModifications);
     if (modificationsArray.length > 0) {
       onApplyModification(modifiedWeapon);
     } else {
-      Alert.alert("Ошибка", "Выберите хотя бы одну модификацию");
+      Alert.alert(tWeaponsAndArmorScreen('modals.errorTitle'), tWeaponsAndArmorScreen('modals.errorSelectMod'));
     }
   };
 
@@ -358,7 +359,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Модификации оружия</Text>
+            <Text style={styles.modalTitle}>{tWeaponsAndArmorScreen('modals.weaponModification')}</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
@@ -367,16 +368,16 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
           <ScrollView style={styles.modalBody}>
             {/* Информация об оружии */}
             <View style={styles.weaponInfo}>
-              <Text style={styles.weaponTitle}>{weapon?.name || 'Неизвестное оружие'}</Text>
+              <Text style={styles.weaponTitle}>{weapon?.name || tWeaponsAndArmorScreen('modals.unknownWeapon')}</Text>
               <Text style={styles.weaponStats}>
-                Урон: {weapon?.damage ?? 0} | Скорость: {weapon?.fire_rate ?? 0} | 
-                Дистанция: {weapon?.range_name ?? 'Близкая'} | Вес: {weapon?.weight ?? 0} | Цена: {weapon?.cost ?? 0}
+                {tWeaponsAndArmorScreen('modals.weaponDamage')}: {weapon?.damage ?? 0} | {tWeaponsAndArmorScreen('modals.weaponFireRate')}: {weapon?.fire_rate ?? 0} |
+                {tWeaponsAndArmorScreen('modals.weaponRange')}: {weapon?.range_name ?? 'Близкая'} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {weapon?.weight ?? 0} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {weapon?.cost ?? 0}
               </Text>
             </View>
 
             {/* Доступные модификации */}
             <View style={styles.modificationsSection}>
-              <Text style={styles.sectionTitle}>Доступные модификации:</Text>
+              <Text style={styles.sectionTitle}>{tWeaponsAndArmorScreen('modals.availableModificationsLabel')}</Text>
               {Object.entries(modsBySlot).map(([slot, mods]) => (
                 <CollapsibleSection
                   key={slot}
@@ -385,20 +386,20 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                   onToggle={() => handleToggleCategory(slot)}
                 >
                   {mods.map((mod, index) => (
-                                         <TouchableOpacity
-                       key={index}
-                       style={[
-                         styles.modificationItem,
-                         selectedModifications[slot]?.id === mod.id && styles.selectedModification
-                       ]}
-                       onPress={() => handleSelectModification(slot, mod)}
-                     >
-                       <Text style={styles.modificationName}>{getModDisplayNameRu(mod, weapon?._baseName ?? weapon?.name) || mod.name}</Text>
-                       <Text style={styles.modificationEffects}>{mod.effect_description || mod.effects}</Text>
-                       <Text style={styles.modificationStats}>
-                         Вес: {toNumber(mod.weight) >= 0 ? '+' : ''}{toNumber(mod.weight)} | Цена: +{toNumber(mod.cost)}
-                       </Text>
-                     </TouchableOpacity>
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.modificationItem,
+                        selectedModifications[slot]?.id === mod.id && styles.selectedModification
+                      ]}
+                      onPress={() => handleSelectModification(slot, mod)}
+                    >
+                      <Text style={styles.modificationName}>{getModDisplayNameRu(mod, weapon?._baseName ?? weapon?.name) || mod.name}</Text>
+                      <Text style={styles.modificationEffects}>{mod.effect_description || mod.effects}</Text>
+                      <Text style={styles.modificationStats}>
+                        {tWeaponsAndArmorScreen('modals.weight')}: {toNumber(mod.weight) >= 0 ? '+' : ''}{toNumber(mod.weight)} | {tWeaponsAndArmorScreen('modals.cost')}: +{toNumber(mod.cost)}
+                      </Text>
+                    </TouchableOpacity>
                   ))}
                 </CollapsibleSection>
               ))}
@@ -407,20 +408,20 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
             {/* Предварительный просмотр */}
             {Object.keys(selectedModifications).length > 0 && (
               <View style={styles.previewSection}>
-                <Text style={styles.sectionTitle}>Предварительный просмотр:</Text>
+                <Text style={styles.sectionTitle}>{tWeaponsAndArmorScreen('modals.previewLabel')}</Text>
                 <View style={styles.previewContent}>
-                                     <Text style={styles.previewTitle}>
+                  <Text style={styles.previewTitle}>
                     {modifiedWeapon.name}
                   </Text>
                   <Text style={styles.previewStats}>
-                    Урон: {modifiedWeapon.damage} | Скорость: {modifiedWeapon.fire_rate} | 
-                    Дистанция: {modifiedWeapon.range_name || 'Близкая'} | Вес: {modifiedWeapon.weight} | Цена: {modifiedWeapon.cost}
+                    {tWeaponsAndArmorScreen('modals.weaponDamage')}: {modifiedWeapon.damage} | {tWeaponsAndArmorScreen('modals.weaponFireRate')}: {modifiedWeapon.fire_rate} |
+                    {tWeaponsAndArmorScreen('modals.weaponRange')}: {modifiedWeapon.range_name || 'Близкая'} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {modifiedWeapon.weight} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {modifiedWeapon.cost}
                   </Text>
                   <Text style={styles.previewEffects}>
-                    Эффекты: {modifiedWeapon.damage_effects ?? modifiedWeapon.Эффекты ?? modifiedWeapon._mods_effects_debug}
+                    {tWeaponsAndArmorScreen('modals.previewEffects')}: {modifiedWeapon.damage_effects ?? modifiedWeapon.Эффекты ?? modifiedWeapon._mods_effects_debug}
                   </Text>
                   <Text style={styles.previewQualities}>
-                    Качества: {modifiedWeapon.qualities}
+                    {tWeaponsAndArmorScreen('modals.previewQualities')}: {modifiedWeapon.qualities}
                   </Text>
                 </View>
               </View>
@@ -430,14 +431,14 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
           {/* Кнопки действий */}
           <View style={styles.modalFooter}>
             <TouchableOpacity onPress={handleClose} style={styles.cancelButton}>
-              <Text style={styles.cancelButtonText}>Отмена</Text>
+              <Text style={styles.cancelButtonText}>{tWeaponsAndArmorScreen('modals.cancel')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={handleApplyModification} 
+            <TouchableOpacity
+              onPress={handleApplyModification}
               style={[styles.applyButton, Object.keys(selectedModifications).length === 0 && styles.disabledButton]}
               disabled={Object.keys(selectedModifications).length === 0}
             >
-              <Text style={styles.applyButtonText}>Применить</Text>
+              <Text style={styles.applyButtonText}>{tWeaponsAndArmorScreen('modals.apply')}</Text>
             </TouchableOpacity>
           </View>
         </View>

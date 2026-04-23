@@ -1,0 +1,18 @@
+{
+  "duration": {
+    "none": "нет",
+    "instant": "мгновенно",
+    "sceneUnit": "сцен"
+  },
+  "events": {
+    "effectsCleared": "Сняты эффекты: {{effects}}",
+    "effectsClearedAll": "все негативные",
+    "instantPositive": "Моментальный положительный эффект: {{name}}",
+    "instantNegative": "Моментальный отрицательный эффект: {{name}}",
+    "positiveApplied": "Положительный эффект {{name}}: +{{scenes}} сцен.",
+    "negativeApplied": "Отрицательный эффект {{name}}: +{{scenes}} сцен."
+  },
+  "display": {
+    "scenesAndMinutes": "{{scenes}} сцен ({{minutes}} мин)"
+  }
+}

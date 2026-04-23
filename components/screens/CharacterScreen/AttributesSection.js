@@ -1,7 +1,7 @@
 // AttributesSection.js
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MIN_ATTRIBUTE, MAX_ATTRIBUTE, getAttributeLimits } from './logic/characterLogic';
+import { MIN_ATTRIBUTE, MAX_ATTRIBUTE, getAttributeLimits } from '../../../domain/characterCreation';
 import { getAttributeLabel } from './logic/attributeKeyUtils';
 import { tCharacterScreen } from './logic/characterScreenI18n';
 

@@ -79,6 +79,19 @@
     "apply": "Применить",
     "improvements": "Улучшения",
     "clothingReinforced": "Усиленные швы",
-    "clothingInsulated": "Утеплённая подкладка"
+    "clothingInsulated": "Утеплённая подкладка",
+    "weaponModification": "Модификации оружия",
+    "unknownWeapon": "Неизвестное оружие",
+    "weaponDamage": "Урон",
+    "weaponFireRate": "Скорость",
+    "weaponRange": "Дистанция",
+    "weaponWeight": "Вес",
+    "weaponCost": "Цена",
+    "availableModificationsLabel": "Доступные модификации:",
+    "previewLabel": "Предварительный просмотр:",
+    "previewEffects": "Эффекты",
+    "previewQualities": "Качества",
+    "errorTitle": "Ошибка",
+    "errorSelectMod": "Выберите хотя бы одну модификацию"
   }
 }

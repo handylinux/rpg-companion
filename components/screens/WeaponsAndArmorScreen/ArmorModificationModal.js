@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
-import { applyArmorMods, formatModBonuses } from './armorModificationUtils';
+import { applyArmorMods, formatModBonuses } from '../../../domain/modsEquip';
 import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
 
 const hasIntersection = (a = [], b = []) => a.some((x) => b.includes(x));

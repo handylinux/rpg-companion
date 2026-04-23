@@ -35,11 +35,9 @@ import {
   ALL_SKILLS,
   isMultiTraitOrigin,
   MAX_ATTRIBUTE,
-} from "./logic/characterLogic";
-import {
   getCanonicalAttributeKey,
   normalizeAttributeMap,
-} from "./logic/attributeKeyUtils";
+} from "../../../domain/characterCreation";
 import {
   getSkillDisplayName,
   tCharacterScreen,
@@ -47,7 +45,7 @@ import {
 import { getCurrentLocale } from "../../../i18n/locale";
 import { AttributesSection } from "./AttributesSection";
 import styles from "../../../styles";
-import { getTimedAttributeModifiers } from "../../../assets/scripts/sceneEffects";
+import { getTimedAttributeModifiers } from "../../../domain/effects";
 
 // Определяем константу BASE_TAGGED_SKILLS для исправления ReferenceError
 const BASE_TAGGED_SKILLS = 3; // Максимальное количество основных навыков
@@ -805,7 +803,7 @@ export default function CharacterScreen() {
     }
 
     // Блокируем, если черта уже выбрана и происхождение не предполагает нескольких черт
-    if (trait && !isMultiTraitOrigin(origin.name)) {
+    if (trait && !isMultiTraitOrigin(origin.id)) {
       showAlert(tCharacterScreen("alerts.infoTitle", "Info"), tCharacterScreen("warnings.traitAlreadySelected", "Trait for this origin is already selected."));
       return;
     }
@@ -1043,7 +1041,7 @@ export default function CharacterScreen() {
               title={tCharacterScreen("labels.trait", "Trait")}
               value={trait ? trait.name : tCharacterScreen("placeholders.selectNone", "Not selected")}
               onPress={handleTraitPress}
-              disabled={!isSaved || (trait && !isMultiTraitOrigin(origin?.name))}
+              disabled={!isSaved || (trait && !isMultiTraitOrigin(origin?.id))}
             />
             <PressableRow
               title={tCharacterScreen("labels.equipmentKit", "Equipment kit")}

@@ -8,12 +8,12 @@ import {
   calculateInitiative,
   calculateDefense,
   calculateMeleeBonus,
-  calculateCarryWeight
-} from './screens/CharacterScreen/logic/characterLogic';
+  calculateCarryWeight,
+  getAttributeValue,
+} from '../domain/characterCreation';
 import { ORIGINS } from './screens/CharacterScreen/logic/originsData';
-import { getAttributeValue } from './screens/CharacterScreen/logic/attributeKeyUtils';
-import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from './screens/CharacterScreen/logic/perksLogic';
-import { applyConsumableToEffects, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../assets/scripts/sceneEffects';
+import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from '../domain/perks';
+import { applyConsumableToEffects, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../domain/effects';
 import { syncCharacterToCloudIfEnabled } from './cloudSync/googleDriveSync';
 
 const CharacterContext = createContext();

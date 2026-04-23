@@ -5,7 +5,7 @@ import {
   applyModification,
   applyMultipleModifications,
   getAvailableModifications 
-} from './weaponModificationUtils';
+} from '../../../domain/modsEquip';
 
 // Тестовые данные
 const testWeapon = {
