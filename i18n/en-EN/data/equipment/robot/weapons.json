@@ -1,0 +1,22 @@
+[
+  {
+    "id": "robot_weapon_manipulator",
+    "name": "Manipulator"
+  },
+  {
+    "id": "robot_weapon_flamethrower",
+    "name": "Flamethrower (Robot)"
+  },
+  {
+    "id": "robot_weapon_circular_saw",
+    "name": "Circular Saw"
+  },
+  {
+    "id": "robot_weapon_laser_cutter",
+    "name": "Laser Cutter"
+  },
+  {
+    "id": "robot_weapon_auto_10mm",
+    "name": "Automatic 10mm Pistol"
+  }
+]

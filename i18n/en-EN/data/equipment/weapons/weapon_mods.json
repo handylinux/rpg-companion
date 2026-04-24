@@ -1,0 +1,990 @@
+[
+  {
+    "id": "mod_001",
+    "name": "Rapid",
+    "prefix": "Rapid",
+    "effectDescription": "Урон -1 БК, скорострельность +2"
+  },
+  {
+    "id": "mod_002",
+    "name": "Бронебойный",
+    "prefix": "Бронебойный",
+    "effectDescription": "Урон +1 БК, получает качество Проникающий 1"
+  },
+  {
+    "id": "mod_003",
+    "name": "Tuned",
+    "prefix": "Tuned"
+  },
+  {
+    "id": "mod_004",
+    "name": "Hardened",
+    "prefix": "Hardened"
+  },
+  {
+    "id": "mod_005",
+    "name": "Powerful",
+    "prefix": "Powerful"
+  },
+  {
+    "id": "mod_006",
+    "name": "Продвинутый",
+    "prefix": "Продвинутый"
+  },
+  {
+    "id": "mod_007",
+    "name": "Калиброванный",
+    "prefix": "Калиброванный",
+    "effectDescription": "Получает качество Порочный"
+  },
+  {
+    "id": "mod_008",
+    "name": "Automatic",
+    "prefix": "Auto"
+  },
+  {
+    "id": "mod_009",
+    "name": "Hair Trigger",
+    "prefix": "Hair Trigger"
+  },
+  {
+    "id": "mod_010",
+    "name": ".38 Receiver",
+    "prefix": ".38"
+  },
+  {
+    "id": "mod_011",
+    "name": ".308 Receiver",
+    "prefix": ".308"
+  },
+  {
+    "id": "mod_012",
+    "name": ".45 Receiver",
+    "prefix": ".45"
+  },
+  {
+    "id": "mod_013",
+    "name": ".50 Receiver",
+    "prefix": ".50"
+  },
+  {
+    "id": "mod_014",
+    "name": "Automatic Piston",
+    "prefix": "Automatic"
+  },
+  {
+    "id": "mod_015",
+    "name": "Snubnose",
+    "prefix": "Snub-Noses"
+  },
+  {
+    "id": "mod_016",
+    "name": "Bull Barrel",
+    "prefix": "Bull Barrel"
+  },
+  {
+    "id": "mod_017",
+    "name": "Long",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_018",
+    "name": "Ported",
+    "prefix": "Ported"
+  },
+  {
+    "id": "mod_019",
+    "name": "Vented",
+    "prefix": "Vented"
+  },
+  {
+    "id": "mod_020",
+    "name": "Sawed-Off",
+    "prefix": "Sawed-Off"
+  },
+  {
+    "id": "mod_021",
+    "name": "Shielded Barrel",
+    "prefix": "Shielded"
+  },
+  {
+    "id": "mod_022",
+    "name": "Finned",
+    "prefix": "Finned"
+  },
+  {
+    "id": "mod_023",
+    "name": "Large Magazine",
+    "prefix": "High Capacity"
+  },
+  {
+    "id": "mod_024",
+    "name": "Quick-Eject Mag",
+    "prefix": "Quick"
+  },
+  {
+    "id": "mod_025",
+    "name": "Large Quick-Eject Mag",
+    "prefix": "Quick High Capacity"
+  },
+  {
+    "id": "mod_026",
+    "name": "Comfort Grip",
+    "prefix": "Comfort"
+  },
+  {
+    "id": "mod_027",
+    "name": "Sharpshooter's Grip",
+    "prefix": "Sharpshooter's"
+  },
+  {
+    "id": "mod_028",
+    "name": "Full Stock",
+    "prefix": "Full Stock"
+  },
+  {
+    "id": "mod_029",
+    "name": "Marksman's Stock",
+    "prefix": "Markman's"
+  },
+  {
+    "id": "mod_030",
+    "name": "Recoil Compensating Stock",
+    "prefix": "Recoil Compensated"
+  },
+  {
+    "id": "mod_031",
+    "name": "Full Capacitors",
+    "prefix": ""
+  },
+  {
+    "id": "mod_032",
+    "name": "Capacitor Boosting Coil",
+    "prefix": ""
+  },
+  {
+    "id": "mod_033",
+    "name": "Reflex Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_034",
+    "name": "Short Scope",
+    "prefix": "Scoped"
+  },
+  {
+    "id": "mod_035",
+    "name": "Long Scope",
+    "prefix": "Long Scoped"
+  },
+  {
+    "id": "mod_036",
+    "name": "Short Night Vision Scope",
+    "prefix": "Night Vision"
+  },
+  {
+    "id": "mod_037",
+    "name": "Long Night Vision Scope",
+    "prefix": "Long Night Vision"
+  },
+  {
+    "id": "mod_038",
+    "name": "Recon Scope",
+    "prefix": "Recon"
+  },
+  {
+    "id": "mod_039",
+    "name": "Bayonet",
+    "prefix": "Beyoneted"
+  },
+  {
+    "id": "mod_040",
+    "name": "Compensator",
+    "prefix": "Componsated"
+  },
+  {
+    "id": "mod_041",
+    "name": "Muzzle Break",
+    "prefix": "Muzzled"
+  },
+  {
+    "id": "mod_042",
+    "name": "Suppressor",
+    "prefix": "Supressed"
+  },
+  {
+    "id": "mod_043",
+    "name": "Beta Wave Tuner",
+    "prefix": "Incendiary"
+  },
+  {
+    "id": "mod_044",
+    "name": "Boosted Capacitor",
+    "prefix": "Boosted"
+  },
+  {
+    "id": "mod_045",
+    "name": "Photon Exciter",
+    "prefix": "Excited"
+  },
+  {
+    "id": "mod_046",
+    "name": "Photon Agitator",
+    "prefix": "Agitated"
+  },
+  {
+    "id": "mod_047",
+    "name": "Three-Crank Capacitor",
+    "prefix": "Three-Crank"
+  },
+  {
+    "id": "mod_048",
+    "name": "Four-Crank Capacitor",
+    "prefix": "Four-Crank"
+  },
+  {
+    "id": "mod_049",
+    "name": "Five-Crank Capacitor",
+    "prefix": "Five-Crank"
+  },
+  {
+    "id": "mod_050",
+    "name": "Six-Crank Capacitor",
+    "prefix": "Six-Crank"
+  },
+  {
+    "id": "mod_051",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_052",
+    "name": "Splitter",
+    "prefix": "Splitter"
+  },
+  {
+    "id": "mod_053",
+    "name": "Automatic Barrel",
+    "prefix": "Automatic"
+  },
+  {
+    "id": "mod_054",
+    "name": "Improved Barrel",
+    "prefix": "Improved"
+  },
+  {
+    "id": "mod_055",
+    "name": "Sniper Barrel",
+    "prefix": "Sniper"
+  },
+  {
+    "id": "mod_056",
+    "name": "Flamer Barrel",
+    "prefix": "Thrower"
+  },
+  {
+    "id": "mod_057",
+    "name": "Sharpshooter's Grip",
+    "prefix": "Sharpshooter's"
+  },
+  {
+    "id": "mod_058",
+    "name": "Standard Stock",
+    "prefix": ""
+  },
+  {
+    "id": "mod_059",
+    "name": "Full Stock",
+    "prefix": ""
+  },
+  {
+    "id": "mod_060",
+    "name": "Marksman's Stock",
+    "prefix": "Marksman's"
+  },
+  {
+    "id": "mod_061",
+    "name": "Recoil Compensating",
+    "prefix": "Recoil Compensated"
+  },
+  {
+    "id": "mod_062",
+    "name": "Reflex Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_063",
+    "name": "Short Scope",
+    "prefix": "Scoped"
+  },
+  {
+    "id": "mod_064",
+    "name": "Long Scope",
+    "prefix": "Scoped"
+  },
+  {
+    "id": "mod_065",
+    "name": "Short Night Vision Scope",
+    "prefix": "Night Vision"
+  },
+  {
+    "id": "mod_066",
+    "name": "Long Night Vision Scope",
+    "prefix": "Night Vision"
+  },
+  {
+    "id": "mod_067",
+    "name": "Recon Scope",
+    "prefix": "Recon"
+  },
+  {
+    "id": "mod_068",
+    "name": "Beam Splitter",
+    "prefix": "Scattered"
+  },
+  {
+    "id": "mod_069",
+    "name": "Beam Focuser",
+    "prefix": "Focused"
+  },
+  {
+    "id": "mod_070",
+    "name": "Gyro Compensating Lens",
+    "prefix": "Targetting"
+  },
+  {
+    "id": "mod_071",
+    "name": "Deep Dish",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_072",
+    "name": "Electric Signal Carrier Antennae",
+    "prefix": "Electrifed"
+  },
+  {
+    "id": "mod_073",
+    "name": "Signal Repeater",
+    "prefix": "Automatic"
+  },
+  {
+    "id": "mod_074",
+    "name": "Napalm Fuel",
+    "prefix": "Napalmer"
+  },
+  {
+    "id": "mod_075",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_076",
+    "name": "Large Tank",
+    "prefix": "High Capacity"
+  },
+  {
+    "id": "mod_077",
+    "name": "Huge Tank",
+    "prefix": "Max Capacity"
+  },
+  {
+    "id": "mod_078",
+    "name": "Compression Nozzle",
+    "prefix": "Compressed"
+  },
+  {
+    "id": "mod_079",
+    "name": "Vaporization Nozzle",
+    "prefix": "Vaporizing"
+  },
+  {
+    "id": "mod_080",
+    "name": "Photon Exciter",
+    "prefix": "Excited"
+  },
+  {
+    "id": "mod_081",
+    "name": "Beta Wave Tuner",
+    "prefix": "Incendiary"
+  },
+  {
+    "id": "mod_082",
+    "name": "Boosted Capacitor",
+    "prefix": "Boosted"
+  },
+  {
+    "id": "mod_083",
+    "name": "Photon Agitator",
+    "prefix": "Agitated"
+  },
+  {
+    "id": "mod_084",
+    "name": "Charging Barrels",
+    "prefix": "Charging"
+  },
+  {
+    "id": "mod_085",
+    "name": "Reflex Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_086",
+    "name": "Beam Focuser",
+    "prefix": "Focused"
+  },
+  {
+    "id": "mod_087",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_088",
+    "name": "Recoil Compensating Stock",
+    "prefix": "Recoil Compensated"
+  },
+  {
+    "id": "mod_089",
+    "name": "Gunner Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_090",
+    "name": "Electrification Module",
+    "prefix": "Electrifed"
+  },
+  {
+    "id": "mod_091",
+    "name": "Ignition Module",
+    "prefix": "Flaming"
+  },
+  {
+    "id": "mod_092",
+    "name": "Accelerated Barrel",
+    "prefix": "High-Speed"
+  },
+  {
+    "id": "mod_093",
+    "name": "Tri-Barrel",
+    "prefix": "High-Powered"
+  },
+  {
+    "id": "mod_094",
+    "name": "Gunner Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_095",
+    "name": "Shredder",
+    "prefix": "Bayonetted Shredding"
+  },
+  {
+    "id": "mod_096",
+    "name": "Triple Barrel",
+    "prefix": "Triple Barrel"
+  },
+  {
+    "id": "mod_097",
+    "name": "Quad Barrel",
+    "prefix": "Quad Barrel"
+  },
+  {
+    "id": "mod_098",
+    "name": "Scope",
+    "prefix": "Scoped"
+  },
+  {
+    "id": "mod_099",
+    "name": "Night Vision Scope",
+    "prefix": "Night-Vision"
+  },
+  {
+    "id": "mod_100",
+    "name": "Targeting Computer",
+    "prefix": "Targetting"
+  },
+  {
+    "id": "mod_101",
+    "name": "Bayonet",
+    "prefix": "Bayonetted Shredding"
+  },
+  {
+    "id": "mod_102",
+    "name": "Stabilizer",
+    "prefix": "Muzzles"
+  },
+  {
+    "id": "mod_103",
+    "name": "Serrated Blade",
+    "prefix": "Serrated"
+  },
+  {
+    "id": "mod_104",
+    "name": "Electrified Blade",
+    "prefix": "Electrifed"
+  },
+  {
+    "id": "mod_105",
+    "name": "Electrified Serrated Blade",
+    "prefix": "Serrated Electrifed"
+  },
+  {
+    "id": "mod_106",
+    "name": "Stun Pack",
+    "prefix": "Stunning"
+  },
+  {
+    "id": "mod_107",
+    "name": "Serrated Blade",
+    "prefix": "Serrated"
+  },
+  {
+    "id": "mod_108",
+    "name": "Stealth Blade",
+    "prefix": "Stealth"
+  },
+  {
+    "id": "mod_109",
+    "name": "Serrated Blade",
+    "prefix": "Serrated"
+  },
+  {
+    "id": "mod_110",
+    "name": "Curved Blade",
+    "prefix": "Curved"
+  },
+  {
+    "id": "mod_111",
+    "name": "Extended Blade",
+    "prefix": "Extended"
+  },
+  {
+    "id": "mod_112",
+    "name": "Extra Flame Jets",
+    "prefix": "Searing"
+  },
+  {
+    "id": "mod_113",
+    "name": "Serrated Blade",
+    "prefix": "Serrated"
+  },
+  {
+    "id": "mod_114",
+    "name": "Barbed",
+    "prefix": "Barbed"
+  },
+  {
+    "id": "mod_115",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_116",
+    "name": "Sharp",
+    "prefix": "Sharp"
+  },
+  {
+    "id": "mod_117",
+    "name": "Chain-Wrapped",
+    "prefix": "Chain-Wrapped"
+  },
+  {
+    "id": "mod_118",
+    "name": "Bladed",
+    "prefix": "Bladed"
+  },
+  {
+    "id": "mod_119",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_120",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_121",
+    "name": "Bladed",
+    "prefix": "Bladed"
+  },
+  {
+    "id": "mod_122",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_123",
+    "name": "Heavy",
+    "prefix": "Heavy"
+  },
+  {
+    "id": "mod_124",
+    "name": "Hooked",
+    "prefix": "Hooked"
+  },
+  {
+    "id": "mod_125",
+    "name": "Heavy",
+    "prefix": "Heavy"
+  },
+  {
+    "id": "mod_126",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_127",
+    "name": "Extra Heavy",
+    "prefix": "Extra Heavy"
+  },
+  {
+    "id": "mod_128",
+    "name": "Barbed",
+    "prefix": "Barbed"
+  },
+  {
+    "id": "mod_129",
+    "name": "Sharp",
+    "prefix": "Sharp"
+  },
+  {
+    "id": "mod_130",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_131",
+    "name": "Sharp",
+    "prefix": "Sharp"
+  },
+  {
+    "id": "mod_132",
+    "name": "Electrified",
+    "prefix": "Electrified"
+  },
+  {
+    "id": "mod_133",
+    "name": "Stun Pack",
+    "prefix": "Stun Pack"
+  },
+  {
+    "id": "mod_134",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_135",
+    "name": "Heavy",
+    "prefix": "Heavy"
+  },
+  {
+    "id": "mod_136",
+    "name": "Heating Coil",
+    "prefix": "Heating Coil"
+  },
+  {
+    "id": "mod_137",
+    "name": "Stun Pack",
+    "prefix": "Stun Pack"
+  },
+  {
+    "id": "mod_138",
+    "name": "Bladed",
+    "prefix": "Bladed"
+  },
+  {
+    "id": "mod_139",
+    "name": "Barbed",
+    "prefix": "Barbed"
+  },
+  {
+    "id": "mod_140",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_141",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_142",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_143",
+    "name": "Lead Lining",
+    "prefix": "Lined"
+  },
+  {
+    "id": "mod_144",
+    "name": "Extra Claw",
+    "prefix": "Large"
+  },
+  {
+    "id": "mod_145",
+    "name": "Sharp",
+    "prefix": "Sharp"
+  },
+  {
+    "id": "mod_146",
+    "name": "Spiked",
+    "prefix": "Spiked"
+  },
+  {
+    "id": "mod_147",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_148",
+    "name": "Bladed",
+    "prefix": "Bladed"
+  },
+  {
+    "id": "mod_149",
+    "name": "Puncturing",
+    "prefix": "Puncturing"
+  },
+  {
+    "id": "mod_150",
+    "name": "Heating Coil",
+    "prefix": "Heated"
+  },
+  {
+    "id": "mod_151",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_152",
+    "name": "Recoil Compensating Stock",
+    "prefix": "Recoil Compensated"
+  },
+  {
+    "id": "mod_153",
+    "name": "Gunner Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_154",
+    "name": "Electrification Module",
+    "prefix": "Electrified"
+  },
+  {
+    "id": "mod_155",
+    "name": "Ignition Module",
+    "prefix": "Flaming"
+  },
+  {
+    "id": "mod_156",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_157",
+    "name": "Full Stock",
+    "prefix": ""
+  },
+  {
+    "id": "mod_158",
+    "name": "Caustic",
+    "prefix": "Caustic"
+  },
+  {
+    "id": "mod_159",
+    "name": "Large Ampoule",
+    "prefix": "High Capacity"
+  },
+  {
+    "id": "mod_160",
+    "name": "Large Vial",
+    "prefix": "Maximum Capacity"
+  },
+  {
+    "id": "mod_161",
+    "name": "Fusion Mag",
+    "prefix": "Converted"
+  },
+  {
+    "id": "mod_162",
+    "name": "Capacitor Mk III",
+    "prefix": "Mk III"
+  },
+  {
+    "id": "mod_163",
+    "name": "Capacitor Mk IV",
+    "prefix": "Mk IV"
+  },
+  {
+    "id": "mod_164",
+    "name": "Capacitor Mk V",
+    "prefix": "Mk V"
+  },
+  {
+    "id": "mod_165",
+    "name": "Capacitor Mk VI",
+    "prefix": "Mk VI"
+  },
+  {
+    "id": "mod_166",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_167",
+    "name": "Light Barrel",
+    "prefix": "Fluted"
+  },
+  {
+    "id": "mod_168",
+    "name": "Multi Shot Canister",
+    "prefix": "Repeating"
+  },
+  {
+    "id": "mod_169",
+    "name": "M79 Launcher",
+    "prefix": "Converted"
+  },
+  {
+    "id": "mod_170",
+    "name": "Crystallizing Barrel",
+    "prefix": "Crystallized"
+  },
+  {
+    "id": "mod_171",
+    "name": "Fusion Mag",
+    "prefix": "Converted"
+  },
+  {
+    "id": "mod_172",
+    "name": "Recoil Compensating Stock",
+    "prefix": "Recoil Compensating"
+  },
+  {
+    "id": "mod_173",
+    "name": "Reflex Tactical",
+    "prefix": ""
+  },
+  {
+    "id": "mod_174",
+    "name": "Barbed Harpoon",
+    "prefix": "Barbed"
+  },
+  {
+    "id": "mod_175",
+    "name": "Flechette Darts",
+    "prefix": "Tiny"
+  },
+  {
+    "id": "mod_176",
+    "name": "Recoil Compensating Stock",
+    "prefix": "Recoil Compensating"
+  },
+  {
+    "id": "mod_177",
+    "name": "Gunner Sight",
+    "prefix": "Tactical"
+  },
+  {
+    "id": "mod_178",
+    "name": "Short Scope",
+    "prefix": "Scoped"
+  },
+  {
+    "id": "mod_179",
+    "name": "Armor Piercing Receiver",
+    "prefix": "Armor Piercing"
+  },
+  {
+    "id": "mod_180",
+    "name": "Armor Piercing Automatic",
+    "prefix": "AP Auto"
+  },
+  {
+    "id": "mod_181",
+    "name": "Hardened Automatic",
+    "prefix": "Hardened Auto"
+  },
+  {
+    "id": "mod_182",
+    "name": "Rapid Automatic",
+    "prefix": "Rapid"
+  },
+  {
+    "id": "mod_183",
+    "name": "Calibrated Powerful",
+    "prefix": "Calibrated Powerful"
+  },
+  {
+    "id": "mod_184",
+    "name": "Powerful Automatic",
+    "prefix": "Powerful Auto"
+  },
+  {
+    "id": "mod_185",
+    "name": "Hardened Piercing Auto",
+    "prefix": "Hardened AP Auto"
+  },
+  {
+    "id": "mod_186",
+    "name": "9mm Receiver",
+    "prefix": "9mm"
+  },
+  {
+    "id": "mod_187",
+    "name": ".357 Receiver",
+    "prefix": ".357"
+  },
+  {
+    "id": "mod_188",
+    "name": "Heavy Barrel",
+    "prefix": ""
+  },
+  {
+    "id": "mod_189",
+    "name": "Heavy Barrel",
+    "prefix": ""
+  },
+  {
+    "id": "mod_190",
+    "name": "Long Barrel",
+    "prefix": ""
+  },
+  {
+    "id": "mod_191",
+    "name": "25mm Receiver",
+    "prefix": ""
+  },
+  {
+    "id": "mod_192",
+    "name": "Speedy Receiver",
+    "prefix": ""
+  },
+  {
+    "id": "mod_193",
+    "name": "Long Barrel",
+    "prefix": "Long"
+  },
+  {
+    "id": "mod_194",
+    "name": "Comfort Grip",
+    "prefix": "Comfort Grip"
+  },
+  {
+    "id": "mod_195",
+    "name": "Extra-Large Magazine",
+    "prefix": ""
+  },
+  {
+    "id": "mod_196",
+    "name": "Front Sight Ring",
+    "prefix": "Sighted"
+  },
+  {
+    "id": "mod_197",
+    "name": "Large Bayonet",
+    "prefix": "Bayoneted"
+  }
+]

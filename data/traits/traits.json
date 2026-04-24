@@ -2,29 +2,26 @@
   {
     "id": "brotherhood-chain-that-binds",
     "originId": "brotherhood",
-    "cyrillicName": "Цепь, которая связывает",
     "displayNameKey": "traits.brotherhood.chainThatBinds.name",
     "descriptionKey": "traits.brotherhood.chainThatBinds.description",
     "modifiers": {
       "extraSkills": 1,
-      "forcedSkills": ["Энергооружие", "Наука", "Ремонт"]
+      "forcedSkills": ["energy_weapons", "science", "repair"]
     }
   },
   {
     "id": "brotherhoodoutcast-chain-that-breaks",
     "originId": "brotherhoodOutcast",
-    "cyrillicName": "Цепь, Которая Ломается",
     "displayNameKey": "traits.brotherhoodOutcast.chainThatBreaks.name",
     "descriptionKey": "traits.brotherhoodOutcast.chainThatBreaks.description",
     "modifiers": {
       "extraSkills": 1,
-      "forcedSkills": ["Энергооружие", "Наука", "Ремонт"]
+      "forcedSkills": ["energy_weapons", "science", "repair"]
     }
   },
   {
     "id": "supermutant-forced-evolution",
     "originId": "superMutant",
-    "cyrillicName": "Принудительная эволюция",
     "displayNameKey": "traits.superMutant.forcedEvolution.name",
     "descriptionKey": "traits.superMutant.forcedEvolution.description",
     "modifiers": {
@@ -42,12 +39,11 @@
   {
     "id": "ghoul-necrotic-posthuman",
     "originId": "ghoul",
-    "cyrillicName": "Некротический постчеловек",
     "displayNameKey": "traits.ghoul.necroticPosthuman.name",
     "descriptionKey": "traits.ghoul.necroticPosthuman.description",
     "modifiers": {
       "skillModifiers": {
-        "Выживание": 2
+        "survival": 2
       },
       "immunities": ["radiation"],
       "effects": ["radiation_healing", "slow_aging", "infertility", "discrimination"]
@@ -56,19 +52,17 @@
   {
     "id": "minuteman-peoples-militia",
     "originId": "minuteman",
-    "cyrillicName": "Народное ополчение",
     "displayNameKey": "traits.minuteman.peoplesMilitia.name",
     "descriptionKey": "traits.minuteman.peoplesMilitia.description",
     "modifiers": {
       "extraSkills": 1,
-      "forcedSkills": ["Энергооружие", "Стрелковое оружие"],
+      "forcedSkills": ["energy_weapons", "small_guns"],
       "effects": ["improved_caravans", "base_defense_4", "cover_dr_bonus", "outnumbered_damage_bonus"]
     }
   },
   {
     "id": "childofatom-radioactive-sponge",
     "originId": "childOfAtom",
-    "cyrillicName": "Радиоактивная губка",
     "displayNameKey": "traits.childOfAtom.radioactiveSponge.name",
     "descriptionKey": "traits.childOfAtom.radioactiveSponge.description",
     "modifiers": {
@@ -80,7 +74,6 @@
   {
     "id": "vaultdweller-vault-kid",
     "originId": "vaultDweller",
-    "cyrillicName": "Ребенок из Убежища",
     "displayNameKey": "traits.vaultDweller.vaultKid.name",
     "descriptionKey": "traits.vaultDweller.vaultKid.description",
     "modifiers": {
@@ -91,7 +84,6 @@
   {
     "id": "protectron-protect-or-destroy",
     "originId": "protectron",
-    "cyrillicName": "Защитить или уничтожить",
     "displayNameKey": "traits.protectron.protectOrDestroy.name",
     "descriptionKey": "traits.protectron.protectOrDestroy.description",
     "modifiers": {
@@ -112,7 +104,6 @@
   {
     "id": "assaultron-designed-for-frontline",
     "originId": "assaultron",
-    "cyrillicName": "Разработан для Передовой",
     "displayNameKey": "traits.assaultron.designedForFrontline.name",
     "descriptionKey": "traits.assaultron.designedForFrontline.description",
     "modifiers": {
@@ -132,7 +123,6 @@
   {
     "id": "ncr-resident",
     "originId": "ncr",
-    "cyrillicName": "Житель НКР",
     "displayNameKey": "traits.ncr.resident.name",
     "descriptionKey": "traits.ncr.resident.description",
     "modifiers": {
@@ -149,7 +139,6 @@
   {
     "id": "ncr-good-soul",
     "originId": "ncr",
-    "cyrillicName": "Добрая Душа",
     "displayNameKey": "traits.ncr.goodSoul.name",
     "descriptionKey": "traits.ncr.goodSoul.description",
     "modifiers": {}
@@ -157,17 +146,15 @@
   {
     "id": "ncr-infantryman",
     "originId": "ncr",
-    "cyrillicName": "Пехотинец",
     "displayNameKey": "traits.ncr.infantryman.name",
     "descriptionKey": "traits.ncr.infantryman.description",
     "modifiers": {
-      "ncrInfantryWeaponIds": ["weapon_008", "weapon_081", "weapon_004", "weapon_054", "weapon_029"]
+      "ncrInfantryWeaponIds": ["weapon_submachine_gun", "weapon_black_powder_rifle", "weapon_assault_rifle", "weapon_frag_grenade", "weapon_combat_knife"]
     }
   },
   {
     "id": "ncr-home-on-the-range",
     "originId": "ncr",
-    "cyrillicName": "Дом на пастбище",
     "displayNameKey": "traits.ncr.homeOnTheRange.name",
     "descriptionKey": "traits.ncr.homeOnTheRange.description",
     "modifiers": {}
@@ -175,7 +162,6 @@
   {
     "id": "ncr-technique-of-descent",
     "originId": "ncr",
-    "cyrillicName": "Техника спуска",
     "displayNameKey": "traits.ncr.techniqueOfDescent.name",
     "descriptionKey": "traits.ncr.techniqueOfDescent.description",
     "modifiers": {}
@@ -183,7 +169,6 @@
   {
     "id": "ncr-brahmin-baron",
     "originId": "ncr",
-    "cyrillicName": "Браминий барон",
     "displayNameKey": "traits.ncr.brahminBaron.name",
     "descriptionKey": "traits.ncr.brahminBaron.description",
     "modifiers": {}
@@ -191,7 +176,6 @@
   {
     "id": "survivor-survivor",
     "originId": "survivor",
-    "cyrillicName": "Выживший",
     "displayNameKey": "traits.survivor.survivor.name",
     "descriptionKey": "traits.survivor.survivor.description",
     "modifiers": {
@@ -208,7 +192,6 @@
   {
     "id": "survivor-educated",
     "originId": "survivor",
-    "cyrillicName": "Образованный",
     "displayNameKey": "traits.survivor.educated.name",
     "descriptionKey": "traits.survivor.educated.description",
     "modifiers": {
@@ -218,7 +201,6 @@
   {
     "id": "survivor-quick-shot",
     "originId": "survivor",
-    "cyrillicName": "Быстрый выстрел",
     "displayNameKey": "traits.survivor.quickShot.name",
     "descriptionKey": "traits.survivor.quickShot.description",
     "modifiers": {}
@@ -226,7 +208,6 @@
   {
     "id": "survivor-gifted",
     "originId": "survivor",
-    "cyrillicName": "Одаренный",
     "displayNameKey": "traits.survivor.gifted.name",
     "descriptionKey": "traits.survivor.gifted.description",
     "modifiers": {
@@ -237,7 +218,6 @@
   {
     "id": "survivor-heavy-handed",
     "originId": "survivor",
-    "cyrillicName": "Тяжёлая рука",
     "displayNameKey": "traits.survivor.heavyHanded.name",
     "descriptionKey": "traits.survivor.heavyHanded.description",
     "modifiers": {
@@ -247,7 +227,6 @@
   {
     "id": "survivor-small-frame",
     "originId": "survivor",
-    "cyrillicName": "Миниатюрный",
     "displayNameKey": "traits.survivor.smallFrame.name",
     "descriptionKey": "traits.survivor.smallFrame.description",
     "modifiers": {
@@ -257,7 +236,6 @@
   {
     "id": "misterhandy-robot-mr-handy",
     "originId": "misterHandy",
-    "cyrillicName": "Робот Мистер Помощник",
     "displayNameKey": "traits.misterHandy.robotMrHandy.name",
     "descriptionKey": "traits.misterHandy.robotMrHandy.description",
     "modifiers": {
@@ -281,7 +259,6 @@
   {
     "id": "robobrain-robot-with-brains",
     "originId": "robobrain",
-    "cyrillicName": "Робот с мозгами",
     "displayNameKey": "traits.robobrain.robotWithBrains.name",
     "descriptionKey": "traits.robobrain.robotWithBrains.description",
     "modifiers": {

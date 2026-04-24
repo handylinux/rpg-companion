@@ -1,0 +1,22 @@
+[
+  {
+    "id": "robot_weapon_manipulator",
+    "name": "Манипулятор"
+  },
+  {
+    "id": "robot_weapon_flamethrower",
+    "name": "Огнемёт (робот)"
+  },
+  {
+    "id": "robot_weapon_circular_saw",
+    "name": "Циркулярная пила"
+  },
+  {
+    "id": "robot_weapon_laser_cutter",
+    "name": "Лазерный резак"
+  },
+  {
+    "id": "robot_weapon_auto_10mm",
+    "name": "Автоматический 10-мм пистолет"
+  }
+]

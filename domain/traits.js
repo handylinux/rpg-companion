@@ -30,14 +30,12 @@ export function loadOriginsData() {
 // ---------------------------------------------------------------------------
 
 /**
- * Find a trait entry by its cyrillicName (legacy DB key) or by id.
+ * Find a trait entry by its id.
  * Returns undefined if not found.
  */
 export function findTraitByName(name) {
   if (!name) return undefined;
-  return traitsJson.find(
-    (t) => t.cyrillicName === name || t.id === name,
-  );
+  return traitsJson.find((t) => t.id === name);
 }
 
 /**

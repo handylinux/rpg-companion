@@ -1,0 +1,17 @@
+{
+  "armor": [
+    {
+      "type": "armor.groups.robotArmor",
+      "items": [
+        {
+          "id": "robot_armor_standard_plating",
+          "name": "Стандартная обшивка"
+        },
+        {
+          "id": "robot_armor_mister_gutsy_plating",
+          "name": "Обшивка для Мистера Храбреца"
+        }
+      ]
+    }
+  ]
+}

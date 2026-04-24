@@ -1,5 +1,5 @@
-import ruWeaponsAndArmorScreen from '../../../i18n/ru-RU/WeaponsAndArmorScreen.json';
-import enWeaponsAndArmorScreen from '../../../i18n/en-EN/WeaponsAndArmorScreen.json';
+import ruWeaponsAndArmorScreen from '../../../i18n/ru-RU/screens/weaponsAndArmor/screen.json';
+import enWeaponsAndArmorScreen from '../../../i18n/en-EN/screens/weaponsAndArmor/screen.json';
 import { getCurrentLocale } from '../../../i18n/locale';
 
 const DICTIONARIES = {

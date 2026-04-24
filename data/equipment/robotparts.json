@@ -1,0 +1,88 @@
+{
+  "robotItems": [
+    {
+      "id": "robot_item_repair_kit",
+      "itemType": "misc",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true,
+      "healAmount": 6
+    },
+    {
+      "id": "robot_item_fertilizer_bag",
+      "itemType": "misc",
+      "weight": 1,
+      "cost": 0,
+      "rarity": 0
+    },
+    {
+      "id": "food_mutafruit",
+      "itemType": "food",
+      "weight": 0.5,
+      "cost": 0,
+      "rarity": 0
+    }
+  ],
+  "robotModules": [
+    {
+      "id": "robot_module_boiler",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true,
+      "grantsItemId": "drink_clean_water",
+      "grantsEveryHours": 24
+    },
+    {
+      "id": "robot_module_recon_sensors",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    },
+    {
+      "id": "robot_module_behavior_analysis",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    },
+    {
+      "id": "robot_module_hazard_detection",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    },
+    {
+      "id": "robot_module_diagnostics",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    }
+  ],
+  "robotPartsUpgrade": [
+    {
+      "id": "robot_body_mister_handy",
+      "slot": "body",
+      "partType": "body",
+      "itemType": "robotPart",
+      "robotBodyPlan": "misterHandy",
+      "requiresManipulatorForStandardWeapons": true,
+      "allowedRobotWeaponIds": [
+        "robot_weapon_manipulator",
+        "robot_weapon_circular_saw",
+        "robot_weapon_auto_10mm",
+        "robot_weapon_flamethrower",
+        "robot_weapon_laser_cutter"
+      ]
+    }
+  ]
+}

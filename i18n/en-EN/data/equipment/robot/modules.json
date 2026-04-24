@@ -1,0 +1,22 @@
+[
+  {
+    "id": "robot_module_boiler",
+    "name": "Built-in Boiler"
+  },
+  {
+    "id": "robot_module_recon_sensors",
+    "name": "Recon Sensors"
+  },
+  {
+    "id": "robot_module_behavior_analysis",
+    "name": "Behavior Analysis Module"
+  },
+  {
+    "id": "robot_module_hazard_detection",
+    "name": "Hazard Detection Module"
+  },
+  {
+    "id": "robot_module_diagnostics",
+    "name": "Diagnostics Module"
+  }
+]

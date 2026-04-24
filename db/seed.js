@@ -40,23 +40,23 @@ async function seedWeapons(equipmentCatalog) {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     params: [
       w.id,
-      w.name || w.Name || '',
-      w.weaponType || w.weapon_type || w['Weapon Type'] || '',
-      safeNum(w.damage ?? w['Damage Rating']),
-      safeStr(w.damage_effects ?? w.damageEffects ?? w['Damage Effects']),
-      safeStr(w.damage_type ?? w.damageType ?? w['Damage Type']),
-      safeStr(w.fire_rate ?? w.fireRate ?? w['Rate of Fire']),
-      safeStr(w.qualities ?? w['Qualities']),
-      safeStr(w.weight ?? w['Weight']),
-      safeStr(w.cost ?? w['Cost']),
-      safeStr(w.rarity ?? w['Rarity']),
-      safeStr(w.ammo_id ?? w.ammoId ?? w['Ammo']),
-      safeStr(w.range ?? w['Range']),
-      safeStr(w.range_name ?? w.rangeName ?? w['range name']),
-      safeStr(w.main_attr ?? w.mainAttr ?? w['main_attr']),
-      safeStr(w.main_skill ?? w.mainSkill ?? w['main_skill']),
-      safeStr(w.rules ?? w['Rules']),
-      safeStr(w.flavour ?? w['Flavour']),
+      w.name || '',
+      w.weaponType || '',
+      safeNum(w.damage),
+      safeStr(w.damageEffects),
+      safeStr(w.damageType),
+      safeStr(w.fireRate),
+      safeStr(w.qualities),
+      safeStr(w.weight),
+      safeStr(w.cost),
+      safeStr(w.rarity),
+      safeStr(w.ammoId),
+      safeStr(w.range),
+      safeStr(w.rangeName),
+      safeStr(w.mainAttr),
+      safeStr(w.mainSkill),
+      safeStr(w.rules),
+      safeStr(w.flavour),
     ],
   }));
   if (statements.length > 0) await runBatch(statements);
@@ -79,19 +79,19 @@ async function seedWeaponMods(equipmentCatalog) {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     params: [
       m.id,
-      m.Name || '',
-      safeStr(m.Prefix),
-      m.Slot || '',
-      safeNum(m.Complexity),
-      safeStr(m['Perk 1']),
-      safeStr(m['Perk 2']),
-      safeStr(m.Skill),
-      safeStr(m.Rarity),
-      safeStr(m.Materials),
-      safeNum(m.Cost),
-      safeStr(m.Effects),
-      safeStr(m.EffectDescription),
-      safeStr(m.Weight),
+      m.name || '',
+      safeStr(m.prefix),
+      m.slot || '',
+      safeNum(m.complexity),
+      safeStr(m.perk1),
+      safeStr(m.perk2),
+      safeStr(m.skill),
+      safeStr(m.rarity),
+      safeStr(m.materials),
+      safeNum(m.cost),
+      safeStr(m.effects),
+      safeStr(m.effectDescription),
+      safeStr(m.weight),
       appliesToIds.length ? JSON.stringify(appliesToIds) : null,
     ],
   };
@@ -140,7 +140,7 @@ async function seedQualities(equipmentCatalog) {
   await clearTable('weapon_qualities');
   const statements = qualitiesData.map(q => ({
     sql: `INSERT OR REPLACE INTO weapon_qualities (id, name, effect, opposite) VALUES (?, ?, ?, ?)`,
-    params: [q.id, q.Name || '', safeStr(q.Effect), safeStr(q.Opposite)],
+    params: [q.id, q.name || '', safeStr(q.effect), safeStr(q.opposite)],
   }));
   if (statements.length > 0) await runBatch(statements);
 }
@@ -173,7 +173,7 @@ async function seedItems(equipmentCatalog) {
   const statements = [];
 
   const addItem = (item, itemType, category = null, subtype = null) => {
-    const name = item.Name || item.name || item['Название'] || '';
+    const name = item.name || '';
     const id = itemType + '_' + slugify(name) + (category ? '_' + slugify(category) : '');
     statements.push({
       sql: `INSERT OR REPLACE INTO items
@@ -182,12 +182,12 @@ async function seedItems(equipmentCatalog) {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       params: [
         id, name, itemType, subtype,
-        safeNum(item['Физ.СУ']), safeNum(item['Энрг.СУ']), safeNum(item['Рад.СУ']),
-        safeStr(item['protected_area']), safeStr(item['clothingType']),
-        safeStr(item['find_formula']),
-        safeStr(item['weight'] ?? item['Вес']),
-        safeStr(item['price'] ?? item['Цена']),
-        safeStr(item['rarity'] ?? item['Редкость']),
+        safeNum(item.physicalDamageRating), safeNum(item.energyDamageRating), safeNum(item.radiationDamageRating),
+        safeStr(item.protected_area), safeStr(item.clothingType),
+        safeStr(item.find_formula),
+        safeStr(item.weight),
+        safeStr(item.cost),
+        safeStr(item.rarity),
         category,
       ],
     });
@@ -196,10 +196,9 @@ async function seedItems(equipmentCatalog) {
   (armorList || []).forEach(item => addItem(item, 'armor', item.category || item.armorCategoryKey || null));
   clothesData.clothes.forEach(group => group.items.forEach(item => addItem(item, 'clothing', group.type, item.clothingType)));
   chemsData.forEach(item => {
-    const name = item['Название'] || '';
     statements.push({
       sql: `INSERT OR REPLACE INTO items (id, name, item_type, weight, price, rarity) VALUES (?, ?, ?, ?, ?, ?)`,
-      params: ['chem_' + slugify(name), name, 'chem', safeStr(item['Вес']), safeStr(item['Цена']), safeStr(item['Редкость'])],
+      params: ['chem_' + slugify(item.name || item.id || ''), item.name || '', 'chem', safeStr(item.weight), safeStr(item.cost), safeStr(item.rarity)],
     });
   });
   miscData.miscellaneous.forEach(group => group.items.forEach(item => addItem(item, item.itemType || 'misc', group.type)));

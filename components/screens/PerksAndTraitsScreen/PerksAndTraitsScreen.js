@@ -6,6 +6,7 @@ import perksData from '../../../assets/Perks/perks.json';
 import PerkSelectModal from './PerkSelectModal';
 import { renderTextWithIcons } from '../WeaponsAndArmorScreen/textUtils';
 import styles from '../../../styles/PerksAndTraitsScreen.styles';
+import { tPerksAndTraits } from './perksAndTraitsScreenI18n';
 
 const PerksAndTraitsScreen = () => {
   const { 
@@ -23,11 +24,11 @@ const PerksAndTraitsScreen = () => {
 
   const handleAddPerkPress = () => {
     if (selectedPerks.length >= perkLimit) {
-      const message = 'На текущем уровне больше перков взять нельзя';
+      const message = tPerksAndTraits('warnings.perkLimitReached');
       if (Platform.OS === 'web') {
         window.alert(message);
       } else {
-        Alert.alert('Предупреждение', message);
+        Alert.alert(tPerksAndTraits('alerts.warningTitle'), message);
       }
       return;
     }
@@ -39,40 +40,39 @@ const PerksAndTraitsScreen = () => {
     
     // Блокируем выбор, если уже взяли максимум на уровне (доп. защита)
     if (selectedPerks.length >= perkLimit) {
-      const message = 'На текущем уровне больше перков взять нельзя';
+      const message = tPerksAndTraits('warnings.perkLimitReached');
       if (Platform.OS === 'web') {
         window.alert(message);
       } else {
-        Alert.alert('Предупреждение', message);
+        Alert.alert(tPerksAndTraits('alerts.warningTitle'), message);
       }
       return;
     }
 
     // Специальная обработка для перка "ИНТЕНСИВНЫЕ ТРЕНИРОВКИ"
     if (perk.perk_name === "ИНТЕНСИВНЫЕ ТРЕНИРОВКИ") {
-      // Проверяем условия для выбора этого перка
       const canTakeIntensiveTraining = level >= 2 || attributesSaved;
       
       if (!canTakeIntensiveTraining) {
-        const message = 'Перк "Интенсивные тренировки" можно взять только на уровне 2+ или после завершения создания персонажа (распределения атрибутов)';
+        const message = tPerksAndTraits('errors.intensiveTrainingRequirements');
         if (Platform.OS === 'web') {
           window.alert(message);
         } else {
-          Alert.alert('Ошибка', message);
+          Alert.alert(tPerksAndTraits('alerts.errorTitle'), message);
         }
         return;
       }
 
-      // Добавляем очко атрибута
       const attributeBonus = perk.modifiers?.attributeBonus || 1;
       addPerkAttributePoints(attributeBonus);
       
-      // Показываем сообщение пользователю
-      const successMessage = `Перк "${perk.perk_name}" выбран! Вы получили +${attributeBonus} очко атрибута. Перейдите на вкладку "Персонаж", чтобы распределить его.`;
+      const successMessage = tPerksAndTraits('perkSelected.intensiveTrainingSuccess')
+        .replace('{perkName}', perk.perk_name)
+        .replace('{bonus}', attributeBonus);
       if (Platform.OS === 'web') {
         window.alert(successMessage);
       } else {
-        Alert.alert('Перк выбран', successMessage);
+        Alert.alert(tPerksAndTraits('alerts.perkSelectedTitle'), successMessage);
       }
     }
 
@@ -86,9 +86,9 @@ const PerksAndTraitsScreen = () => {
         <View style={styles.table}>
           {/* Заголовок таблицы */}
           <View style={[styles.row, styles.headerRow]}>
-            <Text style={[styles.cell, styles.headerText, styles.nameColumn]}>Название</Text>
-            <Text style={[styles.cell, styles.headerText, styles.rankColumn]}>Ранг</Text>
-            <Text style={[styles.cell, styles.headerText, styles.descriptionColumn]}>Описание</Text>
+            <Text style={[styles.cell, styles.headerText, styles.nameColumn]}>{tPerksAndTraits('labels.name')}</Text>
+            <Text style={[styles.cell, styles.headerText, styles.rankColumn]}>{tPerksAndTraits('labels.rank')}</Text>
+            <Text style={[styles.cell, styles.headerText, styles.descriptionColumn]}>{tPerksAndTraits('labels.description')}</Text>
           </View>
 
           {/* Строка с чертой, если она есть */}
@@ -143,7 +143,7 @@ const PerksAndTraitsScreen = () => {
 
       {/* Кнопка Добавить перк */}
       <TouchableOpacity style={styles.addPerkButton} onPress={handleAddPerkPress}>
-        <Text style={styles.addPerkButtonText}>+ Добавить перк</Text>
+        <Text style={styles.addPerkButtonText}>{tPerksAndTraits('buttons.addPerk')}</Text>
       </TouchableOpacity>
 
       <PerkSelectModal

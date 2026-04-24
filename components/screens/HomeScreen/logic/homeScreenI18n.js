@@ -1,5 +1,5 @@
-import ruHomeScreen from "../../../../i18n/ru-RU/HomeScreen.json";
-import enHomeScreen from "../../../../i18n/en-EN/HomeScreen.json";
+import ruHomeScreen from "../../../../i18n/ru-RU/screens/home/screen.json";
+import enHomeScreen from "../../../../i18n/en-EN/screens/home/screen.json";
 import { getCurrentLocale } from "../../../../i18n/locale";
 
 const DICTIONARIES = {

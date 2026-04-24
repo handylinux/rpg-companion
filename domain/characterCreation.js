@@ -2,7 +2,7 @@
 // Pure character creation logic: attributes, skills, derived stats.
 // No React, no UI dependencies. Imports only static i18n JSON for skill name catalog.
 
-import ruCharacterScreen from '../i18n/ru-RU/CharacterScreen.json';
+import ruCharacterScreen from '../i18n/ru-RU/screens/character/screen.json';
 
 // ---------------------------------------------------------------------------
 // Attribute key utilities (from attributeKeyUtils.js)

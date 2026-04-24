@@ -1,0 +1,13 @@
+[
+  {
+    "id": "drink_nuka_cola",
+    "itemType": "drinks",
+    "weight": 0.1,
+    "cost": 25,
+    "rarity": 1,
+    "positiveEffect": { "apModifier": { "op": "+", "value": 1 } },
+    "negativeEffect": "addiction",
+    "positiveEffectDuration": "lasting",
+    "negativeEffectDuration": ""
+  }
+]

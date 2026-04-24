@@ -17,11 +17,11 @@ export const getWeaponBaseCode = (weaponName) => weaponName;
 // Internal helpers for dual-format weapon/mod objects
 // ---------------------------------------------------------------------------
 
-const getWeaponName = (weapon) => weapon.name || weapon.Name || weapon.Название || '';
+const getWeaponName = (weapon) => weapon.name || '';
 
 const getModPrefix = (mod) => {
     if (!mod) return null;
-    return mod.Prefix || mod.prefix || mod['Префикс имени'] || null;
+    return mod.prefix || null;
 };
 
 // ---------------------------------------------------------------------------
@@ -50,24 +50,21 @@ export const applyModification = (weapon, modification) => {
     // --- damage ---
     const dm = modification.damageModifier;
     if (dm) {
-        const base = Number(result.damage ?? result.Урон ?? 0);
+        const base = Number(result.damage ?? 0);
         if (dm.op === 'set') {
             result.damage = dm.value;
-            result.Урон = dm.value;
         } else {
-            const next = dm.op === '-' ? base - dm.value : base + dm.value;
-            result.damage = Math.max(0, next);
-            result.Урон = result.damage;
+            result.damage = Math.max(0, dm.op === '-' ? base - dm.value : base + dm.value);
         }
     }
 
     // --- fire rate ---
     const fr = modification.fireRateModifier;
     if (fr) {
-        const base = Number(result.fire_rate ?? result['Скорость стрельбы'] ?? 0);
+        const base = Number(result.fireRate ?? result.fire_rate ?? 0);
         const next = fr.op === '-' ? base - fr.value : base + fr.value;
-        result.fire_rate = Math.max(0, next);
-        result['Скорость стрельбы'] = result.fire_rate;
+        result.fireRate = Math.max(0, next);
+        result.fire_rate = result.fireRate;
     }
 
     // --- range ---
@@ -82,7 +79,6 @@ export const applyModification = (weapon, modification) => {
     // --- ammo override ---
     if (modification.ammoOverride) {
         result.ammo = modification.ammoOverride;
-        result.Патроны = modification.ammoOverride;
     }
 
     // --- quality changes: gain / lose ---
@@ -90,7 +86,7 @@ export const applyModification = (weapon, modification) => {
     if (Array.isArray(qc) && qc.length > 0) {
         // qualities stored as a Set of strings like "Piercing 1", "Vicious", etc.
         const qualitySet = new Set(
-            String(result.qualities ?? result.Качества ?? '')
+            String(result.qualities ?? '')
                 .split(',').map((q) => q.trim()).filter(Boolean).filter((q) => q !== '–')
         );
 
@@ -114,19 +110,16 @@ export const applyModification = (weapon, modification) => {
 
         const joined = qualitySet.size ? [...qualitySet].join(', ') : '–';
         result.qualities = joined;
-        result.Качества = joined;
     }
 
     // --- weight / cost ---
-    const wMod = modification.Weight ?? modification.weight;
+    const wMod = modification.weight;
     if (wMod != null) {
-        result.weight = Number(result.weight ?? result.Вес ?? 0) + Number(wMod);
-        result.Вес = result.weight;
+        result.weight = Number(result.weight ?? 0) + Number(wMod);
     }
-    const cMod = modification.Cost ?? modification.cost;
+    const cMod = modification.cost;
     if (cMod != null) {
-        result.cost = Number(result.cost ?? result.Цена ?? 0) + Number(cMod);
-        result.Цена = result.cost;
+        result.cost = Number(result.cost ?? 0) + Number(cMod);
     }
 
     return result;
@@ -139,18 +132,16 @@ export const removeModificationEffects = (weapon, modification) => {
 
     const dm = modification.damageModifier;
     if (dm && dm.op !== 'set') {
-        const base = Number(result.damage ?? result.Урон ?? 0);
-        const next = dm.op === '-' ? base + dm.value : base - dm.value;
-        result.damage = Math.max(0, next);
-        result.Урон = result.damage;
+        const base = Number(result.damage ?? 0);
+        result.damage = Math.max(0, dm.op === '-' ? base + dm.value : base - dm.value);
     }
 
     const fr = modification.fireRateModifier;
     if (fr) {
-        const base = Number(result.fire_rate ?? result['Скорость стрельбы'] ?? 0);
+        const base = Number(result.fireRate ?? result.fire_rate ?? 0);
         const next = fr.op === '-' ? base + fr.value : base - fr.value;
-        result.fire_rate = Math.max(0, next);
-        result['Скорость стрельбы'] = result.fire_rate;
+        result.fireRate = Math.max(0, next);
+        result.fire_rate = result.fireRate;
     }
 
     const rm = modification.rangeModifier;
@@ -163,7 +154,7 @@ export const removeModificationEffects = (weapon, modification) => {
     const qc = modification.qualityChanges;
     if (Array.isArray(qc) && qc.length > 0) {
         const qualitySet = new Set(
-            String(result.qualities ?? result.Качества ?? '')
+            String(result.qualities ?? '')
                 .split(',').map((q) => q.trim()).filter(Boolean).filter((q) => q !== '–')
         );
         // Reverse: undo gains and losses
@@ -177,18 +168,15 @@ export const removeModificationEffects = (weapon, modification) => {
         });
         const joined = qualitySet.size ? [...qualitySet].join(', ') : '–';
         result.qualities = joined;
-        result.Качества = joined;
     }
 
-    const wMod = modification.Weight ?? modification.weight;
+    const wMod = modification.weight;
     if (wMod != null) {
-        result.weight = Math.max(0, Number(result.weight ?? result.Вес ?? 0) - Number(wMod));
-        result.Вес = result.weight;
+        result.weight = Math.max(0, Number(result.weight ?? 0) - Number(wMod));
     }
-    const cMod = modification.Cost ?? modification.cost;
+    const cMod = modification.cost;
     if (cMod != null) {
-        result.cost = Math.max(0, Number(result.cost ?? result.Цена ?? 0) - Number(cMod));
-        result.Цена = result.cost;
+        result.cost = Math.max(0, Number(result.cost ?? 0) - Number(cMod));
     }
 
     return result;
@@ -198,23 +186,16 @@ export const removeModificationEffects = (weapon, modification) => {
 export const getOrCreateBaseStats = (weapon) => {
     if (weapon._baseStats) return weapon._baseStats;
     return {
-        name: weapon.name ?? weapon.Name ?? weapon.Название,
-        damage: weapon.damage ?? weapon.Урон,
-        fire_rate: weapon.fire_rate ?? weapon['Скорость стрельбы'],
+        name: weapon.name,
+        damage: weapon.damage,
+        fireRate: weapon.fireRate ?? weapon.fire_rate,
+        fire_rate: weapon.fire_rate ?? weapon.fireRate,
         range_index: weapon.range_index ?? 0,
         range_name: weapon.range_name,
-        weight: weapon.weight ?? weapon.Вес,
-        cost: weapon.cost ?? weapon.Цена,
-        qualities: weapon.qualities ?? weapon.Качества,
-        ammo: weapon.ammo ?? weapon.Патроны,
-        // legacy Cyrillic mirrors — kept so old consumers don't break
-        Название: weapon.Название ?? weapon.name ?? weapon.Name,
-        Урон: weapon.Урон ?? weapon.damage,
-        'Скорость стрельбы': weapon['Скорость стрельбы'] ?? weapon.fire_rate,
-        Вес: weapon.Вес ?? weapon.weight,
-        Цена: weapon.Цена ?? weapon.cost,
-        Качества: weapon.Качества ?? weapon.qualities,
-        Патроны: weapon.Патроны ?? weapon.ammo,
+        weight: weapon.weight,
+        cost: weapon.cost,
+        qualities: weapon.qualities,
+        ammo: weapon.ammo,
     };
 };
 
@@ -230,35 +211,21 @@ export const applyModificationToSlot = (weapon, category, mod) => {
     }
 
     const modsForName = Object.values(installedMods).map((m) => m.data || m);
-    result.Название = getModifiedWeaponName({ ...baseStats }, modsForName);
+    result.name = getModifiedWeaponName({ ...baseStats }, modsForName);
 
     return result;
 };
 
 // Return all available modifications for a weapon, grouped by category.
 export const getAvailableModifications = (weapon, modsData) => {
-    if (!weapon || !weapon.Модификации || !modsData) return {};
-
-    // Mapping for mismatched mod names between weapon data and mods catalog.
-    const nameMapping = {
-        'Продвинутый': 'Улучшенный',
-        'Обрезанный': 'Укороченный',
-        'Полная': 'С компенсатором отдачи',
-        'Для автоогня': 'Ресивер для автоогня',
-        'Короткий Оптический': 'Короткий оптический',
-        'Длинный оптический': 'Длинный оптический',
-        'Большой Быстросъемный': 'Большой быстросъемный',
-        'Большой магазин': 'Большой',
-        'Настроенный': 'Чувствительный',
-        'Стрелка': 'Ложа стрелка',
-    };
+    if (!weapon || !weapon.modifications || !modsData) return {};
 
     const available = {};
-    Object.entries(weapon.Модификации).forEach(([category, modNames]) => {
+    Object.entries(weapon.modifications).forEach(([category, modNames]) => {
         if (!modsData[category]) return;
         const categoryMods = modNames
             .map((modName) => {
-                const data = modsData[category][modName] || modsData[category][nameMapping[modName]];
+                const data = modsData[category][modName];
                 return data ? { name: modName, data } : null;
             })
             .filter(Boolean);
@@ -274,7 +241,7 @@ export const applyMultipleModifications = (weapon, modifications) => {
 
     const byCategory = {};
     modifications.forEach((mod) => {
-        for (const [category, modNames] of Object.entries(weapon.Модификации || {})) {
+        for (const [category, modNames] of Object.entries(weapon.modifications || {})) {
             if (modNames.includes(mod.name)) {
                 if (!byCategory[category]) byCategory[category] = [];
                 byCategory[category].push(mod);
@@ -288,8 +255,8 @@ export const applyMultipleModifications = (weapon, modifications) => {
     });
 
     const modsForName = Object.values(byCategory).map((mods) => mods[mods.length - 1].data);
-    modified.Название = getModifiedWeaponName(modified, modsForName);
-    modified.weaponConfig = createWeaponConfig(weapon.Название, byCategory);
+    modified.name = getModifiedWeaponName(modified, modsForName);
+    modified.weaponConfig = createWeaponConfig(weapon.name, byCategory);
 
     return modified;
 };
@@ -319,7 +286,7 @@ export const parseWeaponConfig = (configString) => {
 export const getBaseWeapon = (weapon) => {
     if (!weapon.weaponConfig) return weapon;
     const { baseWeaponName } = parseWeaponConfig(weapon.weaponConfig);
-    return { ...weapon, Название: baseWeaponName, weaponConfig: baseWeaponName };
+    return { ...weapon, name: baseWeaponName, weaponConfig: baseWeaponName };
 };
 
 // Build a display label for a removed mod.
@@ -329,37 +296,24 @@ export const getRemovedModificationName = (modificationName, weaponName) =>
 
 // Check whether a mod is compatible with a weapon slot.
 export const isModificationCompatible = (weapon, modificationName, modificationCategory) => {
-    if (!weapon.Модификации) return false;
-    const available = weapon.Модификации[modificationCategory];
+    if (!weapon.modifications) return false;
+    const available = weapon.modifications[modificationCategory];
     return !!(available && available.includes(modificationName));
 };
 
 // Parse a weapon+mods config string and return the fully modified weapon.
 export const parseWeaponWithModifications = (weaponString, weaponsData, modsData) => {
     if (!weaponString.includes('+')) {
-        return { weapon: weaponsData.find((w) => w.Название === weaponString), weaponConfig: weaponString };
+        return { weapon: weaponsData.find((w) => w.name === weaponString), weaponConfig: weaponString };
     }
 
     const { baseWeaponName, modifications } = parseWeaponConfig(weaponString);
-    const baseWeapon = weaponsData.find((w) => w.Название === baseWeaponName);
+    const baseWeapon = weaponsData.find((w) => w.name === baseWeaponName);
     if (!baseWeapon) return null;
-
-    const nameMapping = {
-        'Продвинутый': 'Улучшенный',
-        'Обрезанный': 'Укороченный',
-        'Полная': 'С компенсатором отдачи',
-        'Для автоогня': 'Ресивер для автоогня',
-        'Короткий Оптический': 'Короткий оптический',
-        'Длинный оптический': 'Длинный оптический',
-        'Большой Быстросъемный': 'Большой быстросъемный',
-        'Большой магазин': 'Большой',
-        'Настроенный': 'Чувствительный',
-        'Стрелка': 'Ложа стрелка',
-    };
 
     const modsArray = Object.entries(modifications)
         .map(([category, modName]) => {
-            const data = modsData[category]?.[modName] || modsData[category]?.[nameMapping[modName]];
+            const data = modsData[category]?.[modName];
             return data ? { name: modName, data } : null;
         })
         .filter(Boolean);

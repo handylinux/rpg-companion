@@ -158,8 +158,14 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
-- [ ] 9. Перенести данные снаряжения из i18n/ в data/equipment/
-- [ ] 9.1 Создать data/equipment/weapons.json и data/equipment/armor.json
+- [x] 9. Перенести данные снаряжения из i18n/ в data/equipment/
+
+
+
+
+
+- [x] 9.1 Создать data/equipment/weapons.json и data/equipment/armor.json
+
   - Создать `data/equipment/weapons.json` — перенести данные оружия из `i18n/ru-RU/weapons.json` (только данные, без переводов)
   - Создать `data/equipment/armor.json` — перенести данные брони из `i18n/ru-RU/armor.json`
   - Переводы (названия, описания) оставить в `i18n/` по ключам
@@ -167,7 +173,9 @@
   - **Если остаётся кириллица для совместимости с БД** — задокументировать в `docs/cyrillic-db-compat.md`: файл, строки, причина, план миграции
   - _Requirements: 6.1, 6.4_
 
-- [ ] 9.2 Создать data/equipment/mods.json и data/equipment/robotparts.json
+
+- [x] 9.2 Создать data/equipment/mods.json и data/equipment/robotparts.json
+
   - Создать `data/equipment/mods.json` — перенести данные модов из `i18n/ru-RU/weapon_mods.json` и `i18n/ru-RU/armor_mods.json`
   - Создать `data/equipment/robotparts.json` — перенести данные из `i18n/ru-RU/robotItems.json`, `robotModules.json`, `robotPartsUpgrade.json`
   - Обновить `i18n/equipmentCatalog.js` — читать из `data/equipment/` вместо `i18n/`

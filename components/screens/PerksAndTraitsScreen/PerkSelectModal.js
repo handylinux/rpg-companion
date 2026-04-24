@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import styles from '../../../styles/PerkSelectModal.styles';
+import { tPerksAndTraits } from './perksAndTraitsScreenI18n';
 
 const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -15,7 +16,7 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Выберите перк</Text>
+          <Text style={styles.modalTitle}>{tPerksAndTraits('modal.title')}</Text>
 
           <ScrollView style={{ maxHeight: 420 }}>
             {(annotatedPerks || []).map((entry, index) => {
@@ -51,12 +52,17 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
                         <View style={styles.unmetContainer}>
                           {unmet.level && (
                             <Text style={styles.unmetText}>
-                              Требуется уровень: {unmet.level.required} (текущий: {unmet.level.current})
+                              {tPerksAndTraits('modal.requiresLevel')
+                                .replace('{required}', unmet.level.required)
+                                .replace('{current}', unmet.level.current)}
                             </Text>
                           )}
                           {unmet.attributes && Object.entries(unmet.attributes).map(([code, info]) => (
                             <Text key={`${perk.perk_name}-${code}`} style={styles.unmetText}>
-                              Требуется {code}: {info.required} (текущий: {info.current})
+                              {tPerksAndTraits('modal.requiresAttribute')
+                                .replace('{code}', code)
+                                .replace('{required}', info.required)
+                                .replace('{current}', info.current)}
                             </Text>
                           ))}
                         </View>
@@ -79,7 +85,7 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
                         disabled={!available}
                       >
                         <Text style={styles.chooseButtonText}>
-                          {isSelected ? 'Отменить выбор' : 'Выбрать'}
+                          {isSelected ? tPerksAndTraits('modal.buttons.cancelChoice') : tPerksAndTraits('modal.buttons.choose')}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -102,10 +108,10 @@ const PerkSelectModal = ({ visible, onClose, annotatedPerks, onChoosePerk }) => 
               }}
               disabled={selectedPerks.length === 0}
             >
-              <Text style={styles.modalButtonText}>Подтвердить</Text>
+              <Text style={styles.modalButtonText}>{tPerksAndTraits('modal.buttons.confirm')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={onClose}>
-              <Text style={styles.modalButtonText}>Отмена</Text>
+              <Text style={styles.modalButtonText}>{tPerksAndTraits('modal.buttons.cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>

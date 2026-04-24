@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { resolveKitItems } from '../../WeaponsAndArmorScreen/kitResolver.js';
+import { resolveKitItems } from '../../../../domain/kitResolver';
 import styles from '../../../../styles/EquipmentKitModal.styles';
 
 const CATEGORY_LABELS = {
