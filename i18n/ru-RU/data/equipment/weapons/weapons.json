@@ -1008,5 +1008,35 @@
       "without": "",
       "with": ""
     }
+  },
+  {
+    "id": "weapon_unarmed_attack",
+    "name": "Unarmed Attack",
+    "rangeName": "Close",
+    "flavour": "Sometimes your fists are the only weapon you have.",
+    "stockNames": {
+      "without": "",
+      "with": ""
+    }
+  },
+  {
+    "id": "weapon_rock",
+    "name": "Rock",
+    "rangeName": "Close",
+    "flavour": "A simple rock. Primitive, but effective when thrown with enough force.",
+    "stockNames": {
+      "without": "",
+      "with": ""
+    }
+  },
+  {
+    "id": "weapon_pulse_mine",
+    "name": "Pulse Mine",
+    "rangeName": "Medium",
+    "flavour": "A proximity-triggered mine that emits a burst of electromagnetism, devastating to machines.",
+    "stockNames": {
+      "without": "",
+      "with": ""
+    }
   }
 ]

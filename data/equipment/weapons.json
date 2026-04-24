@@ -2483,5 +2483,70 @@
         "qualityId": "quality_blast"
       }
     ]
+  },
+  {
+    "id": "weapon_unarmed_attack",
+    "itemType": "weapon",
+    "damage": 2,
+    "fireRate": 0,
+    "weight": "0",
+    "cost": 0,
+    "rarity": 0,
+    "ammoId": "",
+    "range": "C",
+    "imageName": "Unarmed Attack",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "hasStockVariant": false,
+    "damageType": "physical",
+    "qualities": []
+  },
+  {
+    "id": "weapon_rock",
+    "itemType": "weapon",
+    "damage": 2,
+    "fireRate": 0,
+    "weight": "0.5",
+    "cost": 0,
+    "rarity": 0,
+    "ammoId": "",
+    "range": "C",
+    "imageName": "Rock",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "hasStockVariant": false,
+    "damageType": "physical",
+    "qualities": [
+      {
+        "qualityId": "quality_vicious"
+      },
+      {
+        "qualityId": "quality_thrown"
+      }
+    ]
+  },
+  {
+    "id": "weapon_pulse_mine",
+    "itemType": "weapon",
+    "damage": 9,
+    "fireRate": 0,
+    "weight": "0.5",
+    "cost": 135,
+    "rarity": 3,
+    "ammoId": "",
+    "range": "M",
+    "imageName": "Pulse Mine",
+    "mainAttr": "PER",
+    "mainSkill": "EXPLOSIVES",
+    "hasStockVariant": false,
+    "damageType": "energy",
+    "qualities": [
+      {
+        "qualityId": "quality_mine"
+      },
+      {
+        "qualityId": "quality_blast"
+      }
+    ]
   }
 ]

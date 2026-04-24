@@ -17,7 +17,8 @@
           "specialEffects": [
             { "description": "Один раз за сцену вы можете перебросить 1d20 при проверке Интеллекта." }
           ]
-        }
+        },
+        { "id": "clothing_blouse", "name": "Blouse" }
       ]
     },
     {

@@ -17,7 +17,8 @@
           "specialEffects": [
             { "description": "Once per scene, you may reroll 1d20 on an Intelligence skill test." }
           ]
-        }
+        },
+        { "id": "clothing_blouse", "name": "Blouse" }
       ]
     },
     {
