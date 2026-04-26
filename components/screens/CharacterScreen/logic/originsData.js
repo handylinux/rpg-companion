@@ -1,4 +1,5 @@
-import equipmentKitsData from '../../../../i18n/ru-RU/equipmentKits.json';
+import equipmentKitsData from '../../../../i18n/ru-RU/data/system/equipmentKits.json';
+import { loadOriginsData, tOrigin } from '../../../../domain/traits';
 
 const ORIGIN_IMAGES = {
   brotherhood: require('../../../../assets/origins/brotherhood_of_steel.png'),
@@ -20,32 +21,26 @@ const ORIGIN_IMAGES = {
   savage: require('../../../../assets/origins/savage.png'),
 };
 
-const ORIGIN_DESCRIPTIONS = {
-  childOfAtom: 'Поклонники атомной энергии',
-  vaultDweller: 'Жители подземных убежищ',
-  protectron: 'Старые роботы-охранники',
-  survivor: 'Одиночки, выжившие в пустошах',
-  securitron: 'Боевые роботы с продвинутым вооружением',
-  ghoul: 'Мутанты, устойчивые к радиации',
-  assaultron: 'Элитные боевые роботы с ближним боем',
-  superMutant: 'Мощные мутанты с огромной силой',
-  misterHandy: 'Универсальные сервисные роботы',
-  brotherhoodOutcast: 'Отвергнутые члены Братства',
-  shadow: 'Таинственные агенты подполья',
-  synth: 'Продвинутые андроиды',
-  robobrain: 'Роботы с человеческим мозгом',
-  savage: 'Племенные жители пустошей',
-};
-
 const equipmentKitGroups = equipmentKitsData.equipmentKitGroups || {};
 
-export const ORIGINS = (equipmentKitsData.origins || []).map((origin) => ({
-  id: origin.id,
-  name: origin.name,
-  description: ORIGIN_DESCRIPTIONS[origin.id],
-  image: ORIGIN_IMAGES[origin.id],
-  ...(origin.id === 'robobrain' ? { immunity: { radiation: true, poison: true } } : {}),
-  equipmentKits: (origin.equipmentKits || [])
+// Build ORIGINS from data/origins/origins.json — single source of truth for origin ids/structure.
+// Names come from i18n via tOrigin(id). Equipment kits come from equipmentKits.json.
+export const ORIGINS = loadOriginsData().map((origin) => {
+  const kitIds = origin.equipmentKitIds || [];
+  const equipmentKits = kitIds
     .map((kitId) => ({ id: kitId, ...(equipmentKitGroups[kitId] || {}) }))
-    .filter((kit) => Array.isArray(kit.items)),
-}));
+    .filter((kit) => Array.isArray(kit.items));
+
+  return {
+    id: origin.id,
+    name: tOrigin(origin.id),
+    image: ORIGIN_IMAGES[origin.id] || null,
+    isRobot: origin.isRobot || false,
+    isMutant: origin.isMutant || false,
+    canWearStandardArmor: origin.canWearStandardArmor ?? true,
+    canWearRobotArmor: origin.canWearRobotArmor ?? false,
+    canWearMutantArmor: origin.canWearMutantArmor ?? false,
+    traitIds: origin.traitIds || [],
+    equipmentKits,
+  };
+});

@@ -1,6 +1,7 @@
-import ruEffects from '../i18n/ru-RU/effects.json';
-import enEffects from '../i18n/en-EN/effects.json';
+import ruEffects from '../i18n/ru-RU/data/system/effects.json';
+import enEffects from '../i18n/en-EN/data/system/effects.json';
 import { getCurrentLocale } from '../i18n/locale';
+import { rollCombatDiceEffects } from './diceRollsLogic';
 
 const SCENE_DURATION_MINUTES = 5;
 const SCENE_DURATION_MS = SCENE_DURATION_MINUTES * 60 * 1000;
@@ -22,10 +23,8 @@ const tEffects = (path, vars = {}) => {
     return String(current).replace(/\{\{(\w+)\}\}/g, (_, key) => (vars[key] ?? ''));
 };
 
-const EFFECT_DURATION_KEYS = {
-    NONE: 'none',
-    INSTANT: 'instant',
-};
+const DURATION_LASTING_SCENES = 1;  // lasting = до конца текущей сцены (1 сцена = 5 мин)
+const DURATION_BRIEF_SCENES = 3;    // brief = краткое действие (3 сцены = 15 мин)
 
 const toStringSafe = (value) => (value === undefined || value === null ? '' : String(value).trim());
 
@@ -33,12 +32,20 @@ const normalizeDuration = (rawDuration) => {
     const value = toStringSafe(rawDuration).toLowerCase();
     const localizedNone = tEffects('duration.none').toLowerCase();
     const localizedInstant = tEffects('duration.instant').toLowerCase();
-    if (!value || value === localizedNone || value === EFFECT_DURATION_KEYS.NONE) {
+
+    if (!value || value === localizedNone || value === 'none') {
         return { type: 'none', scenes: 0 };
     }
-
-    if (value === localizedInstant || value === EFFECT_DURATION_KEYS.INSTANT) {
+    if (value === localizedInstant || value === 'instant') {
         return { type: 'instant', scenes: 0 };
+    }
+    // lasting = до конца сцены (1 сцена = 5 мин)
+    if (value === 'lasting') {
+        return { type: 'scene', scenes: DURATION_LASTING_SCENES };
+    }
+    // brief = краткое (3 сцены)
+    if (value === 'brief') {
+        return { type: 'scene', scenes: DURATION_BRIEF_SCENES };
     }
 
     const localizedScene = tEffects('duration.sceneUnit').toLowerCase();
@@ -62,7 +69,7 @@ const normalizeRemovalEffects = (list) => {
         .filter(Boolean);
 };
 
-const buildTimedEffect = ({ effectName, effectLabel, effectKind, scenes, sourceName }) => ({
+const buildTimedEffect = ({ effectName, effectLabel, effectKind, scenes, sourceName, maxHpModifier, damageResistanceModifier }) => ({
     id: `${effectKind}-${effectName}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     effectName,
     effectLabel,
@@ -72,6 +79,8 @@ const buildTimedEffect = ({ effectName, effectLabel, effectKind, scenes, sourceN
     durationMs: Math.max(0, scenes) * SCENE_DURATION_MS,
     expiresAt: Date.now() + (Math.max(0, scenes) * SCENE_DURATION_MS),
     scenesLeft: scenes,
+    ...(maxHpModifier ? { maxHpModifier } : {}),
+    ...(damageResistanceModifier ? { damageResistanceModifier } : {}),
 });
 
 const applyOrStackEffect = (activeEffects, newEffect) => {
@@ -157,6 +166,55 @@ export const getTimedAttributeModifiers = (activeEffects = []) => (
     }, {})
 );
 
+/**
+ * Проверяет возникновение зависимости при приёме препарата.
+ *
+ * Механика: бросаем N Combat Dice (N = дозы за 24 ч),
+ * считаем грани 5 и 6 как "эффекты".
+ * Если effectCount >= addictionLevel → зависимость.
+ *
+ * @param {object} item          — предмет с полем addictionLevel
+ * @param {number} dosesToday    — сколько доз этого препарата принято за 24 ч (включая текущую)
+ * @returns {{ addicted: boolean, effectCount: number, faces: number[], addictionLevel: number }}
+ */
+export const checkAddiction = (item, dosesToday) => {
+    const addictionLevel = Number(item?.addictionLevel) || 0;
+    if (addictionLevel === 0 || !item?.negativeEffect) {
+        return { addicted: false, effectCount: 0, faces: [], addictionLevel: 0 };
+    }
+    const { effectCount, faces } = rollCombatDiceEffects(dosesToday);
+    return {
+        addicted: effectCount >= addictionLevel,
+        effectCount,
+        faces,
+        addictionLevel,
+    };
+};
+
+/**
+ * Применяет removeCondition из предмета к списку условий персонажа.
+ * Например аддиктол: { removeCondition: ["addicted"] }
+ *
+ * @param {object}   item       — предмет с полем positiveEffect.removeCondition
+ * @param {string[]} conditions — текущие условия персонажа
+ * @returns {{ conditions: string[], removed: string[] }}
+ */
+export const applyRemoveConditions = (item, conditions = []) => {
+    const positiveEffect = item?.positiveEffect;
+    if (!positiveEffect || typeof positiveEffect !== 'object') {
+        return { conditions, removed: [] };
+    }
+    const toRemove = Array.isArray(positiveEffect.removeCondition)
+        ? positiveEffect.removeCondition.map(toStringSafe).filter(Boolean)
+        : [];
+    if (toRemove.length === 0) {
+        return { conditions, removed: [] };
+    }
+    const removed = conditions.filter((c) => toRemove.includes(c));
+    const next = conditions.filter((c) => !toRemove.includes(c));
+    return { conditions: next, removed };
+};
+
 export const applyConsumableToEffects = (item, currentEffects = []) => {
     const name = toStringSafe(item?.name || item?.Name);
     let nextEffects = [...currentEffects];
@@ -183,9 +241,51 @@ export const applyConsumableToEffects = (item, currentEffects = []) => {
         }
     }
 
-    const positiveName = toStringSafe(item?.positiveEffect);
-    const positiveLabel = toStringSafe(item?.positiveEffectLabel);
+    const positiveEffectRaw = item?.positiveEffect;
+    const positiveEffectIsObject = positiveEffectRaw !== null && typeof positiveEffectRaw === 'object';
     const positiveDuration = normalizeDuration(item?.positiveEffectDuration);
+
+    // maxHpModifier — timed-эффект на максимальные ОЗ
+    if (positiveEffectIsObject && positiveEffectRaw?.maxHpModifier && positiveDuration.scenes > 0) {
+        const mod = positiveEffectRaw.maxHpModifier;
+        const value = Number(mod?.value) || 0;
+        if (value !== 0) {
+            const effectName = `maxHp:${mod.op}${value}`;
+            nextEffects = applyOrStackEffect(nextEffects, buildTimedEffect({
+                effectName,
+                effectLabel: effectName,
+                effectKind: 'positive',
+                scenes: positiveDuration.scenes,
+                sourceName: name,
+                maxHpModifier: mod,
+            }));
+            events.push(tEffects('events.positiveApplied', { name: effectName, scenes: positiveDuration.scenes }));
+        }
+    }
+
+    // damageResistanceModifier — timed-эффект на сопротивление урону
+    if (positiveEffectIsObject && positiveEffectRaw?.damageResistanceModifier && positiveDuration.scenes > 0) {
+        const drMod = positiveEffectRaw.damageResistanceModifier;
+        for (const [type, mod] of Object.entries(drMod)) {
+            const value = Number(mod?.value) || 0;
+            if (value !== 0) {
+                const effectName = `dr:${type}:${mod.op}${value}`;
+                nextEffects = applyOrStackEffect(nextEffects, buildTimedEffect({
+                    effectName,
+                    effectLabel: effectName,
+                    effectKind: 'positive',
+                    scenes: positiveDuration.scenes,
+                    sourceName: name,
+                    damageResistanceModifier: { type, op: mod.op, value },
+                }));
+                events.push(tEffects('events.positiveApplied', { name: effectName, scenes: positiveDuration.scenes }));
+            }
+        }
+    }
+
+    // Строковый/label positiveEffect — timed-эффект для отображения
+    const positiveName = toStringSafe(item?.positiveEffectLabel || (!positiveEffectIsObject ? positiveEffectRaw : ''));
+    const positiveLabel = toStringSafe(item?.positiveEffectLabel);
 
     if (positiveName && positiveDuration.type !== 'none') {
         if (positiveDuration.type === 'instant') {
@@ -278,6 +378,48 @@ export const getEffectTimeText = (scenesLeft) => {
     return tEffects('display.scenesAndMinutes', { scenes, minutes: totalMinutes });
 };
 
+/**
+ * Возвращает мгновенное количество HP для лечения из предмета.
+ * Читает positiveEffect.hpModifier (chems) или hpHealed (drinks/food).
+ */
+export const getInstantHealAmount = (item) => {
+    if (!item) return 0;
+    const pe = item.positiveEffect;
+    if (pe && typeof pe === 'object' && pe.hpModifier?.op === '+') {
+        return Number(pe.hpModifier.value) || 0;
+    }
+    if (item.hpHealed != null) return Number(item.hpHealed) || 0;
+    if (item.healAmount != null) return Number(item.healAmount) || 0;
+    return 0;
+};
+
+/**
+ * Суммирует бонус к максимальным ОЗ из активных timed-эффектов.
+ */
+export const getTimedMaxHpBonus = (activeEffects = []) =>
+    activeEffects.reduce((sum, effect) => {
+        if (!effect || effect.effectKind !== 'positive') return sum;
+        const mod = effect.maxHpModifier;
+        if (!mod) return sum;
+        const val = Number(mod.value) || 0;
+        return mod.op === '+' ? sum + val : sum - val;
+    }, 0);
+
+/**
+ * Суммирует бонус к сопротивлению урону из активных timed-эффектов.
+ * Возвращает { physical: N, radiation: N, energy: N }
+ */
+export const getTimedDamageResistanceBonus = (activeEffects = []) =>
+    activeEffects.reduce((acc, effect) => {
+        if (!effect || effect.effectKind !== 'positive') return acc;
+        const mod = effect.damageResistanceModifier;
+        if (!mod) return acc;
+        const val = Number(mod.value) || 0;
+        const delta = mod.op === '+' ? val : -val;
+        acc[mod.type] = (acc[mod.type] || 0) + delta;
+        return acc;
+    }, {});
+
 export const SCENE_RULES = {
     SCENE_DURATION_MINUTES,
 };
@@ -285,8 +427,13 @@ export const SCENE_RULES = {
 export default {
     SCENE_RULES,
     applyConsumableToEffects,
+    checkAddiction,
+    applyRemoveConditions,
     advanceEffectsByScene,
     pruneExpiredTimedEffects,
     getTimedAttributeModifiers,
+    getTimedMaxHpBonus,
+    getTimedDamageResistanceBonus,
+    getInstantHealAmount,
     getEffectTimeText,
 };

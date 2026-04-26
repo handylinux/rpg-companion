@@ -4,6 +4,48 @@
 
 import traitsJson from '../data/traits/traits.json';
 import originsJson from '../data/origins/origins.json';
+import ruTraits from '../i18n/ru-RU/data/system/traits.json';
+import enTraits from '../i18n/en-EN/data/system/traits.json';
+import ruOrigins from '../i18n/ru-RU/data/system/origins.json';
+import enOrigins from '../i18n/en-EN/data/system/origins.json';
+import { getCurrentLocale } from '../i18n/locale';
+
+const TRAIT_DICTIONARIES = {
+  'ru-RU': ruTraits,
+  'en-EN': enTraits,
+};
+
+const ORIGIN_DICTIONARIES = {
+  'ru-RU': ruOrigins,
+  'en-EN': enOrigins,
+};
+
+/**
+ * Resolves a dot-separated i18n key like "traits.brotherhood.chainThatBinds.name"
+ * against the current locale's traits dictionary.
+ */
+export function tTrait(key) {
+  if (!key) return '';
+  const locale = getCurrentLocale();
+  const dict = TRAIT_DICTIONARIES[locale] || ruTraits;
+  const parts = key.split('.');
+  let current = dict;
+  for (const part of parts) {
+    current = current?.[part];
+    if (current === undefined) return key;
+  }
+  return typeof current === 'string' ? current : key;
+}
+
+/**
+ * Returns the localized display name for an origin by its id.
+ */
+export function tOrigin(id) {
+  if (!id) return '';
+  const locale = getCurrentLocale();
+  const dict = ORIGIN_DICTIONARIES[locale] || ruOrigins;
+  return dict[id] || id;
+}
 
 // ---------------------------------------------------------------------------
 // Data loaders
@@ -150,35 +192,31 @@ export function getTraitExtraSkills(trait) {
  */
 export function getTraitDescriptionKey(trait) {
   if (!trait) return '';
-
-  // Try to find the canonical data entry
   const dataEntry = findTraitByName(trait.name) || findTraitById(trait.id);
-  if (dataEntry?.descriptionKey) return dataEntry.descriptionKey;
-
-  // Fallback: trait object may carry descriptionKey directly
-  return trait.descriptionKey || '';
+  const key = dataEntry?.descriptionKey || trait.descriptionKey || '';
+  return tTrait(key) || key;
 }
 
-/**
- * Returns the i18n key for the trait's display name.
- *
- * @param {object} trait - runtime or data trait object
- * @returns {string} i18n key, or empty string if not found
- */
 export function getTraitNameKey(trait) {
   if (!trait) return '';
   const dataEntry = findTraitByName(trait.name) || findTraitById(trait.id);
-  if (dataEntry?.displayNameKey) return dataEntry.displayNameKey;
-  return trait.displayNameKey || '';
+  const key = dataEntry?.displayNameKey || trait.displayNameKey || '';
+  return tTrait(key) || key;
 }
 
 /**
- * Returns the trait description i18n key for UI display.
- * The UI can pass this key to t() directly.
- *
- * @param {object} trait - runtime or data trait object
- * @returns {string}
+ * Returns fully resolved { name, description } for a trait by id,
+ * using the current locale.
  */
+export function getTraitI18n(id) {
+  const dataEntry = findTraitById(id);
+  if (!dataEntry) return { name: id, description: '' };
+  return {
+    name: tTrait(dataEntry.displayNameKey),
+    description: tTrait(dataEntry.descriptionKey),
+  };
+}
+
 export function getTraitDisplayDescription(trait) {
   return getTraitDescriptionKey(trait);
 }

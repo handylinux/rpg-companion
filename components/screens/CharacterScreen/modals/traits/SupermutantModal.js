@@ -1,33 +1,12 @@
 import React from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
-import { TRAITS } from '../../logic/traitsData';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Супермутант',
-  modalType: 'info'
-};
+export const traitConfig = { originId: 'superMutant', modalType: 'info' };
 
 const SupermutantModal = ({ visible, onSelect, onClose, infoOnly = false }) => {
-  const trait = {
-    name: "Принудительная эволюция",
-    description: "Ваши начальные атрибуты Сила и Выносливость увеличены на +2 каждый, а максимальные значения Силы и Выносливости увеличены до 12, при этом максимальные значения Интеллекта и Харизмы снижены до 6. Все ваши навыки не могут быть выше 4-го ранга. Вы обладаете полным иммунитетом к повреждениям от радиации и яда. Кажется, что вы не стареете, но вы бесплодны. Вы можете носить только ту броню, что сделана для супермутанта.",
-    attributeModifiers: {
-      'STR': 2,
-      'END': 2,
-    },
-    minLimits: {
-      'STR': 6,
-      'END': 6
-    },
-    maxLimits: {
-      'STR': 12,
-      'END': 12,
-      'CHA': 6,
-      'INT': 6
-    },
-    skillMaxValue: 4
-  };
+  const { name, description } = getTraitI18n('supermutant-forced-evolution');
 
   const handleConfirm = () => {
     if (infoOnly) {
@@ -35,18 +14,12 @@ const SupermutantModal = ({ visible, onSelect, onClose, infoOnly = false }) => {
       return;
     }
 
-    onSelect(trait.name, { 
-      attributes: trait.attributeModifiers,
-      minLimits: trait.minLimits,
-      maxLimits: trait.maxLimits,
-      skillMaxValue: trait.skillMaxValue,
-      effects: [
-        'Иммунитет к радиации',
-        'Иммунитет к яду',
-        'Нестареющий',
-        'Бесплодие',
-        'Ограниченная броня'
-      ]
+    onSelect(name, {
+      attributes: { 'STR': 2, 'END': 2 },
+      minLimits: { 'STR': 6, 'END': 6 },
+      maxLimits: { 'STR': 12, 'END': 12, 'CHA': 6, 'INT': 6 },
+      skillMaxValue: 4,
+      effects: ['Иммунитет к радиации', 'Иммунитет к яду', 'Нестареющий', 'Бесплодие', 'Ограниченная броня']
     });
   };
 
@@ -60,9 +33,9 @@ const SupermutantModal = ({ visible, onSelect, onClose, infoOnly = false }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Супермутант</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
+          <Text style={styles.traitName}>{name}</Text>
           
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          {renderTextWithIcons(description, styles.modalText)}
           
           <TouchableOpacity
             style={[styles.modalButton, styles.confirmButton]}

@@ -1,31 +1,21 @@
 import React, { useState } from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
-import { TRAITS } from '../../logic/traitsData';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Минитмен',
-  traitName: 'Народное ополчение',
-  modalType: 'choice'
-};
+export const traitConfig = { originId: 'minuteman', traitName: 'Народное ополчение', modalType: 'choice' };
+
+const SELECTABLE_SKILLS = ['Стрелковое оружие', 'Выживание', 'Красноречие'];
 
 const MinutemanModal = ({ visible, onSelect, onClose }) => {
   const [selectedSkill, setSelectedSkill] = useState(null);
-  
-  const traitName = 'Народное ополчение';
-  const trait = TRAITS[traitName];
-
-  const handleSelectSkill = (skill) => {
-    setSelectedSkill(skill);
-  };
+  const { name: traitName, description } = getTraitI18n('minuteman-peoples-militia');
 
   const handleConfirm = () => {
     if (!selectedSkill) return;
-    
     onSelect(traitName, {
       forcedSkills: [selectedSkill],
       extraSkills: 1,
-      effects: trait.effects
     });
     onClose();
   };
@@ -41,17 +31,17 @@ const MinutemanModal = ({ visible, onSelect, onClose }) => {
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Минитмен</Text>
           <Text style={styles.traitName}>{traitName}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
-          
-          {trait.forcedSkills?.map(skill => (
+          {renderTextWithIcons(description, styles.modalText)}
+
+          {SELECTABLE_SKILLS.map(skill => (
             <TouchableOpacity
               key={skill}
               style={[
-                styles.modalButton, 
+                styles.modalButton,
                 styles.skillOption,
                 selectedSkill === skill && styles.selectedSkillOption
               ]}
-              onPress={() => handleSelectSkill(skill)}
+              onPress={() => setSelectedSkill(skill)}
             >
               <Text style={styles.buttonText}>{skill}</Text>
             </TouchableOpacity>

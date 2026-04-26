@@ -97,13 +97,13 @@ const DATA_TABLES = [
 
 export async function initDatabase() {
   const meta = await readMeta();
-  const storedVersion = meta.version ? Number(meta.version) : 0;
+  const storedVersion = meta.seeded_version ? Number(meta.seeded_version) : (meta.version ? Number(meta.version) : 0);
 
   if (storedVersion !== SCHEMA_VERSION) {
     for (const t of DATA_TABLES) {
       await AsyncStorage.removeItem(PREFIX + t);
     }
-    await writeMeta({ version: String(SCHEMA_VERSION) });
+    await writeMeta({ version: String(SCHEMA_VERSION), seeded_version: String(SCHEMA_VERSION) });
     return true;
   }
   return false;

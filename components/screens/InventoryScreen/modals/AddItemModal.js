@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, FlatList, SafeAreaView, TextInput } from 'react-native';
 import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
-import { getWeaponById, getWeapons } from '../../../../db';
+import { getWeaponById, getWeapons, getRowCount } from '../../../../db';
 import { tInventory } from '../logic/inventoryI18n';
 import { useLocale } from '../../../../i18n/locale';
 import styles from '../../../../styles/AddItemModal.styles';
@@ -14,6 +14,7 @@ const CATEGORY_ICONS = {
   food: '🍖',
   drinks: '🥤',
   chems: '💊',
+  items: '🔧',
   materials: '🧰',
 };
 
@@ -38,27 +39,47 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
 
     const loadWeaponsFromDb = async () => {
       try {
+        // Fallback to catalog if DB is empty (not yet seeded)
+        const dbCount = await getRowCount('weapons').catch(() => 0);
+        const catalog = getEquipmentCatalog(locale);
+
+        if (!dbCount) {
+          // Use catalog directly
+          const grouped = {};
+          const typeMap = Object.fromEntries(
+            Object.entries(mapWeaponTypeToDbValue).map(([k, v]) => [v.toLowerCase(), k])
+          );
+          for (const weapon of catalog.weapons || []) {
+            const groupKey = typeMap[(weapon.weaponType || weapon.weapon_type || '').toLowerCase()];
+            if (!groupKey) continue;
+            const label = tInventory(`modals.addItemModal.weaponTypeLabels.${groupKey}`);
+            if (!grouped[label]) grouped[label] = [];
+            grouped[label].push({ ...weapon, itemType: 'weapon' });
+          }
+          Object.keys(grouped).forEach((k) => grouped[k].sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))));
+          if (!cancelled) setWeaponsByType(grouped);
+          return;
+        }
+
         const entries = await Promise.all(
           Object.entries(mapWeaponTypeToDbValue).map(async ([groupKey, weaponType]) => {
-            // 1) Получаем список оружия по weapon_type
             const weaponsByTypeList = await getWeapons(weaponType);
-            const weaponIds = weaponsByTypeList
-              .map((weapon) => weapon?.id)
-              .filter(Boolean);
-
-            // 2) Получаем каждую пушку по id
+            const weaponIds = weaponsByTypeList.map((w) => w?.id).filter(Boolean);
             const weaponsById = await Promise.all(weaponIds.map((id) => getWeaponById(id)));
             const normalizedWeapons = weaponsById
               .filter(Boolean)
-              .map((weapon) => ({
-                ...weapon,
-                weaponType: weapon.weapon_type || weapon.weaponType,
-                itemType: 'weapon',
-                // 3) Для отображения используем name
-                name: weapon.name,
-              }))
+              .map((weapon) => {
+                // Merge with catalog to get qualities array and other structured fields
+                const catalogEntry = (catalog.weapons || []).find((w) => w.id === weapon.id);
+                return {
+                  ...weapon,
+                  ...(catalogEntry ? { qualities: catalogEntry.qualities, damageType: catalogEntry.damageType } : {}),
+                  weaponType: weapon.weapon_type || weapon.weaponType,
+                  itemType: 'weapon',
+                  name: weapon.name,
+                };
+              })
               .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
-
             return [groupKey, normalizedWeapons];
           })
         );
@@ -74,9 +95,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
 
         setWeaponsByType(groupedWeapons);
       } catch (error) {
-        if (!cancelled) {
-          setWeaponsByType({});
-        }
+        if (!cancelled) setWeaponsByType({});
       }
     };
 
@@ -101,14 +120,17 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
       [tInventory('modals.addItemModal.categories.ammo')]: {
         [tInventory('modals.addItemModal.categories.all')]: Array.isArray(equipmentCatalog.ammoData) ? equipmentCatalog.ammoData : [],
       },
-      [tInventory('modals.addItemModal.categories.food')]: {
-        [tInventory('modals.addItemModal.categories.all')]: [],
-      },
       [tInventory('modals.addItemModal.categories.drinks')]: {
         [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.drinks || [],
       },
       [tInventory('modals.addItemModal.categories.chems')]: {
         [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.chems || [],
+      },
+      [tInventory('modals.addItemModal.categories.food')]: {
+        [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.food || [],
+      },
+      [tInventory('modals.addItemModal.categories.items')]: {
+        [tInventory('modals.addItemModal.categories.all')]: equipmentCatalog.generalGoods || [],
       },
       [tInventory('modals.addItemModal.categories.materials')]: {
         [tInventory('modals.addItemModal.categories.all')]: [],
@@ -165,7 +187,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
       Object.values(allData[tInventory('modals.addItemModal.categories.clothing')] || {}).forEach((items) => Array.isArray(items) && allItems.push(...items));
 
       const allLabel = tInventory('modals.addItemModal.categories.all');
-      const categoryKeys = ['ammo', 'chems', 'drinks'].map((key) => tInventory(`modals.addItemModal.categories.${key}`));
+      const categoryKeys = ['ammo', 'chems', 'drinks', 'food', 'items'].map((key) => tInventory(`modals.addItemModal.categories.${key}`));
       categoryKeys.forEach((category) => {
         if (allData[category]?.[allLabel]) {
           allItems.push(...allData[category][allLabel]);

@@ -1,8 +1,8 @@
-{
+﻿{
   "origins": [
     {
       "id": "brotherhood",
-      "name": "Братство Стали",
+      "name": "Р‘СЂР°С‚СЃС‚РІРѕ РЎС‚Р°Р»Рё",
       "equipmentKits": [
         "brotherhood_initiate",
         "brotherhood_scribe"
@@ -10,7 +10,7 @@
     },
     {
       "id": "ncr",
-      "name": "Житель НКР",
+      "name": "Р–РёС‚РµР»СЊ РќРљР ",
       "equipmentKits": [
         "ncr_infantry",
         "ncr_caravaneer",
@@ -19,7 +19,7 @@
     },
     {
       "id": "minuteman",
-      "name": "Минитмен",
+      "name": "РњРёРЅРёС‚РјРµРЅ",
       "equipmentKits": [
         "minuteman_shooter",
         "minuteman_skirmisher"
@@ -27,7 +27,7 @@
     },
     {
       "id": "childOfAtom",
-      "name": "Дитя Атома",
+      "name": "Р”РёС‚СЏ РђС‚РѕРјР°",
       "equipmentKits": [
         "atom_missionary",
         "atom_zealot"
@@ -35,7 +35,7 @@
     },
     {
       "id": "vaultDweller",
-      "name": "Обитатель убежища",
+      "name": "РћР±РёС‚Р°С‚РµР»СЊ СѓР±РµР¶РёС‰Р°",
       "equipmentKits": [
         "vault_security",
         "vault_resident"
@@ -43,7 +43,7 @@
     },
     {
       "id": "ghoul",
-      "name": "Гуль",
+      "name": "Р“СѓР»СЊ",
       "equipmentKits": [
         "wastelander_mercenary",
         "wastelander_settler",
@@ -54,7 +54,7 @@
     },
     {
       "id": "survivor",
-      "name": "Выживший",
+      "name": "Р’С‹Р¶РёРІС€РёР№",
       "equipmentKits": [
         "wastelander_mercenary",
         "wastelander_settler",
@@ -65,7 +65,7 @@
     },
     {
       "id": "superMutant",
-      "name": "Супермутант",
+      "name": "РЎСѓРїРµСЂРјСѓС‚Р°РЅС‚",
       "equipmentKits": [
         "supermutant_bruiser",
         "supermutant_skirmisher"
@@ -73,7 +73,7 @@
     },
     {
       "id": "brotherhoodOutcast",
-      "name": "Изгой Братства Стали",
+      "name": "РР·РіРѕР№ Р‘СЂР°С‚СЃС‚РІР° РЎС‚Р°Р»Рё",
       "equipmentKits": [
         "outcast_former_knight",
         "outcast_former_scribe"
@@ -81,28 +81,28 @@
     },
     {
       "id": "robobrain",
-      "name": "Робомозг",
+      "name": "Р РѕР±РѕРјРѕР·Рі",
       "equipmentKits": [
         "robobrain_hypnotron"
       ]
     },
     {
       "id": "securitron",
-      "name": "Секьюритрон",
+      "name": "РЎРµРєСЊСЋСЂРёС‚СЂРѕРЅ",
       "equipmentKits": [
         "default_caps_only"
       ]
     },
     {
       "id": "assaultron",
-      "name": "Штурмотрон",
+      "name": "РЁС‚СѓСЂРјРѕС‚СЂРѕРЅ",
       "equipmentKits": [
         "default_caps_only"
       ]
     },
     {
       "id": "misterHandy",
-      "name": "Мистер Помощник",
+      "name": "РњРёСЃС‚РµСЂ РџРѕРјРѕС‰РЅРёРє",
       "equipmentKits": [
         "mister_handy_assistant",
         "mister_handy_brave",
@@ -113,28 +113,28 @@
     },
     {
       "id": "protectron",
-      "name": "Протектрон",
+      "name": "РџСЂРѕС‚РµРєС‚СЂРѕРЅ",
       "equipmentKits": [
         "default_caps_only"
       ]
     },
     {
       "id": "shadow",
-      "name": "Тень",
+      "name": "РўРµРЅСЊ",
       "equipmentKits": [
         "default_caps_only"
       ]
     },
     {
       "id": "synth",
-      "name": "Синт",
+      "name": "РЎРёРЅС‚",
       "equipmentKits": [
         "default_caps_only"
       ]
     },
     {
       "id": "savage",
-      "name": "Дикарь",
+      "name": "Р”РёРєР°СЂСЊ",
       "equipmentKits": [
         "default_caps_only"
       ]
@@ -142,7 +142,7 @@
   ],
   "equipmentKitGroups": {
     "brotherhood_initiate": {
-      "name": "Комплект Посвященного",
+      "name": "РљРѕРјРїР»РµРєС‚ РџРѕСЃРІСЏС‰РµРЅРЅРѕРіРѕ",
       "items": [
         {
           "type": "fixed",
@@ -192,13 +192,13 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_holotags",
+          "itemId": "item_holotags",
           "itemType": "misc"
         }
       ]
     },
     "brotherhood_scribe": {
-      "name": "Комплект Писца",
+      "name": "РљРѕРјРїР»РµРєС‚ РџРёСЃС†Р°",
       "items": [
         {
           "type": "fixed",
@@ -248,13 +248,13 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_holotags",
+          "itemId": "item_holotags",
           "itemType": "misc"
         }
       ]
     },
     "ncr_infantry": {
-      "name": "Пехотинец НКР",
+      "name": "РџРµС…РѕС‚РёРЅРµС† РќРљР ",
       "items": [
         {
           "type": "fixed",
@@ -346,7 +346,7 @@
       ]
     },
     "ncr_caravaneer": {
-      "name": "Багровый караванщик",
+      "name": "Р‘Р°РіСЂРѕРІС‹Р№ РєР°СЂР°РІР°РЅС‰РёРє",
       "items": [
         {
           "type": "fixed",
@@ -415,7 +415,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_pack_brahmin",
+          "itemId": "item_pack_brahmin",
           "itemType": "misc"
         },
         {
@@ -447,7 +447,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_playing_cards",
+          "itemId": "item_playing_cards",
           "itemType": "misc"
         },
         {
@@ -463,7 +463,7 @@
       ]
     },
     "ncr_marksman": {
-      "name": "Меткий стрелок НКР",
+      "name": "РњРµС‚РєРёР№ СЃС‚СЂРµР»РѕРє РќРљР ",
       "items": [
         {
           "type": "fixed",
@@ -500,13 +500,13 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_us_special_ops_manual",
+          "itemId": "item_us_special_ops_manual",
           "itemType": "misc"
         }
       ]
     },
     "minuteman_shooter": {
-      "name": "Стрелок Минитмен",
+      "name": "РЎС‚СЂРµР»РѕРє РњРёРЅРёС‚РјРµРЅ",
       "items": [
         {
           "type": "fixed",
@@ -588,7 +588,7 @@
       ]
     },
     "minuteman_skirmisher": {
-      "name": "Застрельщик Минитмен",
+      "name": "Р—Р°СЃС‚СЂРµР»СЊС‰РёРє РњРёРЅРёС‚РјРµРЅ",
       "items": [
         {
           "type": "fixed",
@@ -662,7 +662,7 @@
       ]
     },
     "atom_missionary": {
-      "name": "Миссионер Атома",
+      "name": "РњРёСЃСЃРёРѕРЅРµСЂ РђС‚РѕРјР°",
       "items": [
         {
           "type": "fixed",
@@ -710,7 +710,7 @@
       ]
     },
     "atom_zealot": {
-      "name": "Зилот Атома",
+      "name": "Р—РёР»РѕС‚ РђС‚РѕРјР°",
       "items": [
         {
           "type": "choice",
@@ -761,7 +761,7 @@
       ]
     },
     "vault_security": {
-      "name": "Охранник Убежища",
+      "name": "РћС…СЂР°РЅРЅРёРє РЈР±РµР¶РёС‰Р°",
       "items": [
         {
           "type": "fixed",
@@ -804,13 +804,13 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_pipboy",
+          "itemId": "item_pip_boy",
           "itemType": "misc"
         }
       ]
     },
     "vault_resident": {
-      "name": "Житель Убежища",
+      "name": "Р–РёС‚РµР»СЊ РЈР±РµР¶РёС‰Р°",
       "items": [
         {
           "type": "fixed",
@@ -844,7 +844,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_pipboy",
+          "itemId": "item_pip_boy",
           "itemType": "misc"
         },
         {
@@ -855,7 +855,7 @@
       ]
     },
     "wastelander_mercenary": {
-      "name": "Наемник Пустоши",
+      "name": "РќР°РµРјРЅРёРє РџСѓСЃС‚РѕС€Рё",
       "items": [
         {
           "type": "fixed",
@@ -957,7 +957,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_settlement_job_posting",
+          "itemId": "item_settlement_job_posting",
           "itemType": "misc"
         },
         {
@@ -968,7 +968,7 @@
       ]
     },
     "wastelander_settler": {
-      "name": "Поселенец Пустоши",
+      "name": "РџРѕСЃРµР»РµРЅРµС† РџСѓСЃС‚РѕС€Рё",
       "items": [
         {
           "type": "fixed",
@@ -1036,7 +1036,7 @@
       ]
     },
     "wastelander_wanderer": {
-      "name": "Путешественник Пустоши",
+      "name": "РџСѓС‚РµС€РµСЃС‚РІРµРЅРЅРёРє РџСѓСЃС‚РѕС€Рё",
       "items": [
         {
           "type": "fixed",
@@ -1108,7 +1108,7 @@
       ]
     },
     "wastelander_raider": {
-      "name": "Рейдер Пустоши",
+      "name": "Р РµР№РґРµСЂ РџСѓСЃС‚РѕС€Рё",
       "items": [
         {
           "type": "fixed",
@@ -1190,7 +1190,7 @@
       ]
     },
     "wastelander_trader": {
-      "name": "Торговец Пустоши",
+      "name": "РўРѕСЂРіРѕРІРµС† РџСѓСЃС‚РѕС€Рё",
       "items": [
         {
           "type": "fixed",
@@ -1254,7 +1254,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_pack_brahmin",
+          "itemId": "item_pack_brahmin",
           "itemType": "misc"
         },
         {
@@ -1265,7 +1265,7 @@
       ]
     },
     "supermutant_bruiser": {
-      "name": "Громила",
+      "name": "Р“СЂРѕРјРёР»Р°",
       "items": [
         {
           "type": "fixed",
@@ -1329,7 +1329,7 @@
       ]
     },
     "supermutant_skirmisher": {
-      "name": "Застрельщик Супермутантов",
+      "name": "Р—Р°СЃС‚СЂРµР»СЊС‰РёРє РЎСѓРїРµСЂРјСѓС‚Р°РЅС‚РѕРІ",
       "items": [
         {
           "type": "fixed",
@@ -1388,7 +1388,7 @@
       ]
     },
     "outcast_former_knight": {
-      "name": "Бывший рыцарь",
+      "name": "Р‘С‹РІС€РёР№ СЂС‹С†Р°СЂСЊ",
       "items": [
         {
           "type": "fixed",
@@ -1431,7 +1431,7 @@
       ]
     },
     "outcast_former_scribe": {
-      "name": "Бывший писец",
+      "name": "Р‘С‹РІС€РёР№ РїРёСЃРµС†",
       "items": [
         {
           "type": "fixed",
@@ -1454,7 +1454,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "misc_multitool",
+          "itemId": "item_multi_tool",
           "itemType": "misc"
         },
         {
@@ -1474,7 +1474,7 @@
       ]
     },
     "robobrain_hypnotron": {
-      "name": "Гипнотрон",
+      "name": "Р“РёРїРЅРѕС‚СЂРѕРЅ",
       "items": [
         {
           "type": "fixed",
@@ -1511,7 +1511,7 @@
       ]
     },
     "default_caps_only": {
-      "name": "Стартовый капитал",
+      "name": "РЎС‚Р°СЂС‚РѕРІС‹Р№ РєР°РїРёС‚Р°Р»",
       "items": [
         {
           "type": "fixed",
@@ -1521,7 +1521,7 @@
       ]
     },
     "mister_handy_assistant": {
-      "name": "Мистер Помощник",
+      "name": "РњРёСЃС‚РµСЂ РџРѕРјРѕС‰РЅРёРє",
       "items": [
         {
           "type": "fixed",
@@ -1567,7 +1567,7 @@
       ]
     },
     "mister_handy_brave": {
-      "name": "Мистер Храбрец",
+      "name": "РњРёСЃС‚РµСЂ РҐСЂР°Р±СЂРµС†",
       "items": [
         {
           "type": "fixed",
@@ -1614,7 +1614,7 @@
       ]
     },
     "mister_handy_nanny": {
-      "name": "Мисс Няня",
+      "name": "РњРёСЃСЃ РќСЏРЅСЏ",
       "items": [
         {
           "type": "fixed",
@@ -1698,7 +1698,7 @@
       ]
     },
     "mister_handy_medic": {
-      "name": "Медбрат Помощник",
+      "name": "РњРµРґР±СЂР°С‚ РџРѕРјРѕС‰РЅРёРє",
       "items": [
         {
           "type": "choice",
@@ -1784,7 +1784,7 @@
       ]
     },
     "mister_handy_farmer": {
-      "name": "Мистер Фермер",
+      "name": "РњРёСЃС‚РµСЂ Р¤РµСЂРјРµСЂ",
       "items": [
         {
           "type": "fixed",
@@ -1814,7 +1814,7 @@
         },
         {
           "type": "fixed",
-          "itemId": "robot_item_fertilizer_bag",
+          "itemId": "item_fertilizer_bag",
           "itemType": "misc"
         },
         {

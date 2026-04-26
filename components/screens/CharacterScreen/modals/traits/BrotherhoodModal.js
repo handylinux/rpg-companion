@@ -1,29 +1,20 @@
-// components/modals/BrotherhoodModal.js
 import React, { useState } from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
-import { TRAITS } from '../../logic/traitsData';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Братство Стали',
-  modalType: 'choice'
-};
+export const traitConfig = { originId: 'brotherhood', modalType: 'choice' };
+
+const SELECTABLE_SKILLS = ['Энергооружие', 'Наука', 'Ремонт'];
 
 const BrotherhoodModal = ({ visible, onSelect, onClose }) => {
   const [selectedSkill, setSelectedSkill] = useState(null);
-
-  const traitName = 'Цепь, которая связывает';
-  const trait = TRAITS[traitName];
-
-  const handleSelectSkill = (skill) => {
-    setSelectedSkill(skill);
-  };
+  const { name: traitName, description } = getTraitI18n('brotherhood-chain-that-binds');
 
   const handleConfirm = () => {
-    // Теперь передаем и выбранный навык, и информацию о доп. навыке
-    onSelect('Цепь, которая связывает', { 
+    onSelect(traitName, {
       forcedSkills: selectedSkill ? [selectedSkill] : [],
-      extraSkills: 1 
+      extraSkills: 1
     });
     onClose();
   };
@@ -38,11 +29,11 @@ const BrotherhoodModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Братство Стали</Text>
-          <Text style={styles.traitName}>{trait.name || traitName}</Text>
+          <Text style={styles.traitName}>{traitName}</Text>
           
-          {trait.description && renderTextWithIcons(trait.description, styles.modalText)}
+          {renderTextWithIcons(description, styles.modalText)}
 
-          {trait.forcedSkills?.map(skill => (
+          {SELECTABLE_SKILLS.map(skill => (
             <TouchableOpacity
               key={skill}
               style={[
@@ -50,7 +41,7 @@ const BrotherhoodModal = ({ visible, onSelect, onClose }) => {
                 styles.skillOption,
                 selectedSkill === skill && styles.selectedSkillOption
               ]}
-              onPress={() => handleSelectSkill(skill)}
+              onPress={() => setSelectedSkill(skill)}
             >
               <Text style={styles.buttonText}>{skill}</Text>
             </TouchableOpacity>

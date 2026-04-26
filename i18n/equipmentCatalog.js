@@ -1,7 +1,6 @@
 // Locale-specific display data (names, descriptions, flavour text)
 import ruWeapons from './ru-RU/data/equipment/weapons/weapons.json';
 import ruWeaponMods from './ru-RU/data/equipment/weapons/weapon_mods.json';
-import ruModsOverrides from './ru-RU/data/equipment/weapons/mods_overrides.json';
 import ruArmor from './ru-RU/data/equipment/armor/armor.json';
 import ruArmorMods from './ru-RU/data/equipment/armor/armor_mods.json';
 import ruUniqArmorMods from './ru-RU/data/equipment/armor/uniq_armor_mods.json';
@@ -17,13 +16,14 @@ import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
 import ruRobotPartsUpgrade from './ru-RU/data/equipment/robot/partsUpgrade.json';
 import ruChems from './ru-RU/data/consumables/chems.json';
 import ruDrinks from './ru-RU/data/consumables/drinks.json';
+import ruFood from './ru-RU/data/consumables/food.json';
 import ruQualities from './ru-RU/data/system/qualities.json';
+import ruGeneralGoods from './ru-RU/data/equipment/general_goods.json';
 import ruEffects from './ru-RU/data/system/effects.json';
 import ruEquipmentKits from './ru-RU/data/system/equipmentKits.json';
 
 import enWeapons from './en-EN/data/equipment/weapons/weapons.json';
 import enWeaponMods from './en-EN/data/equipment/weapons/weapon_mods.json';
-import enModsOverrides from './en-EN/data/equipment/weapons/mods_overrides.json';
 import enArmor from './en-EN/data/equipment/armor/armor.json';
 import enArmorMods from './en-EN/data/equipment/armor/armor_mods.json';
 import enUniqArmorMods from './en-EN/data/equipment/armor/uniq_armor_mods.json';
@@ -39,7 +39,9 @@ import enRobotItems from './en-EN/data/equipment/robot/items.json';
 import enRobotPartsUpgrade from './en-EN/data/equipment/robot/partsUpgrade.json';
 import enChems from './en-EN/data/consumables/chems.json';
 import enDrinks from './en-EN/data/consumables/drinks.json';
+import enFood from './en-EN/data/consumables/food.json';
 import enQualities from './en-EN/data/system/qualities.json';
+import enGeneralGoods from './en-EN/data/equipment/general_goods.json';
 import enEffects from './en-EN/data/system/effects.json';
 import enEquipmentKits from './en-EN/data/system/equipmentKits.json';
 
@@ -55,6 +57,10 @@ import dataAmmo from '../data/equipment/ammo.json';
 import dataRobotParts from '../data/equipment/robotparts.json';
 import dataChems from '../data/consumables/chems.json';
 import dataDrinks from '../data/consumables/drinks.json';
+import dataFood from '../data/consumables/food.json';
+import dataWeaponModSlots from '../data/equipment/weapon_mod_slots.json';
+import dataRobotWeapons from '../data/equipment/robot_weapons.json';
+import dataGeneralGoods from '../data/equipment/general_goods.json';
 
 import { getCurrentLocale, normalizeLocale } from './locale';
 
@@ -66,7 +72,6 @@ const EQUIPMENT_BY_LOCALE = {
     qualities: ruQualities,
     effects: ruEffects,
     equipmentKits: ruEquipmentKits,
-    modsOverrides: ruModsOverrides,
     armor: ruArmor,
     armorMods: ruArmorMods,
     uniqArmorMods: ruUniqArmorMods,
@@ -74,7 +79,9 @@ const EQUIPMENT_BY_LOCALE = {
     clothes: ruClothes,
     chems: ruChems,
     drinks: ruDrinks,
+    food: ruFood,
     miscellaneous: ruMiscItems,
+    generalGoods: ruGeneralGoods,
     ammoData: ruAmmoData,
     robotWeapons: ruRobotWeapons,
     robotArmor: ruRobotArmor,
@@ -89,7 +96,6 @@ const EQUIPMENT_BY_LOCALE = {
     qualities: enQualities,
     effects: enEffects,
     equipmentKits: enEquipmentKits,
-    modsOverrides: enModsOverrides,
     armor: enArmor,
     armorMods: enArmorMods,
     uniqArmorMods: enUniqArmorMods,
@@ -97,7 +103,9 @@ const EQUIPMENT_BY_LOCALE = {
     clothes: enClothes,
     chems: enChems,
     drinks: enDrinks,
+    food: enFood,
     miscellaneous: enMiscItems,
+    generalGoods: enGeneralGoods,
     ammoData: enAmmoData,
     robotWeapons: enRobotWeapons,
     robotArmor: enRobotArmor,
@@ -158,7 +166,7 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
 
   // Weapons: merge data/ stats with i18n names/flavour
   const weapons = mergeById(dataWeapons, i18n.weapons).map((w) => ({ ...w, itemType: 'weapon' }));
-  const robotWeapons = (i18n.robotWeapons || []).map((w) => ({ ...w, itemType: 'weapon' }));
+  const robotWeapons = mergeById(dataRobotWeapons, i18n.robotWeapons || []).map((w) => ({ ...w, itemType: 'weapon' }));
   const allWeapons = [...weapons, ...robotWeapons];
 
   // Armor: i18n file has {armor:[{type, categoryKey, items}]}, data file has allowedModCategories per categoryKey
@@ -192,6 +200,9 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
   const mergedAmmo = mergeById(dataAmmo, i18n.ammoTypes);
   const mergedChems = mergeById(dataChems, i18n.chems);
   const mergedDrinks = mergeById(dataDrinks, i18n.drinks);
+  const mergedFood = mergeById(dataFood, i18n.food);
+  const mergedGeneralGoods = mergeById(dataGeneralGoods, i18n.generalGoods || []);
+  const mergedRobotPartsUpgrade = mergeById(dataRobotParts.robotPartsUpgrade || [], i18n.robotPartsUpgrade || []);
   const mergedWeaponMods = mergeById(dataWeaponMods, i18n.weaponMods);
   const mergedArmorMods = mergeById(dataArmorMods, i18n.armorMods);
   const mergedUniqArmorMods = mergeById(dataUniqArmorMods, i18n.uniqArmorMods);
@@ -208,13 +219,16 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
     ammoTypes: mergedAmmo,
     chems: validateConsumablesContract(mergedChems, ['chem'], 'chem'),
     drinks: validateConsumablesContract(mergedDrinks, ['drinks'], 'drinks'),
+    food: validateConsumablesContract(mergedFood, ['food'], 'food'),
+    generalGoods: mergedGeneralGoods,
     weaponMods: mergedWeaponMods,
     armorMods: mergedArmorMods,
     uniqArmorMods: mergedUniqArmorMods,
+    modsOverrides: dataWeaponModSlots,
     armorEffects: dataArmorEffects,
     robotModules: Array.isArray(i18n.robotModules) ? i18n.robotModules : [],
     robotItems: Array.isArray(i18n.robotItems) ? i18n.robotItems : [],
-    robotPartsUpgrade: Array.isArray(i18n.robotPartsUpgrade) ? i18n.robotPartsUpgrade : [],
+    robotPartsUpgrade: mergedRobotPartsUpgrade,
   };
 };
 

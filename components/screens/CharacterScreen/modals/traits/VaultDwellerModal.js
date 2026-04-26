@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, ScrollView } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Обитатель убежища',
-  modalType: 'choice'
-};
+export const traitConfig = { originId: 'vaultDweller', modalType: 'choice' };
 
 const VaultDwellerModal = ({ visible, onSelect, onClose, skills }) => {
-  const trait = {
-    name: "Ребенок из Убежища",
-    description: "Ваше здоровое начало жизни, полученное от опытных врачей и высокотехнологичных автодоков, снижает сложность всех проверок на ВЫН и позволяет противостоять эффектам болезней. Кроме того, благодаря тщательно спланированному воспитанию вы получаете один дополнительный отмеченный навык на выбор. Вы также можете вместе с Гейм-мастером определить, что за эксперимент проводился в вашем Убежище. Один раз за квест ГМ может ввести осложнение, которое отражает природу эксперимента, в котором вы невольно участвовали, или ввести осложнение, связанное с вашей ранней жизнью в изоляции и заключении в Убежище. Если ГМ делает это, вы немедленно восстанавливаете одно очко удачи.",
-    effects: ['Снижение сложности проверок ВЫН', 'Сопротивление болезням', 'Восстановление очка удачи при осложнении']
-  };
+  const { name, description } = getTraitI18n('vaultdweller-vault-kid');
 
   const handleSelectSkill = (skill) => {
-    onSelect(trait.name, { 
+    onSelect(name, {
       selectedExtraSkills: [skill],
-      effects: trait.effects 
+      effects: ['Снижение сложности проверок ВЫН', 'Сопротивление болезням', 'Восстановление очка удачи при осложнении']
     });
   };
 
@@ -31,8 +25,8 @@ const VaultDwellerModal = ({ visible, onSelect, onClose, skills }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Обитатель убежища</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          <Text style={styles.traitName}>{name}</Text>
+          {renderTextWithIcons(description, styles.modalText)}
           
           <ScrollView style={{ width: '100%', maxHeight: 200 }}>
             {skills.map(skill => (

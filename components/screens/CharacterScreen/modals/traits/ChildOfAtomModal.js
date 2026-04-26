@@ -1,23 +1,15 @@
 import React from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Дитя Атома',
-  modalType: 'info'
-};
+export const traitConfig = { originId: 'childOfAtom', modalType: 'info' };
 
 const ChildOfAtomModal = ({ visible, onSelect, onClose }) => {
-  const trait = {
-    name: "Радиоактивная губка",
-    description: "Ваш необычный жизненный опыт дает вам дополнительный перк на первом уровне.Кроме того, вы получили подарок от Атома, уникальный даже среди других членов Церкви. Вы можете сопротивляться, накапливать и даже направлять излучение через свое тело. Хотя Атом благословил вас своим сиянием, вы должны быть осторожны. Неверующие могут не понимать ваш дар и могут испугаться, когда станут его свидетелями. Ваша базовая сопротивляемость к радиационному урону составляет 1 и может быть дополнительно увеличена за счет брони и перков. Один раз за сцену, когда кто-то на близкой дистанции от вас должен пострадать от радиационного повреждения, вместо этого вы можете принять удар на себя. Всякий раз, когда вы страдаете от радиационного повреждения (минимум 0), получите одно очко радиации максимум до 5. Когда вы атакуете в ближнем бою, вы можете потратить свои сохраненные очки радиации - за каждое потраченное очко нанесите дополнительный урон от радиации 2 кд, урон наносится отдельно после совершения атаки и нанесения урона. Когда вы спите, вы теряете 1 очко радиации.",
-    effects: ['Дополнительный перк', 'Сопротивление радиации 1', 'Принятие удара на себя', 'Накопление очков радиации', 'Атака очками радиации']
-  };
+  const { name, description } = getTraitI18n('childofatom-radioactive-sponge');
 
   const handleConfirm = () => {
-    onSelect(trait.name, { 
-      effects: trait.effects
-    });
+    onSelect(name, { effects: ['Дополнительный перк', 'Сопротивление радиации 1', 'Принятие удара на себя', 'Накопление очков радиации'] });
   };
 
   return (
@@ -30,8 +22,8 @@ const ChildOfAtomModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Дитя Атома</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          <Text style={styles.traitName}>{name}</Text>
+          {renderTextWithIcons(description, styles.modalText)}
           <TouchableOpacity
             style={[styles.modalButton, styles.confirmButton]}
             onPress={handleConfirm}

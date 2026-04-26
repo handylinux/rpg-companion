@@ -1,10 +1,7 @@
 import React from 'react';
 import SurvivorModal from './SurvivorModal';
 
-export const traitConfig = {
-  originName: 'Житель НКР',
-  modalType: 'choice'
-};
+export const traitConfig = { originId: 'ncr', modalType: 'choice' };
 
 const NcrCitizenModal = (props) => (
   <SurvivorModal

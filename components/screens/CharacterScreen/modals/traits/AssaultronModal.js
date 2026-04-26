@@ -1,30 +1,16 @@
 import React from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Штурмотрон',
-  modalType: 'info'
-};
+export const traitConfig = { originId: 'assaultron', modalType: 'info' };
 
 const AssaultronModal = ({ visible, onSelect, onClose }) => {
-  const trait = {
-    name: "Разработан для Передовой",
-    description: "Вы - робот, невосприимчивый к болезням, урону от радиации и яда, но неспособный использовать препараты или получать пользу от еды, питья или отдыха. Вы не можете оправиться от увечья или восстановить очки здоровья без получения ремонта. Ваш можете переносить 150 фунтов, этот показатель нельзя увеличить за счет Силы или Перков, но его можно увеличить с помощью модификации брони. Вы передвигаетесь на двух ногах и можете манипулировать своим окружением с помощью трехпалых когтеобразных рук. У вас есть конечности с цепным приводом, которые обеспечивают скорость и смертоносную эффективность в ближнем бою, что дает вам +1 Боевой Кубик к рукопашным атака в дополнение к любому бонусу Боевой Кубик ближнего боя, который вы получаете от вашего атрибута Силы. В бронированную голову встроен мощный лазер, позволяющий поражать противников на расстоянии с помощью мощного энергетического оружия, а также способность критически перегружать ядерное реактор, инициируя саморазрушающий разрушительный взрыв.",
-    effects: [
-        'Иммунитет к болезням, радиации и ядам',
-        'Нельзя использовать препараты, еду, питье, отдых',
-        'Ремонт для восстановления здоровья',
-        'Фиксированный вес 150 фунтов',
-        '+1 БК к рукопашным атакам',
-        'Встроенный лазер',
-        'Возможность самоуничтожения'
-    ]
-  };
+  const { name, description } = getTraitI18n('assaultron-designed-for-frontline');
 
   const handleConfirm = () => {
-    onSelect(trait.name, { 
-      effects: trait.effects
+    onSelect(name, {
+      effects: ['Иммунитет к болезням, радиации и ядам', 'Нельзя использовать препараты, еду, питье, отдых', 'Ремонт для восстановления здоровья', '+1 БК к рукопашным атакам', 'Встроенный лазер']
     });
   };
 
@@ -38,8 +24,8 @@ const AssaultronModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Штурмотрон</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          <Text style={styles.traitName}>{name}</Text>
+          {renderTextWithIcons(description, styles.modalText)}
           <TouchableOpacity
             style={[styles.modalButton, styles.confirmButton]}
             onPress={handleConfirm}

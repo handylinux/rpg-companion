@@ -1,4 +1,3 @@
-// components/modals/index.js
 import BrotherhoodModal, { traitConfig as brotherhoodConfig } from './BrotherhoodModal';
 import SupermutantModal, { traitConfig as supermutantConfig } from './SupermutantModal';
 import GhoulModal, { traitConfig as ghoulConfig } from './GhoulModal';
@@ -12,46 +11,39 @@ import SurvivorModal, { traitConfig as survivorConfig } from './SurvivorModal';
 import OutcastBrotherhoodModal, { traitConfig as outcastConfig } from './OutcastBrotherhoodModal';
 import RoboBrainModal, { traitConfig as robobrainConfig } from './RoboBrainModal';
 import MisterHandyModal, { traitConfig as misterHandyConfig } from './MisterHandyModal';
-// другие импорты
 
+// Keyed by origin id (from data/origins/origins.json)
 export const TRAIT_MODALS = {
-  [brotherhoodConfig.originName]: BrotherhoodModal,
-  [supermutantConfig.originName]: SupermutantModal,
-  [ghoulConfig.originName]: GhoulModal,
-  [minutemanConfig.originName]: MinutemanModal,
-  [childOfAtomConfig.originName]: ChildOfAtomModal,
-  [vaultDwellerConfig.originName]: VaultDwellerModal,
-  [protectronConfig.originName]: ProtectronModal,
-  [assaultronConfig.originName]: AssaultronModal,
-  [ncrCitizenConfig.originName]: NcrCitizenModal,
-  [survivorConfig.originName]: SurvivorModal,
-  [outcastConfig.originName]: OutcastBrotherhoodModal,
-  [robobrainConfig.originName]: RoboBrainModal,
-  [misterHandyConfig.originName]: MisterHandyModal,
-  // остальные
+  [brotherhoodConfig.originId]: BrotherhoodModal,
+  [supermutantConfig.originId]: SupermutantModal,
+  [ghoulConfig.originId]: GhoulModal,
+  [minutemanConfig.originId]: MinutemanModal,
+  [childOfAtomConfig.originId]: ChildOfAtomModal,
+  [vaultDwellerConfig.originId]: VaultDwellerModal,
+  [protectronConfig.originId]: ProtectronModal,
+  [assaultronConfig.originId]: AssaultronModal,
+  [ncrCitizenConfig.originId]: NcrCitizenModal,
+  [survivorConfig.originId]: SurvivorModal,
+  [outcastConfig.originId]: OutcastBrotherhoodModal,
+  [robobrainConfig.originId]: RoboBrainModal,
+  [misterHandyConfig.originId]: MisterHandyModal,
 };
 
 export const TRAIT_CONFIGS = {
-  [brotherhoodConfig.originName]: brotherhoodConfig,
-  [supermutantConfig.originName]: supermutantConfig,
-  [ghoulConfig.originName]: ghoulConfig,
-  [minutemanConfig.originName]: minutemanConfig,
-  [childOfAtomConfig.originName]: childOfAtomConfig,
-  [vaultDwellerConfig.originName]: vaultDwellerConfig,
-  [protectronConfig.originName]: protectronConfig,
-  [assaultronConfig.originName]: assaultronConfig,
-  [ncrCitizenConfig.originName]: ncrCitizenConfig,
-  [survivorConfig.originName]: survivorConfig,
-  [outcastConfig.originName]: outcastConfig,
-  [robobrainConfig.originName]: robobrainConfig,
-  [misterHandyConfig.originName]: misterHandyConfig,
-  // остальные
+  [brotherhoodConfig.originId]: brotherhoodConfig,
+  [supermutantConfig.originId]: supermutantConfig,
+  [ghoulConfig.originId]: ghoulConfig,
+  [minutemanConfig.originId]: minutemanConfig,
+  [childOfAtomConfig.originId]: childOfAtomConfig,
+  [vaultDwellerConfig.originId]: vaultDwellerConfig,
+  [protectronConfig.originId]: protectronConfig,
+  [assaultronConfig.originId]: assaultronConfig,
+  [ncrCitizenConfig.originId]: ncrCitizenConfig,
+  [survivorConfig.originId]: SurvivorModal,
+  [outcastConfig.originId]: outcastConfig,
+  [robobrainConfig.originId]: robobrainConfig,
+  [misterHandyConfig.originId]: misterHandyConfig,
 };
 
-export const getTraitModalComponent = (originName) => {
-  return TRAIT_MODALS[originName] || null;
-};
-
-export const getTraitConfig = (originName) => {
-  return TRAIT_CONFIGS[originName] || null;
-}; 
+export const getTraitModalComponent = (originId) => TRAIT_MODALS[originId] || null;
+export const getTraitConfig = (originId) => TRAIT_CONFIGS[originId] || null;

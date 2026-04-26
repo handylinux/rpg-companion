@@ -10,7 +10,8 @@ import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
 import { applyArmorMods } from '../../../domain/modsEquip';
 import { getSkillDisplayName } from '../CharacterScreen/logic/characterScreenI18n';
-import { getEffectTimeText } from '../../../domain/effects';
+import { getEffectTimeText, getTimedMaxHpBonus, getTimedDamageResistanceBonus } from '../../../domain/effects';
+import { resolveWeaponQualities, resolveWeaponDamageType } from '../../../domain/weaponDisplay';
 import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
 
 // Импортируем модальное окно модификаций
@@ -115,12 +116,12 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
 
     // Канонический формат полей оружия
     const weaponName = displayWeapon.Name ?? displayWeapon.name ?? tWeaponsAndArmorScreen('common.empty');
-    const damageType = displayWeapon.damage_type ?? displayWeapon.damageType ?? tWeaponsAndArmorScreen('common.empty');
+    const damageType = resolveWeaponDamageType(displayWeapon.damage_type ?? displayWeapon.damageType);
     const baseDamage = Number(displayWeapon.damage ?? 0) || 0;
     const effectsValue = displayWeapon.damage_effects ?? displayWeapon.damageEffects ?? tWeaponsAndArmorScreen('common.empty');
     const fireRateBase = Number(displayWeapon.fire_rate ?? 0) || 0;
     const rangeValue = displayWeapon.range_name ?? displayWeapon.rangeName ?? tWeaponsAndArmorScreen('common.empty');
-    const qualitiesValue = displayWeapon.qualities ?? tWeaponsAndArmorScreen('common.empty');
+    const qualitiesValue = resolveWeaponQualities(displayWeapon.qualities) || tWeaponsAndArmorScreen('common.empty');
     const mainAttr = displayWeapon.main_attr ?? 'AGI';
     const mainSkill = displayWeapon.main_skill ?? 'SMALL_GUNS';
 
@@ -294,6 +295,9 @@ const WeaponsAndArmorScreen = () => {
   const defense = calculateDefense(attributes);
   const meleeBonus = calculateMeleeBonus(attributes, trait);
   const maxHealth = attributesSaved ? calculateMaxHealth(attributes, level) : 0;
+  const timedMaxHpBonus = getTimedMaxHpBonus(activeTimedEffects);
+  const effectiveMaxHealth = maxHealth + timedMaxHpBonus;
+  const timedDR = getTimedDamageResistanceBonus(activeTimedEffects);
   
   const isMisterHandyRobot = Boolean(trait?.modifiers?.isRobot && trait?.modifiers?.robotBodyPlan === 'misterHandy');
   const hasRadImmunity = isMisterHandyRobot || effects.includes('Иммунитет к радиации');
@@ -393,9 +397,9 @@ const WeaponsAndArmorScreen = () => {
     const { item: modifiedArmor } = applyArmorMods(armorItem, equipmentCatalog);
     const { item: modifiedClothing } = applyArmorMods(clothingItem, equipmentCatalog, { standardKey: 'appliedClothingModId', uniqueKey: 'unused' });
 
-    const physDef = Math.max(Number(modifiedArmor?.physicalDamageRating || 0), Number(modifiedClothing?.physicalDamageRating || 0));
-    const energyDef = Math.max(Number(modifiedArmor?.energyDamageRating || 0), Number(modifiedClothing?.energyDamageRating || 0));
-    const radDef = Math.max(Number(modifiedArmor?.radiationDamageRating || 0), Number(modifiedClothing?.radiationDamageRating || 0));
+    const physDef = Math.max(Number(modifiedArmor?.physicalDamageRating || 0), Number(modifiedClothing?.physicalDamageRating || 0)) + (timedDR.physical || 0);
+    const energyDef = Math.max(Number(modifiedArmor?.energyDamageRating || 0), Number(modifiedClothing?.energyDamageRating || 0)) + (timedDR.energy || 0);
+    const radDef = Math.max(Number(modifiedArmor?.radiationDamageRating || 0), Number(modifiedClothing?.radiationDamageRating || 0)) + (timedDR.radiation || 0);
 
     const stats = [
       { label: tWeaponsAndArmorScreen('armor.fields.physical'), value: physDef > 0 ? physDef : tWeaponsAndArmorScreen('common.none') },
@@ -465,8 +469,8 @@ const WeaponsAndArmorScreen = () => {
                   ) : null}
                 </StatBox>
                 <StatBox title={tWeaponsAndArmorScreen('stats.poisonResistance')} value={hasPoisonImmunity ? '∞' : '0'} />
-                <StatBox title={tWeaponsAndArmorScreen('stats.health')} max={maxHealth}>
-                  <HealthCounter max={maxHealth} isEnabled={attributesSaved} />
+                <StatBox title={tWeaponsAndArmorScreen('stats.health')} max={effectiveMaxHealth}>
+                  <HealthCounter max={effectiveMaxHealth} isEnabled={attributesSaved} />
                 </StatBox>
             </View>
             </View>

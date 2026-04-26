@@ -83,6 +83,20 @@
         "robot_weapon_flamethrower",
         "robot_weapon_laser_cutter"
       ]
+    },
+    {
+      "id": "robot_body_protectron",
+      "slot": "body",
+      "partType": "body",
+      "itemType": "robotPart",
+      "robotBodyPlan": "protectron",
+      "requiresManipulatorForStandardWeapons": false,
+      "allowedRobotWeaponIds": [
+        "robot_weapon_protectron_manipulator",
+        "robot_weapon_cryojet",
+        "robot_weapon_self_destruct",
+        "robot_weapon_shocker_arms"
+      ]
     }
   ]
 }

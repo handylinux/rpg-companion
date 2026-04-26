@@ -31,7 +31,7 @@ import styles from '../../../styles/HomeScreen.styles';
 
 const getOriginImage = (originName) => {
   if (!originName) return null;
-  const found = ORIGINS.find(o => o.name === originName);
+  const found = ORIGINS.find(o => o.id === originName);
   return found ? found.image : null;
 };
 

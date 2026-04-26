@@ -1,37 +1,15 @@
 import React from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Робомозг',
-  modalType: 'info'
-};
+export const traitConfig = { originId: 'robobrain', modalType: 'info' };
 
 const RoboBrainModal = ({ visible, onSelect, onClose }) => {
-  const trait = {
-    name: "Робот с мозгами",
-    description: "Черта: Робот с мозгами\nВы - робот с человеческим мозгом в качестве центрального процессора. У вас есть зрительные сенсоры, способные обнаруживать визуальный спектр и инфракрасное излучение, вы игнорируете любое увеличение сложности тестов на восприятие в темноте. Вы также невосприимчивы к радиации и ядам, но не можете использовать препараты, а также получать пользу от еды, питья или отдыха. Вы не можете восстанавливать свои повреждения или восстанавливать здоровье, не получив ремонта.\n\nВы передвигаетесь на двух гусеницах , и у вас есть два трубообразных гибких экстендера в качестве рук с противопоставленными зажимами, которые вы можете использовать для точного управления инструментами и предметами, предназначенными для людей, и совершать рукопашные атаки. В вашу голову встроен гипнотрон, который вы можете использовать для дальних атак. Ваш максимальный вес для переноски составляет 150 фунтов, и он не может быть увеличен за счет вашей силы или перков, но может быть увеличен за счет модификации брони.",
-    effects: [
-        'Зрительные сенсоры с возможностью обнаружения визуального спектра и инфракрасного излучения',
-        'Игнорирование увеличения сложности тестов на восприятие в темноте',
-        'Иммунитет к радиации и ядам',
-        'Невозможность использования препаратов, еды, питья, отдыха',
-        'Невозможность восстановления повреждений или здоровья без ремонта',
-        'Движение на двух гусеницах',
-        'Два трубообразных гибких экстендера в качестве рук',
-        'Гипнотрон для дальних атак',
-        'Максимальный вес переноски 150 фунтов'
-    ],
-    immunity: {
-      radiation: true,
-      poison: true
-    }
-  };
+  const { name, description } = getTraitI18n('robobrain-robot-with-brains');
 
   const handleConfirm = () => {
-    onSelect(trait.name, { 
-      effects: trait.effects
-    });
+    onSelect(name, { effects: ['Иммунитет к радиации и ядам', 'Невозможность использования препаратов, еды, питья, отдыха', 'Ремонт для восстановления здоровья'] });
   };
 
   return (
@@ -44,8 +22,8 @@ const RoboBrainModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Робомозг</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          <Text style={styles.traitName}>{name}</Text>
+          {renderTextWithIcons(description, styles.modalText)}
           <TouchableOpacity
             style={[styles.modalButton, styles.confirmButton]}
             onPress={handleConfirm}

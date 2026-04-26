@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Изгой Братства Стали',
-  modalType: 'choice'
-};
+export const traitConfig = { originId: 'brotherhoodOutcast', modalType: 'choice' };
 
-const DESCRIPTION = `Вы убеждены, что ваше руководство в Братстве ничто так не интересует, как сбор довоенных технологий. А  ваша \nроль, как члена этого братства, как потомка военных, обязывает вас \nпомогать другим и следовать иным целям, нежели диктуют догмы \nлидеров Братства.\n\nВы получаете один дополнительный отмеченный навык на выбор \nиз: Энергетическое оружие, Наука или Ремонт.`;
-
-const selectableSkills = ['Энергооружие', 'Наука', 'Ремонт'];
+const SELECTABLE_SKILLS = ['Энергооружие', 'Наука', 'Ремонт'];
 
 const OutcastBrotherhoodModal = ({ visible, onSelect, onClose }) => {
   const [selectedSkill, setSelectedSkill] = useState(null);
+  const { name: traitName, description } = getTraitI18n('brotherhoodoutcast-chain-that-breaks');
 
   const handleConfirm = () => {
-    onSelect('Цепь, Которая Ломается', {
+    onSelect(traitName, {
       forcedSkills: selectedSkill ? [selectedSkill] : [],
       extraSkills: 1
     });
@@ -26,10 +23,10 @@ const OutcastBrotherhoodModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Изгой Братства Стали</Text>
-          <Text style={styles.traitName}>Цепь, Которая Ломается</Text>
-          <Text style={styles.modalText}>{DESCRIPTION}</Text>
+          <Text style={styles.traitName}>{traitName}</Text>
+          <Text style={styles.modalText}>{description}</Text>
 
-          {selectableSkills.map(skill => (
+          {SELECTABLE_SKILLS.map(skill => (
             <TouchableOpacity
               key={skill}
               style={[styles.modalButton, styles.skillOption, selectedSkill === skill && styles.selectedSkillOption]}

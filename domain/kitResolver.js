@@ -1,6 +1,6 @@
 import { getWeaponById, getWeaponModById, getAmmoById, getItemByName } from '../db/Database';
 import { resolveRandomLootByRoll } from '../components/screens/CharacterScreen/logic/RandomLootLogic';
-import { evaluateRollConfig } from '../components/screens/CharacterScreen/logic/Calculator';
+import { evaluateRollConfig } from './diceRollsLogic';
 import { getEquipmentCatalog } from '../i18n/equipmentCatalog';
 import { tWeaponsAndArmorScreen } from '../components/screens/WeaponsAndArmorScreen/weaponsAndArmorScreenI18n';
 
@@ -111,6 +111,7 @@ const resolveItemById = (item) => {
   if (item.itemId) {
     const all = [
       ...flattenGroupedItems(catalog?.miscellaneous),
+      ...(catalog?.generalGoods || []),
       ...(catalog?.chems || []),
       ...(catalog?.drinks || []),
       ...(catalog?.robotModules || []),

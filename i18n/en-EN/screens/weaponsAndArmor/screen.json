@@ -48,6 +48,36 @@
   "weapon": {
     "emptySlot": "Empty Slot",
     "notEquipped": "No weapon equipped",
+    "rangeDefault": "Close",
+    "rangeNames": {
+      "Close": "Close",
+      "Medium": "Medium",
+      "Long": "Long",
+      "Extreme": "Extreme"
+    },
+    "modPrefixes": {
+      "Hardened": "Hardened",
+      "Improved": "Improved",
+      "Advanced": "Advanced",
+      "Tuned": "Tuned",
+      "Calibrated": "Calibrated",
+      "Automatic": "Automatic",
+      "Rapid": "Rapid",
+      "Quick": "Quick",
+      "Suppressed": "Suppressed",
+      "Supressed": "Suppressed",
+      "Silent": "Silent",
+      "Long": "Long",
+      "Short": "Short",
+      "Tactical": "Tactical",
+      "Recon": "Recon",
+      "Night": "Night Vision",
+      "Bayonet": "Bayoneted",
+      "Compensated": "Compensated",
+      "Perforated": "Perforated",
+      "Vented": "Vented",
+      "Ribbed": "Ribbed"
+    },
     "fields": {
       "success": "SUCCESS VALUE",
       "damageType": "DAMAGE TYPE",

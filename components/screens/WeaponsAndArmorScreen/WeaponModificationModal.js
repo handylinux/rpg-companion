@@ -63,46 +63,20 @@ function normalizeSlotKey(slot) {
   return map[key] || raw || 'Other';
 }
 
-function translateModTokenToRu(token) {
+function translateModPrefix(token) {
   if (!token) return token;
   const t = String(token).trim();
-  // Если уже есть кириллица — считаем, что это русская строка
-  if (/[А-Яа-яЁё]/.test(t)) return t;
-
-  const map = {
-    // частые префиксы/названия
-    Hardened: 'Укреплённый',
-    Improved: 'Улучшенный',
-    Advanced: 'Продвинутый',
-    Tuned: 'Чувствительный',
-    Calibrated: 'Калиброванный',
-    Automatic: 'Автоматический',
-    Rapid: 'Быстрый',
-    Quick: 'Быстрый',
-    Suppressed: 'Тихий',
-    Supressed: 'Тихий',
-    Silent: 'Тихий',
-    Long: 'Длинный',
-    Short: 'Короткий',
-    Tactical: 'Тактический',
-    Recon: 'Разведывательный',
-    Night: 'Ночного видения',
-    Bayonet: 'Штыковой',
-    Compensated: 'Компенсированный',
-    Perforated: 'Перфорированный',
-    Vented: 'Вентилируемый',
-    Ribbed: 'Ребристый',
-  };
-  return map[t] || t;
+  const localized = tWeaponsAndArmorScreen(`weapon.modPrefixes.${t}`);
+  // tWeaponsAndArmorScreen returns the key path if not found — fall back to original
+  return localized.startsWith('weapon.modPrefixes.') ? t : localized;
 }
 
-function getModDisplayNameRu(mod, weaponBaseName) {
+function getModDisplayName(mod, weaponBaseName) {
   if (!mod) return '';
   const rawPrefix = mod.prefix || '';
   const rawName = mod.name || '';
-  const ruPrefix = translateModTokenToRu(rawPrefix || rawName);
-  // склоняем только те префиксы, которые совпадают с таблицей declinePrefix
-  return weaponBaseName ? declinePrefix(ruPrefix, weaponBaseName) : ruPrefix;
+  const localizedPrefix = translateModPrefix(rawPrefix || rawName);
+  return weaponBaseName ? declinePrefix(localizedPrefix, weaponBaseName) : localizedPrefix;
 }
 
 function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
@@ -170,11 +144,16 @@ function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
     cost += toNumber(mod.cost);
   }
 
-  const rangeOrder = ['Близкая', 'Средняя', 'Дальняя', 'Экстремальная'];
-  const currentRangeName = String(baseWeapon.range_name ?? 'Близкая').trim();
-  const currentRangeIndex = Math.max(0, rangeOrder.indexOf(currentRangeName));
-  const nextRangeIndex = Math.max(0, Math.min(rangeOrder.length - 1, currentRangeIndex + rangeShift));
-  const range_name = rangeOrder[nextRangeIndex];
+  const RANGE_ORDER = ['Close', 'Medium', 'Long', 'Extreme'];
+  const rangeNames = tWeaponsAndArmorScreen('weapon.rangeNames') || {};
+  const currentRangeName = String(baseWeapon.range_name ?? 'Close').trim();
+  // range_name in DB may be stored in Russian — map back to English key
+  const RANGE_RU_TO_EN = { 'Близкая': 'Close', 'Средняя': 'Medium', 'Дальняя': 'Long', 'Экстремальная': 'Extreme' };
+  const currentRangeKey = RANGE_RU_TO_EN[currentRangeName] || currentRangeName;
+  const currentRangeIndex = Math.max(0, RANGE_ORDER.indexOf(currentRangeKey));
+  const nextRangeIndex = Math.max(0, Math.min(RANGE_ORDER.length - 1, currentRangeIndex + rangeShift));
+  const range_name_key = RANGE_ORDER[nextRangeIndex];
+  const range_name = rangeNames[range_name_key] || range_name_key;
   const qualitiesValue = qualities.size ? Array.from(qualities).join(', ') : '–';
 
   return {
@@ -371,7 +350,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
               <Text style={styles.weaponTitle}>{weapon?.name || tWeaponsAndArmorScreen('modals.unknownWeapon')}</Text>
               <Text style={styles.weaponStats}>
                 {tWeaponsAndArmorScreen('modals.weaponDamage')}: {weapon?.damage ?? 0} | {tWeaponsAndArmorScreen('modals.weaponFireRate')}: {weapon?.fire_rate ?? 0} |
-                {tWeaponsAndArmorScreen('modals.weaponRange')}: {weapon?.range_name ?? 'Близкая'} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {weapon?.weight ?? 0} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {weapon?.cost ?? 0}
+                {tWeaponsAndArmorScreen('modals.weaponRange')}: {weapon?.range_name ?? tWeaponsAndArmorScreen('weapon.rangeDefault')} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {weapon?.weight ?? 0} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {weapon?.cost ?? 0}
               </Text>
             </View>
 
@@ -394,7 +373,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                       ]}
                       onPress={() => handleSelectModification(slot, mod)}
                     >
-                      <Text style={styles.modificationName}>{getModDisplayNameRu(mod, weapon?._baseName ?? weapon?.name) || mod.name}</Text>
+                      <Text style={styles.modificationName}>{getModDisplayName(mod, weapon?._baseName ?? weapon?.name) || mod.name}</Text>
                       <Text style={styles.modificationEffects}>{mod.effect_description || mod.effects}</Text>
                       <Text style={styles.modificationStats}>
                         {tWeaponsAndArmorScreen('modals.weight')}: {toNumber(mod.weight) >= 0 ? '+' : ''}{toNumber(mod.weight)} | {tWeaponsAndArmorScreen('modals.cost')}: +{toNumber(mod.cost)}
@@ -415,7 +394,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                   </Text>
                   <Text style={styles.previewStats}>
                     {tWeaponsAndArmorScreen('modals.weaponDamage')}: {modifiedWeapon.damage} | {tWeaponsAndArmorScreen('modals.weaponFireRate')}: {modifiedWeapon.fire_rate} |
-                    {tWeaponsAndArmorScreen('modals.weaponRange')}: {modifiedWeapon.range_name || 'Близкая'} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {modifiedWeapon.weight} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {modifiedWeapon.cost}
+                    {tWeaponsAndArmorScreen('modals.weaponRange')}: {modifiedWeapon.range_name || tWeaponsAndArmorScreen('weapon.rangeDefault')} | {tWeaponsAndArmorScreen('modals.weaponWeight')}: {modifiedWeapon.weight} | {tWeaponsAndArmorScreen('modals.weaponCost')}: {modifiedWeapon.cost}
                   </Text>
                   <Text style={styles.previewEffects}>
                     {tWeaponsAndArmorScreen('modals.previewEffects')}: {modifiedWeapon.damage_effects ?? modifiedWeapon.Эффекты ?? modifiedWeapon._mods_effects_debug}

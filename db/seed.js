@@ -46,7 +46,7 @@ async function seedWeapons(equipmentCatalog) {
       safeStr(w.damageEffects),
       safeStr(w.damageType),
       safeStr(w.fireRate),
-      safeStr(w.qualities),
+      Array.isArray(w.qualities) ? JSON.stringify(w.qualities) : safeStr(w.qualities),
       safeStr(w.weight),
       safeStr(w.cost),
       safeStr(w.rarity),

@@ -13,7 +13,7 @@ import {
 } from '../domain/characterCreation';
 import { loadOriginsData } from '../domain/traits';
 import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from '../domain/perks';
-import { applyConsumableToEffects, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../domain/effects';
+import { applyConsumableToEffects, checkAddiction, applyRemoveConditions, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../domain/effects';
 import { syncCharacterToCloudIfEnabled } from './cloudSync/googleDriveSync';
 
 const CharacterContext = createContext();
@@ -23,14 +23,8 @@ const generateId = () => `char_${Date.now()}_${Math.random().toString(36).substr
 
 const resolveOrigin = (storedOrigin) => {
   if (!storedOrigin) return null;
-
-  const identity = typeof storedOrigin === 'string'
-    ? storedOrigin
-    : (storedOrigin.id || storedOrigin.originId || storedOrigin.name);
-
-  return ORIGINS.find((origin) => (
-    origin.id === identity || origin.name === identity
-  )) || null;
+  const id = typeof storedOrigin === 'string' ? storedOrigin : storedOrigin.id;
+  return ORIGINS.find((origin) => origin.id === id) || null;
 };
 
 const serializeState = (state) => ({
@@ -88,6 +82,8 @@ export const CharacterProvider = ({ children }) => {
   const [meleeBonus, setMeleeBonus] = useState(0);
   const [initiative, setInitiative] = useState(0);
   const [defense, setDefense] = useState(1);
+  const [conditions, setConditions] = useState([]);       // ['addicted', 'diseased', ...]
+  const [chemDosesLog, setChemDosesLog] = useState([]);   // [{ chemId, takenAt }]
 
   const isSavedRef = useRef(isSaved);
   const characterIdRef = useRef(characterId);
@@ -135,13 +131,15 @@ export const CharacterProvider = ({ children }) => {
     meleeBonus,
     initiative,
     defense,
+    conditions,
+    chemDosesLog,
   }), [
     characterName, level, attributes, skills, selectedSkills, extraTaggedSkills,
     forcedSelectedSkills, origin, trait, equipment, effects, activeTimedEffects,
     sceneCounter, equippedWeapons,
     equippedArmor, caps, currentHealth, modifiedItems, availablePerkAttributePoints,
     luckPoints, maxLuckPoints, attributesSaved, skillsSaved, selectedPerks,
-    carryWeight, meleeBonus, initiative, defense,
+    carryWeight, meleeBonus, initiative, defense, conditions, chemDosesLog,
   ]);
 
   // Realtime save for already persisted characters.
@@ -157,7 +155,7 @@ export const CharacterProvider = ({ children }) => {
           characterIdRef.current,
           snapshot.characterName,
           snapshot.level ?? 1,
-          snapshot.origin?.name || snapshot.origin?.id || null,
+          snapshot.origin?.id || snapshot.origin?.name || null,
           serialized
         );
         await syncCharacterToCloudIfEnabled(characterIdRef.current);
@@ -189,7 +187,7 @@ export const CharacterProvider = ({ children }) => {
         id,
         name,
         snapshot.level ?? 1,
-        snapshot.origin?.name || snapshot.origin?.id || null,
+        snapshot.origin?.id || snapshot.origin?.name || null,
         serialized
       );
       await syncCharacterToCloudIfEnabled(id);
@@ -245,6 +243,10 @@ export const CharacterProvider = ({ children }) => {
       setMeleeBonus(data.meleeBonus ?? 0);
       setInitiative(data.initiative ?? 0);
       setDefense(data.defense ?? 1);
+      setConditions(data.conditions || []);
+      setChemDosesLog(
+        (data.chemDosesLog || []).filter((d) => Date.now() - d.takenAt < 24 * 60 * 60 * 1000)
+      );
       setIsSaved(true);
       isSavedRef.current = true;
       characterIdRef.current = id;
@@ -302,6 +304,69 @@ export const CharacterProvider = ({ children }) => {
 
   const addPerkAttributePoints = (points) => {
     setAvailablePerkAttributePoints(prev => prev + points);
+  };
+
+  /**
+   * Записывает дозу препарата и возвращает количество доз за последние 24 ч.
+   */
+  const recordChemDose = (chemId) => {
+    const now = Date.now();
+    const cutoff = now - 24 * 60 * 60 * 1000;
+    let updatedLog;
+    setChemDosesLog((prev) => {
+      updatedLog = [...prev.filter((d) => d.takenAt > cutoff), { chemId, takenAt: now }];
+      return updatedLog;
+    });
+    // Синхронный подсчёт: фильтруем текущий лог + новая доза
+    const todayDoses = chemDosesLog
+      .filter((d) => d.takenAt > cutoff && d.chemId === chemId)
+      .length + 1;
+    return todayDoses;
+  };
+
+  /**
+   * Применяет расходник: timed-эффекты + removeCondition + проверка зависимости.
+   * Возвращает { timedResult, addictionResult, conditionsRemoved }.
+   */
+  const applyConsumableFull = (item) => {
+    console.log('[applyConsumableFull] START:', {
+      itemName: item?.name || item?.Name,
+      itemId: item?.id || item?.code,
+      positiveEffect: item?.positiveEffect,
+      positiveEffectType: typeof item?.positiveEffect,
+    });
+
+    // 1. Timed-эффекты
+    const normalizedCurrent = pruneExpiredTimedEffects(activeTimedEffects);
+    const timedResult = applyConsumableToEffects(item, normalizedCurrent.effects);
+    const normalizedResult = pruneExpiredTimedEffects(timedResult.effects);
+    setActiveTimedEffects(normalizedResult.effects);
+
+    // 2. removeCondition (аддиктол, антибиотики)
+    const { conditions: nextConditions, removed } = applyRemoveConditions(item, conditions);
+    if (removed.length > 0) setConditions(nextConditions);
+
+    // 3. Зависимость
+    let addictionResult = null;
+    if (item?.addictionLevel > 0 && item?.negativeEffect === 'addiction') {
+      const dosesToday = recordChemDose(item.id || item.name);
+      addictionResult = checkAddiction(item, dosesToday);
+      if (addictionResult.addicted && !conditions.includes('addicted')) {
+        setConditions((prev) => [...prev, 'addicted']);
+      }
+    }
+
+    console.log('[applyConsumableFull] RESULT:', {
+      timedResult,
+      addictionResult,
+      conditionsRemoved: removed,
+    });
+
+    return {
+      timedResult: { ...timedResult, expired: normalizedCurrent.expired },
+      addictionResult,
+      conditionsRemoved: removed,
+    };
   };
 
   const applyConsumableTimedEffects = (item) => {
@@ -376,6 +441,8 @@ export const CharacterProvider = ({ children }) => {
     });
     setCaps(0);
     setSelectedPerks([]);
+    setConditions([]);
+    setChemDosesLog([]);
     setMeleeBonus(0);
     setInitiative(calculateInitiative(initialAttributes));
     setDefense(calculateDefense(initialAttributes));
@@ -412,6 +479,9 @@ export const CharacterProvider = ({ children }) => {
     sceneCounter,
     sceneDurationMinutes: SCENE_RULES.SCENE_DURATION_MINUTES,
     applyConsumableTimedEffects,
+    applyConsumableFull,
+    conditions, setConditions,
+    chemDosesLog,
     advanceScene,
     equippedWeapons, setEquippedWeapons,
     equippedArmor, setEquippedArmor,

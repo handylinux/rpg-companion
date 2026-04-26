@@ -6,6 +6,7 @@ import SellItemModal from './modals/SellItemModal';
 import AddItemModal from './modals/AddItemModal';
 import BuyItemModal from './modals/BuyItemModal';
 import { calculateMaxHealth } from '../../../domain/characterCreation';
+import { getInstantHealAmount } from '../../../domain/effects';
 import { formatInventoryText, tInventory } from './logic/inventoryI18n';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
@@ -33,6 +34,8 @@ const InventoryScreen = () => {
     attributes, level,
     currentHealth, setCurrentHealth,
     applyConsumableTimedEffects,
+    applyConsumableFull,
+    conditions, setConditions,
     getModifiedItem,
     trait
   } = useCharacter();
@@ -83,7 +86,9 @@ const InventoryScreen = () => {
     if (itemType === 'clothing' || itemType === 'outfit') return '👕';
     if (itemType === 'chem' || itemType === 'chems') return '💊';
     if (itemType === 'drinks') return '🥤';
+    if (itemType === 'food') return '🍖';
     if (itemType === 'ammo') return '🔹';
+    if (itemType === 'misc') return '🔧';
     return '📦';
   };
 
@@ -157,6 +162,22 @@ const InventoryScreen = () => {
 
     if (itemType === 'chem' || itemType === 'chems') {
       const base = (equipmentCatalog?.chems || []).find((entry) => entry.id === item.id);
+      if (!base) {
+        console.log('[resolveLocalizedItem] No chem base found for:', item.id, 'item:', item);
+        return item;
+      }
+      const result = {
+        ...base,
+        ...item,
+        name: base.name || base.Name || item.name || item.Name,
+        Name: base.Name || base.name || item.Name || item.name,
+      };
+      console.log('[resolveLocalizedItem] chem result:', result.id, 'positiveEffect:', result.positiveEffect);
+      return result;
+    }
+
+    if (itemType === 'drinks') {
+      const base = (equipmentCatalog?.drinks || []).find((entry) => entry.id === item.id);
       if (!base) return item;
       return {
         ...base,
@@ -166,8 +187,8 @@ const InventoryScreen = () => {
       };
     }
 
-    if (itemType === 'drinks') {
-      const base = (equipmentCatalog?.drinks || []).find((entry) => entry.id === item.id);
+    if (itemType === 'food') {
+      const base = (equipmentCatalog?.food || []).find((entry) => entry.id === item.id);
       if (!base) return item;
       return {
         ...base,
@@ -189,7 +210,10 @@ const InventoryScreen = () => {
     }
 
     const miscItems = flattenMiscellaneousItems(equipmentCatalog?.miscellaneous);
-    const base = miscItems.find((entry) => entry.id === item.id) || (equipmentCatalog?.robotModules || []).find((entry) => entry.id === item.id) || (equipmentCatalog?.robotItems || []).find((entry) => entry.id === item.id);
+    const base = miscItems.find((entry) => entry.id === item.id)
+      || (equipmentCatalog?.generalGoods || []).find((entry) => entry.id === item.id)
+      || (equipmentCatalog?.robotModules || []).find((entry) => entry.id === item.id)
+      || (equipmentCatalog?.robotItems || []).find((entry) => entry.id === item.id);
     if (!base) return item;
     return {
       ...base,
@@ -217,24 +241,72 @@ const InventoryScreen = () => {
     const consumableItem = { ...item };
     const itemName = getItemName(consumableItem);
 
+    console.log('[handleApplyConsumable] START:', {
+      itemName,
+      item,
+      consumableItem,
+      positiveEffect: consumableItem?.positiveEffect,
+      positiveEffectType: typeof consumableItem?.positiveEffect,
+    });
+
     const applyToSelf = () => {
       if (isRobotCharacter) {
         Alert.alert(tInventory('screen.alerts.robotCannotSelfUseTitle', 'Ограничение робота'), tInventory('screen.alerts.robotCannotSelfUseMessage', 'Роботы не могут применять еду, напитки и препараты на себя.'));
         return;
       }
-      const timedResult = applyConsumableTimedEffects(consumableItem);
-      if (consumableItem.healAmount) {
+
+      // Применяем расходник с полной логикой (timed-эффекты, removeCondition, addiction)
+      const result = applyConsumableFull(consumableItem);
+      const { timedResult, addictionResult, conditionsRemoved } = result;
+
+      // Лечение HP
+      const healAmount = getInstantHealAmount(consumableItem);
+
+      console.log('[handleApplyConsumable] HEAL CALC:', {
+        itemName,
+        healAmount,
+        currentHealth,
+        maxHealth: calculateMaxHealth(attributes, level),
+      });
+
+      if (healAmount) {
         const maxHealth = calculateMaxHealth(attributes, level);
-        const healAmount = consumableItem.healAmount;
         const newHealth = Math.min(maxHealth, currentHealth + healAmount);
+        console.log('[handleApplyConsumable] HEALING:', {
+          healAmount,
+          currentHealth,
+          newHealth,
+        });
         setCurrentHealth(newHealth);
         Alert.alert(tInventory('screen.alerts.successTitle'), formatInventoryText(tInventory('screen.alerts.healMessage'), { healAmount }));
       } else {
+        console.log('[handleApplyConsumable] NO HEAL AMOUNT FOUND');
         Alert.alert(tInventory('screen.alerts.appliedTitle'), formatInventoryText(tInventory('screen.alerts.appliedSelfMessage'), { itemName }));
       }
 
+      // Эффекты от timed-эффектов
       if (timedResult.events.length > 0) {
         Alert.alert(tInventory('screen.alerts.effectsTitle'), timedResult.events.join('\n'));
+      }
+
+      // Удаление условий (аддиктол, антибиотики)
+      if (conditionsRemoved.length > 0) {
+        Alert.alert(tInventory('screen.alerts.conditionsRemovedTitle', 'Снято состояние'), tInventory('screen.alerts.conditionsRemovedMessage', 'Снято: {{conditions}}', { conditions: conditionsRemoved.join(', ') }));
+      }
+
+      // Результат броска на зависимость
+      if (addictionResult) {
+        const { effectCount, faces, addicted, addictionLevel } = addictionResult;
+        const facesText = faces.join(', ');
+        Alert.alert(
+          tInventory('screen.alerts.addictionRollTitle', 'Бросок на зависимость'),
+          tInventory('screen.alerts.addictionRollMessage', 'Брошено: {{faces}} — {{effectCount}} эффект(ов) из {{addictionLevel}} нужных.', { faces: facesText, effectCount, addictionLevel })
+        );
+        if (addicted) {
+          Alert.alert(tInventory('screen.alerts.addictionGainedTitle', 'Зависимость'), tInventory('screen.alerts.addictionGainedMessage', 'Вы стали зависимы от этого препарата.'));
+        } else {
+          Alert.alert(tInventory('screen.alerts.addictionAvoidedTitle', 'Зависимость'), tInventory('screen.alerts.addictionAvoidedMessage', 'Зависимость не наступила.'));
+        }
       }
 
       handleRemoveItem(consumableItem, 1);
@@ -268,9 +340,27 @@ const InventoryScreen = () => {
   
   const handleRemoveItem = (itemToRemove, quantity) => {
     const newItems = [...(equipment?.items || [])];
-    const itemIndex = newItems.findIndex(i => 
-      getItemName(i) === getItemName(itemToRemove)
-    );
+    const targetName = getItemName(itemToRemove);
+    const targetId = itemToRemove.id || itemToRemove.code;
+    const itemIndex = newItems.findIndex(i => {
+      if (targetId && (i.id || i.code)) {
+        return (i.id || i.code) === targetId;
+      }
+      return getItemName(i) === targetName;
+    });
+    
+    console.log('[handleRemoveItem] START:', {
+      targetName,
+      targetId,
+      itemIndex,
+      found: itemIndex > -1,
+      items: newItems.map(i => ({ name: getItemName(i), id: i.id || i.code, itemType: i.itemType, quantity: i.quantity })),
+      itemToRemove: {
+        name: getItemName(itemToRemove),
+        id: itemToRemove.id || itemToRemove.code,
+        itemType: itemToRemove.itemType,
+      },
+    });
     
     if (itemIndex > -1) {
       // Получаем модифицированную версию предмета, если она есть
@@ -280,14 +370,23 @@ const InventoryScreen = () => {
       };
       const modifiedItem = getModifiedItem(itemWithType);
       
-      // Обновляем предмет в инвентаре на модифицированную версию
-      newItems[itemIndex] = modifiedItem;
-      newItems[itemIndex].quantity -= quantity;
+      console.log('[handleRemoveItem] MODIFIED ITEM:', {
+        original: newItems[itemIndex],
+        modified: modifiedItem,
+      });
+      
+      // Обновляем предмет в инвентаре на модифицированную версию (копируем, чтобы не мутировать оригинал)
+      newItems[itemIndex] = { ...modifiedItem, quantity: (modifiedItem.quantity ?? newItems[itemIndex].quantity) - quantity };
       
       if (newItems[itemIndex].quantity <= 0) {
+        console.log('[handleRemoveItem] REMOVING ITEM (qty 0):', newItems[itemIndex]);
         newItems.splice(itemIndex, 1);
+      } else {
+        console.log('[handleRemoveItem] UPDATED ITEM:', newItems[itemIndex]);
       }
       updateInventoryItems(newItems);
+    } else {
+      console.log('[handleRemoveItem] ITEM NOT FOUND');
     }
   };
 
@@ -341,10 +440,11 @@ const InventoryScreen = () => {
     if (existingItemIndex > -1) {
         newItems[existingItemIndex].quantity += quantity;
     } else {
-        // Убеждаемся, что у предмета есть itemType
+        // Убеждаемся, что у предмета есть itemType и локализация
+        const localizedItem = resolveLocalizedItem(item);
         const itemWithType = {
-          ...item,
-          itemType: getItemType(item),
+          ...localizedItem,
+          itemType: getItemType(localizedItem),
           stackKey,
           quantity
         };
@@ -923,7 +1023,7 @@ const InventoryScreen = () => {
     const itemName = getItemName(localizedDisplayItem) || tInventory('screen.labels.unknownItem');
     const itemIcon = getItemTypeIcon(item.itemType);
     const isEquippable = item.itemType === 'weapon' || item.itemType === 'armor' || item.itemType === 'clothing';
-    const isConsumable = item.itemType === 'chem' || item.itemType === 'chems' || item.itemType === 'drinks';
+    const isConsumable = item.itemType === 'chem' || item.itemType === 'chems' || item.itemType === 'drinks' || item.itemType === 'food';
 
     const handleActionPress = () => {
         if (item.isEquipped) {
@@ -964,10 +1064,10 @@ const InventoryScreen = () => {
               </TouchableOpacity>
           )}
 
-          {isConsumable && !item.isEquipped && (
+          {isConsumable && !item.isEquipped && !isRobotCharacter && (
               <TouchableOpacity 
                   style={[styles.actionButton, styles.applyButton]} 
-                  onPress={() => handleApplyConsumable(item)}>
+                  onPress={() => handleApplyConsumable(localizedDisplayItem)}>
                   <Text style={styles.actionButtonText}>{tInventory('screen.actions.apply')}</Text>
               </TouchableOpacity>
           )}

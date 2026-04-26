@@ -1,31 +1,15 @@
 import React from 'react';
 import { renderTextWithIcons } from '../../../WeaponsAndArmorScreen/textUtils';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { getTraitI18n } from '../../../../../domain/traits';
 
-export const traitConfig = {
-  originName: 'Протектрон',
-  modalType: 'info'
-};
+export const traitConfig = { originId: 'protectron', modalType: 'info' };
 
 const ProtectronModal = ({ visible, onSelect, onClose }) => {
-  const trait = {
-    name: "Защитить или уничтожить",
-    description: "Вы были созданы для выживания в суровых условиях. Один раз для каждой сцены вы можете перебросить результат проверки, чтобы преодолеть экологическую опасность, и использовать новый результат. Вы также невосприимчивы к болезням, радиации и ядам, но вы не можете использовать препараты, а также получать пользу от еды, питья или отдыха. Вы не можете оправиться от своих травм или восстановить очки здоровья, не получив ремонта. Протектроны предназначены для определенной цели и содержат дополнительные механизмы для поддержки запрограммированных задач. У вас не может быть установлено более двух модификаций для роботов одновременно. Вы можете быть Пожарным , Полицейским , Рабочим - строителем, Медицинским работником или моделью вашего собственного изобретения. При прохождении проверки, непосредственно связанной с назначением вашей модели, первый d20, который вы покупаете, используя ОД стоит 0. Кроме того, ваш вес при переноске составляет 225 фунтов и не может быть увеличен за счет вашей силы или перков, но может быть увеличен за счет модификации брони.",
-    effects: [
-        'Переброс проверки на экологическую опасность',
-        'Иммунитет к болезням, радиации и ядам',
-        'Нельзя использовать препараты, еду, питье, отдых',
-        'Ремонт для восстановления здоровья',
-        'Максимум 2 модификации для роботов',
-        'Скидка на d20 для проверок по назначению',
-        'Фиксированный вес 225 фунтов'
-    ]
-  };
+  const { name, description } = getTraitI18n('protectron-protect-or-destroy');
 
   const handleConfirm = () => {
-    onSelect(trait.name, { 
-      effects: trait.effects
-    });
+    onSelect(name, { effects: ['Переброс проверки на экологическую опасность', 'Иммунитет к болезням, радиации и ядам', 'Нельзя использовать препараты, еду, питье, отдых', 'Ремонт для восстановления здоровья'] });
   };
 
   return (
@@ -38,8 +22,8 @@ const ProtectronModal = ({ visible, onSelect, onClose }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Протектрон</Text>
-          <Text style={styles.traitName}>{trait.name}</Text>
-          {renderTextWithIcons(trait.description, styles.modalText)}
+          <Text style={styles.traitName}>{name}</Text>
+          {renderTextWithIcons(description, styles.modalText)}
           <TouchableOpacity
             style={[styles.modalButton, styles.confirmButton]}
             onPress={handleConfirm}

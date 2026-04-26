@@ -18,7 +18,7 @@ import OriginModal from "./modals/OriginModal";
 import TraitSkillModal from "./modals/TraitSkillModal";
 import EquipmentKitModal from "./modals/EquipmentKitModal";
 import { ORIGINS } from "./logic/originsData";
-import { TRAITS } from "./logic/traitsData";
+import { loadTraitsData } from "../../../domain/traits";
 import { getTraitModalComponent, getTraitConfig } from "./modals/traits/index";
 import {
   createInitialAttributes,
@@ -603,12 +603,10 @@ export default function CharacterScreen() {
     });
   };
 
-  // Функция для получения черт происхождения
+  // Возвращает true если для данного origin есть трейт-модал
   const getTraitsForOrigin = (origin) => {
     if (!origin) return [];
-    return Object.entries(TRAITS).filter(
-      ([_, trait]) => trait.origin === origin.name,
-    );
+    return loadTraitsData().filter((t) => t.originId === origin.id);
   };
 
   const handleSelectOrigin = (origin) => {
@@ -653,13 +651,11 @@ export default function CharacterScreen() {
   };
 
   const handleSelectTrait = (traitName, newModifiersFromModal) => {
-    // Комбинируем базовую информацию о черте с модификаторами из модального окна
-    const baseInfo = TRAITS[traitName] || {};
+    // traitName — локализованное имя черты из модала
+    // Комбинируем с модификаторами из модального окна
     const newTrait = {
-      ...baseInfo,
       name: traitName,
       modifiers: {
-        ...(baseInfo.modifiers || {}),
         ...(newModifiersFromModal || {}),
       },
     };
@@ -815,11 +811,10 @@ export default function CharacterScreen() {
     }
 
     // Если есть специальное модальное окно для черты
-    const TraitModalComponent = getTraitModalComponent(origin.name);
+    const TraitModalComponent = getTraitModalComponent(origin.id);
     if (TraitModalComponent) {
       setIsTraitModalVisible(true);
     } else {
-      // Если нет специального модального окна, показываем обычный список
       setIsTraitModalVisible(true);
     }
   };
@@ -972,7 +967,7 @@ export default function CharacterScreen() {
 
   // Получаем компонент модального окна для черты
   const TraitModalComponent = origin
-    ? getTraitModalComponent(origin.name)
+    ? getTraitModalComponent(origin.id)
     : null;
 
   return (

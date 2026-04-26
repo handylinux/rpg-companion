@@ -1,5 +1,5 @@
 // components/screens/CharacterScreen/logic/ammoLogic.js
-import { calculateDamage, parseFormula } from './Calculator.js';
+import { calculateDamage, parseFormula } from '../../../../../domain/diceRollsLogic';
 
 /**
  * Парсит формулу вида "X+Nfn{CD} <tag>" или "N <tag>".
