@@ -2668,5 +2668,24 @@
                           }
                       ],
         "weaponType":  "Explosive"
+    },
+    {
+        "id": "unarmed_human",
+        "itemType": "weapon",
+        "weaponType": "Unarmed",
+        "damage": 2,
+        "damageType": "physical",
+        "range": "C",
+        "mainAttr": "STR",
+        "mainSkill": "UNARMED",
+        "weight": 0,
+        "cost": 0,
+        "rarity": 0,
+        "isBuiltin": true,
+        "qualities": [
+            {
+                "qualityId": "quality_close_quarters"
+            }
+        ]
     }
 ]

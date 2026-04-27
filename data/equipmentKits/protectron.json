@@ -3,13 +3,27 @@
     "items": [
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "weaponId": "robot_weapon_protectron_manipulator",
+        "itemType": "weapon",
+        "slot": "right"
       },
       {
         "type": "fixed",
@@ -58,6 +72,18 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
+      },
+      {
+        "type": "fixed",
         "weaponId": "robot_weapon_shocker_arms",
         "itemType": "weapon"
       },
@@ -86,6 +112,12 @@
   },
   "protectron_firefighter": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
+      },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_cryojet",
@@ -126,12 +158,25 @@
       }
     ]
   },
-  "protectron_nukатron": {
+  "protectron_nukatron": {
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
+      },
+      {
+        "type": "fixed",
         "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "left"
       },
       {
         "type": "fixed",
@@ -187,8 +232,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
+      },
+      {
+        "type": "fixed",
         "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "left"
       },
       {
         "type": "fixed",
@@ -212,7 +270,9 @@
                 "type": "fixed",
                 "weaponId": "weapon_railway_rifle",
                 "itemType": "weapon",
-                "overrideQualities": ["remove:quality_two-handed"],
+                "overrideQualities": [
+                  "remove:quality_two-handed"
+                ],
                 "ammo": {
                   "ammoId": "ammo_railway_spike",
                   "quantity": {
@@ -251,13 +311,27 @@
     "items": [
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_protectron",
+        "itemType": "robotArm",
+        "slot": "right"
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_protectron_manipulator",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "weaponId": "robot_weapon_protectron_manipulator",
+        "itemType": "weapon",
+        "slot": "right"
       },
       {
         "type": "fixed",
@@ -360,4 +434,3 @@
     ]
   }
 }
-

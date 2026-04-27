@@ -29,7 +29,7 @@
   "protectron_standard": { "name": "Протектрон" },
   "protectron_medic": { "name": "Медик" },
   "protectron_firefighter": { "name": "Пожарный" },
-  "protectron_nukатron": { "name": "Нюка-Трон" },
+  "protectron_nukatron": { "name": "Нюка-Трон" },
   "protectron_worker": { "name": "Рабочий" },
   "protectron_model_x": { "name": "Модель X" }
 }

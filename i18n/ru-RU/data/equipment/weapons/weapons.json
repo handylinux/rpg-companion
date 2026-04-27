@@ -1038,5 +1038,10 @@
       "without": "",
       "with": ""
     }
+  },
+  {
+    "id": "unarmed_human",
+    "name": "Кулаки",
+    "rangeName": "Близкая"
   }
 ]
