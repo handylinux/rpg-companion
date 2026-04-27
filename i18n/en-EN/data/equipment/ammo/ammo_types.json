@@ -34,5 +34,7 @@
   { "id": "ammo_acid_concentrate", "name": "Кислотный концентрат" },
   { "id": "ammo_cannonball", "name": "Пушечное ядро" },
   { "id": "ammo_cryo_cell", "name": "Крио-элемент" },
-  { "id": "ammo_harpoon", "name": "Гарпун" }
+  { "id": "ammo_harpoon", "name": "Гарпун" },
+  { "id": "ammo_syringe_bloodpack", "name": "Bloodpack Syringe" },
+  { "id": "ammo_gas_grenade", "name": "Gas Grenade" }
 ]

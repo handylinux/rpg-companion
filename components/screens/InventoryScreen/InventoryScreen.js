@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ImageBackground, SafeAreaView, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ImageBackground, SafeAreaView, FlatList, TouchableOpacity, Alert, Platform } from 'react-native';
 import { useCharacter } from '../../CharacterContext';
 import CapsModal from './modals/CapsModal';
 import SellItemModal from './modals/SellItemModal';
@@ -39,6 +39,19 @@ const InventoryScreen = () => {
     getModifiedItem,
     trait
   } = useCharacter();
+
+  const showAlert = (title, message = '') => {
+    const text = message ? `${title}\n\n${message}` : title;
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert(text);
+      return;
+    }
+    if (message) {
+      Alert.alert(title, message);
+    } else {
+      Alert.alert(title);
+    }
+  };
   
   const [isCapsModalVisible, setIsCapsModalVisible] = useState(false);
   const [capsOperationType, setCapsOperationType] = useState('add');
@@ -251,7 +264,7 @@ const InventoryScreen = () => {
 
     const applyToSelf = () => {
       if (isRobotCharacter) {
-        Alert.alert(tInventory('screen.alerts.robotCannotSelfUseTitle', 'Ограничение робота'), tInventory('screen.alerts.robotCannotSelfUseMessage', 'Роботы не могут применять еду, напитки и препараты на себя.'));
+        showAlert(tInventory('screen.alerts.robotCannotSelfUseTitle', 'Ограничение робота'), tInventory('screen.alerts.robotCannotSelfUseMessage', 'Роботы не могут применять еду, напитки и препараты на себя.'));
         return;
       }
 
@@ -278,34 +291,34 @@ const InventoryScreen = () => {
           newHealth,
         });
         setCurrentHealth(newHealth);
-        Alert.alert(tInventory('screen.alerts.successTitle'), formatInventoryText(tInventory('screen.alerts.healMessage'), { healAmount }));
+        showAlert(tInventory('screen.alerts.successTitle'), formatInventoryText(tInventory('screen.alerts.healMessage'), { healAmount }));
       } else {
         console.log('[handleApplyConsumable] NO HEAL AMOUNT FOUND');
-        Alert.alert(tInventory('screen.alerts.appliedTitle'), formatInventoryText(tInventory('screen.alerts.appliedSelfMessage'), { itemName }));
+        showAlert(tInventory('screen.alerts.appliedTitle'), formatInventoryText(tInventory('screen.alerts.appliedSelfMessage'), { itemName }));
       }
 
       // Эффекты от timed-эффектов
       if (timedResult.events.length > 0) {
-        Alert.alert(tInventory('screen.alerts.effectsTitle'), timedResult.events.join('\n'));
+        showAlert(tInventory('screen.alerts.effectsTitle'), timedResult.events.join('\n'));
       }
 
       // Удаление условий (аддиктол, антибиотики)
       if (conditionsRemoved.length > 0) {
-        Alert.alert(tInventory('screen.alerts.conditionsRemovedTitle', 'Снято состояние'), tInventory('screen.alerts.conditionsRemovedMessage', 'Снято: {{conditions}}', { conditions: conditionsRemoved.join(', ') }));
+        showAlert(tInventory('screen.alerts.conditionsRemovedTitle', 'Снято состояние'), tInventory('screen.alerts.conditionsRemovedMessage', 'Снято: {{conditions}}', { conditions: conditionsRemoved.join(', ') }));
       }
 
       // Результат броска на зависимость
       if (addictionResult) {
         const { effectCount, faces, addicted, addictionLevel } = addictionResult;
         const facesText = faces.join(', ');
-        Alert.alert(
+        showAlert(
           tInventory('screen.alerts.addictionRollTitle', 'Бросок на зависимость'),
           tInventory('screen.alerts.addictionRollMessage', 'Брошено: {{faces}} — {{effectCount}} эффект(ов) из {{addictionLevel}} нужных.', { faces: facesText, effectCount, addictionLevel })
         );
         if (addicted) {
-          Alert.alert(tInventory('screen.alerts.addictionGainedTitle', 'Зависимость'), tInventory('screen.alerts.addictionGainedMessage', 'Вы стали зависимы от этого препарата.'));
+          showAlert(tInventory('screen.alerts.addictionGainedTitle', 'Зависимость'), tInventory('screen.alerts.addictionGainedMessage', 'Вы стали зависимы от этого препарата.'));
         } else {
-          Alert.alert(tInventory('screen.alerts.addictionAvoidedTitle', 'Зависимость'), tInventory('screen.alerts.addictionAvoidedMessage', 'Зависимость не наступила.'));
+          showAlert(tInventory('screen.alerts.addictionAvoidedTitle', 'Зависимость'), tInventory('screen.alerts.addictionAvoidedMessage', 'Зависимость не наступила.'));
         }
       }
 
@@ -313,7 +326,7 @@ const InventoryScreen = () => {
     };
 
     const applyToOther = () => {
-      Alert.alert(tInventory('screen.alerts.appliedTitle'), formatInventoryText(tInventory('screen.alerts.appliedOtherMessage'), { itemName }));
+      showAlert(tInventory('screen.alerts.appliedTitle'), formatInventoryText(tInventory('screen.alerts.appliedOtherMessage'), { itemName }));
       handleRemoveItem(consumableItem, 1);
     };
 
@@ -327,7 +340,7 @@ const InventoryScreen = () => {
       return;
     }
 
-    Alert.alert(
+    showAlert(
       tInventory('screen.alerts.applyConsumableTitle'),
       formatInventoryText(tInventory('screen.alerts.applyConsumableQuestion'), { itemName }),
       [
@@ -532,7 +545,7 @@ const InventoryScreen = () => {
     if (isRobotCharacter && isRobotOnlyItem(displayWeapon) && Array.isArray(robotBodyUpgrade?.allowedRobotWeaponIds)) {
       const allowedWeaponIds = robotBodyUpgrade.allowedRobotWeaponIds;
       if (displayWeapon?.id && !allowedWeaponIds.includes(displayWeapon.id)) {
-        Alert.alert(
+        showAlert(
           tInventory('screen.alerts.robotBodyWeaponMismatchTitle'),
           tInventory('screen.alerts.robotBodyWeaponMismatchMessage')
         );
@@ -541,7 +554,7 @@ const InventoryScreen = () => {
     }
 
     if (isRobotOnlyItem(displayWeapon) && !isRobotCharacter) {
-      Alert.alert(tInventory('screen.alerts.robotOnlyWeaponTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotOnlyWeaponMessage', 'Это оружие могут использовать только роботы.'));
+      showAlert(tInventory('screen.alerts.robotOnlyWeaponTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotOnlyWeaponMessage', 'Это оружие могут использовать только роботы.'));
       return;
     }
     if (!isRobotOnlyItem(displayWeapon) && isRobotCharacter) {
@@ -550,7 +563,7 @@ const InventoryScreen = () => {
         .filter((w) => Boolean(w?.canHandelWeapon));
 
       if (!handlers.length) {
-        Alert.alert(
+        showAlert(
           tInventory('screen.alerts.manipulatorRequiredTitle'),
           tInventory('screen.alerts.robotNoHandlingLimbMessage')
         );
@@ -572,7 +585,7 @@ const InventoryScreen = () => {
 
       if (!canAnyHandlerEquip) {
         if (isTwoHandedWeapon && handlers.some((handler) => Boolean(handler?.excludeTwoHanded))) {
-          Alert.alert(
+          showAlert(
             tInventory('screen.alerts.manipulatorWeightTitle'),
             tInventory('screen.alerts.robotCannotUseTwoHandedMessage')
           );
@@ -584,7 +597,7 @@ const InventoryScreen = () => {
           .map((value) => toWeight(value))
           .filter((value) => value > 0);
         const maxHeldWeight = numericLimits.length ? Math.max(...numericLimits) : 0;
-        Alert.alert(
+        showAlert(
           tInventory('screen.alerts.manipulatorWeightTitle'),
           formatInventoryText(
             tInventory('screen.alerts.manipulatorWeightMessage'),
@@ -602,7 +615,7 @@ const InventoryScreen = () => {
     const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
 
     if (totalOwned <= alreadyEquippedCount) {
-        Alert.alert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
+        showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
     }
 
@@ -687,7 +700,7 @@ const InventoryScreen = () => {
           onPress: () => equipAction(index),
         }));
 
-        Alert.alert(
+        showAlert(
           tInventory('screen.alerts.replaceWeaponTitle'),
           replaceMessage,
           [
@@ -739,11 +752,11 @@ const InventoryScreen = () => {
   const handleEquipArmor = (itemToEquip) => {
     const currentEquipped = equippedArmor;
     if (isRobotCharacter && !isRobotOnlyItem(itemToEquip)) {
-      Alert.alert(tInventory('screen.alerts.robotArmorOnlyTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotArmorOnlyMessage', 'Роботы не могут экипировать типовую или силовую броню.'));
+      showAlert(tInventory('screen.alerts.robotArmorOnlyTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotArmorOnlyMessage', 'Роботы не могут экипировать типовую или силовую броню.'));
       return;
     }
     if (isRobotCharacter && isPowerArmorItem(itemToEquip)) {
-      Alert.alert(tInventory('screen.alerts.robotArmorOnlyTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotArmorOnlyMessage', 'Роботы не могут экипировать типовую или силовую броню.'));
+      showAlert(tInventory('screen.alerts.robotArmorOnlyTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotArmorOnlyMessage', 'Роботы не могут экипировать типовую или силовую броню.'));
       return;
     }
     const canWearUnderArmor = itemToEquip.itemType === 'clothing' && (
@@ -760,7 +773,7 @@ const InventoryScreen = () => {
     }).length;
 
     if (ownedCount <= equippedCount) {
-      Alert.alert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
+      showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
       return;
     }
 
@@ -834,7 +847,7 @@ const InventoryScreen = () => {
                   performEquip();
               }
           } else {
-              Alert.alert(
+              showAlert(
                   tInventory('screen.alerts.replaceEquipmentTitle'),
                   tInventory('screen.alerts.replaceEquipmentConfirm'),
                   [
@@ -872,7 +885,7 @@ const InventoryScreen = () => {
       return;
     }
 
-    Alert.alert(
+    showAlert(
       tInventory('screen.alerts.replaceEquipmentTitle'),
       tInventory('screen.alerts.bothSlotsBusy'),
       [

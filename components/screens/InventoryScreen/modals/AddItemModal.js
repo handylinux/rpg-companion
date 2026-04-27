@@ -16,6 +16,13 @@ const CATEGORY_ICONS = {
   chems: '💊',
   items: '🔧',
   materials: '🧰',
+  robotEquipment: '🤖',
+  robotWeapons: '⚙️',
+  robotPlating: '🔩',
+  robotArmorLayer: '🛡️',
+  robotFrame: '⚙️',
+  robotBodyParts: '🦾',
+  robotModules: '💡',
 };
 
 const mapWeaponTypeToDbValue = {
@@ -108,11 +115,13 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
 
   const staticData = useMemo(() => {
     const equipmentCatalog = getEquipmentCatalog(locale);
+
     return {
-      [tInventory('modals.addItemModal.categories.armor')]: (equipmentCatalog.armor?.armor || []).reduce((acc, category) => {
-        acc[category.type] = category.items;
-        return acc;
-      }, {}),
+      [tInventory('modals.addItemModal.categories.armor')]: (equipmentCatalog.armor?.armor || [])
+        .reduce((acc, category) => {
+          acc[category.type] = category.items;
+          return acc;
+        }, {}),
       [tInventory('modals.addItemModal.categories.clothing')]: (equipmentCatalog.clothes?.clothes || []).reduce((acc, category) => {
         acc[category.type] = category.items;
         return acc;
@@ -134,6 +143,14 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
       },
       [tInventory('modals.addItemModal.categories.materials')]: {
         [tInventory('modals.addItemModal.categories.all')]: [],
+      },
+      [tInventory('modals.addItemModal.categories.robotEquipment')]: {
+        [tInventory('modals.addItemModal.categories.robotWeapons')]: equipmentCatalog.robotWeaponsOnly || [],
+        [tInventory('modals.addItemModal.categories.robotPlating')]: equipmentCatalog.robotPlating || [],
+        [tInventory('modals.addItemModal.categories.robotArmorLayer')]: equipmentCatalog.robotArmorLayer || [],
+        [tInventory('modals.addItemModal.categories.robotFrame')]: equipmentCatalog.robotFrames || [],
+        [tInventory('modals.addItemModal.categories.robotBodyParts')]: equipmentCatalog.robotBody || [],
+        [tInventory('modals.addItemModal.categories.robotModules')]: equipmentCatalog.robotModules || [],
       },
     };
   }, [locale]);
@@ -157,6 +174,9 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     if (itemType === 'chem' || itemType === 'chems') return tInventory('modals.addItemModal.itemTypes.chem');
     if (itemType === 'drinks') return tInventory('modals.addItemModal.itemTypes.drinks');
     if (itemType === 'ammo') return tInventory('modals.addItemModal.itemTypes.ammo');
+    if (itemType === 'plating') return tInventory('modals.addItemModal.itemTypes.plating');
+    if (itemType === 'robotArmor') return tInventory('modals.addItemModal.itemTypes.robotArmor');
+    if (itemType === 'robotFrame') return tInventory('modals.addItemModal.itemTypes.robotFrame');
     return '';
   };
 
@@ -185,7 +205,7 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
       Object.values(allData[tInventory('modals.addItemModal.categories.weapon')] || {}).forEach((items) => Array.isArray(items) && allItems.push(...items));
       Object.values(allData[tInventory('modals.addItemModal.categories.armor')] || {}).forEach((items) => Array.isArray(items) && allItems.push(...items));
       Object.values(allData[tInventory('modals.addItemModal.categories.clothing')] || {}).forEach((items) => Array.isArray(items) && allItems.push(...items));
-
+      Object.values(allData[tInventory('modals.addItemModal.categories.robotEquipment')] || {}).forEach((items) => Array.isArray(items) && allItems.push(...items));
       const allLabel = tInventory('modals.addItemModal.categories.all');
       const categoryKeys = ['ammo', 'chems', 'drinks', 'food', 'items'].map((key) => tInventory(`modals.addItemModal.categories.${key}`));
       categoryKeys.forEach((category) => {

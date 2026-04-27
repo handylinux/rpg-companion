@@ -66,37 +66,31 @@
       "cost": 0,
       "rarity": 0,
       "robotOnly": true
-    }
-  ],
-  "robotPartsUpgrade": [
-    {
-      "id": "robot_body_mister_handy",
-      "slot": "body",
-      "partType": "body",
-      "itemType": "robotPart",
-      "robotBodyPlan": "misterHandy",
-      "requiresManipulatorForStandardWeapons": true,
-      "allowedRobotWeaponIds": [
-        "robot_weapon_manipulator",
-        "robot_weapon_circular_saw",
-        "robot_weapon_auto_10mm",
-        "robot_weapon_flamethrower",
-        "robot_weapon_laser_cutter"
-      ]
     },
     {
-      "id": "robot_body_protectron",
-      "slot": "body",
-      "partType": "body",
-      "itemType": "robotPart",
-      "robotBodyPlan": "protectron",
-      "requiresManipulatorForStandardWeapons": false,
-      "allowedRobotWeaponIds": [
-        "robot_weapon_protectron_manipulator",
-        "robot_weapon_cryojet",
-        "robot_weapon_self_destruct",
-        "robot_weapon_shocker_arms"
-      ]
+      "id": "robot_module_sensor_array",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    },
+    {
+      "id": "robot_module_hacking",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
+    },
+    {
+      "id": "robot_module_radiation_coils",
+      "itemType": "module",
+      "weight": 0,
+      "cost": 0,
+      "rarity": 0,
+      "robotOnly": true
     }
-  ]
+  ],
+  "robotPartsUpgrade": []
 }

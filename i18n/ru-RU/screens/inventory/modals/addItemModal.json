@@ -19,7 +19,14 @@
     "chems": "Препараты",
     "materials": "Материалы",
     "items": "Предметы",
-    "all": "Все"
+    "all": "Все",
+    "robotEquipment": "Снаряжение роботов",
+    "robotWeapons": "Оружие роботов",
+    "robotPlating": "Обшивка",
+    "robotArmorLayer": "Броня",
+    "robotFrame": "Привод",
+    "robotBodyParts": "Части тела роботов",
+    "robotModules": "Модули роботов"
   },
   "itemTypes": {
     "weapon": "🔫 Оружие",
@@ -27,7 +34,10 @@
     "clothing": "👕 Одежда",
     "chem": "💊 Препарат",
     "drinks": "🥤 Напиток",
-    "ammo": "🔹 Боеприпасы"
+    "ammo": "🔹 Боеприпасы",
+    "plating": "🔩 Обшивка",
+    "robotArmor": "🛡️ Броня робота",
+    "robotFrame": "⚙️ Привод"
   },
   "title": "Добавить предмет",
   "back": "...Назад",

@@ -156,7 +156,14 @@
     "canWearRobotArmor": true,
     "canWearMutantArmor": false,
     "traitIds": ["protectron-protect-or-destroy"],
-    "equipmentKitIds": ["default_caps_only"]
+    "equipmentKitIds": [
+      "protectron_standard",
+      "protectron_medic",
+      "protectron_firefighter",
+      "protectron_nukатron",
+      "protectron_worker",
+      "protectron_model_x"
+    ]
   },
   {
     "id": "shadow",

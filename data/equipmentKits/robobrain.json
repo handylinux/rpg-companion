@@ -1,0 +1,38 @@
+{
+  "robobrain_hypnotron": {
+    "items": [
+      {
+        "type": "fixed",
+        "weaponId": "weapon_mesmetron",
+        "itemType": "weapon",
+        "ammo": {
+          "ammoId": "ammo_gamma_round",
+          "quantity": {
+            "base": 5,
+            "rollType": "rollCD",
+            "rollValue": 5,
+            "op": "+"
+          }
+        }
+      },
+      {
+        "type": "rollTable",
+        "tableId": "food",
+        "roll": {
+          "rollType": "D20",
+          "count": 2,
+          "mode": "separate"
+        }
+      },
+      {
+        "type": "rollTable",
+        "tableId": "trinklet",
+        "roll": {
+          "rollType": "D20",
+          "count": 1,
+          "mode": "separate"
+        }
+      }
+    ]
+  }
+}

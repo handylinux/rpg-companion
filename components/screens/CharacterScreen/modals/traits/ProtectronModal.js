@@ -9,7 +9,22 @@ const ProtectronModal = ({ visible, onSelect, onClose }) => {
   const { name, description } = getTraitI18n('protectron-protect-or-destroy');
 
   const handleConfirm = () => {
-    onSelect(name, { effects: ['Переброс проверки на экологическую опасность', 'Иммунитет к болезням, радиации и ядам', 'Нельзя использовать препараты, еду, питье, отдых', 'Ремонт для восстановления здоровья'] });
+    onSelect(name, {
+      effects: ['Переброс проверки на экологическую опасность', 'Иммунитет к болезням, радиации и ядам', 'Нельзя использовать препараты, еду, питье, отдых', 'Ремонт для восстановления здоровья'],
+      carryWeightStrengthMultiplier: 0,
+      carryWeight: 0,
+      isRobot: true,
+      robotType: 'protectron',
+      robotBodyPlan: 'protectron',
+      robotRules: {
+        canSelfUseConsumables: false,
+        canUseConsumablesOnOthers: true,
+        canEquipStandardArmor: false,
+        canEquipPowerArmor: false,
+        carryWeightLimit: 150,
+        armorConstraints: []
+      }
+    });
   };
 
   return (

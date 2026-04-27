@@ -1,17 +1,7 @@
-{
-  "armor": [
-    {
-      "type": "armor.groups.robotArmor",
-      "items": [
-        {
-          "id": "robot_armor_standard_plating",
-          "name": "Стандартная обшивка"
-        },
-        {
-          "id": "robot_armor_mister_gutsy_plating",
-          "name": "Обшивка для Мистера Храбреца"
-        }
-      ]
-    }
-  ]
-}
+[
+  { "id": "robot_armor_factory_optics",   "name": "Заводская броня (Оптика)",   "special": "Стандартизированная заводская обшивка" },
+  { "id": "robot_armor_factory_body",     "name": "Заводская броня (Корпус)",   "special": "Стандартизированная заводская обшивка" },
+  { "id": "robot_armor_factory_arms",     "name": "Заводская броня (Руки)",     "special": "Стандартизированная заводская обшивка" },
+  { "id": "robot_armor_factory_thruster", "name": "Заводская броня (Тяга)",     "special": "Стандартизированная заводская обшивка" },
+  { "id": "robot_armor_storage_body",     "name": "Заводская броня с хранилищем (Корпус)", "special": "Добавляет отсеки для хранения" }
+]

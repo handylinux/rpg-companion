@@ -1,17 +1,7 @@
-{
-  "armor": [
-    {
-      "type": "armor.groups.robotArmor",
-      "items": [
-        {
-          "id": "robot_armor_standard_plating",
-          "name": "Standard Plating"
-        },
-        {
-          "id": "robot_armor_mister_gutsy_plating",
-          "name": "Mister Gutsy Plating"
-        }
-      ]
-    }
-  ]
-}
+[
+  { "id": "robot_armor_factory_optics",   "name": "Factory Armor (Optics)",   "special": "Standardized factory-made plating" },
+  { "id": "robot_armor_factory_body",     "name": "Factory Armor (Main Body)", "special": "Standardized factory-made plating" },
+  { "id": "robot_armor_factory_arms",     "name": "Factory Armor (Arms)",     "special": "Standardized factory-made plating" },
+  { "id": "robot_armor_factory_thruster", "name": "Factory Armor (Thruster)", "special": "Standardized factory-made plating" },
+  { "id": "robot_armor_storage_body",     "name": "Factory Storage Armor (Main Body)", "special": "Adds storage compartments" }
+]

@@ -1,0 +1,7 @@
+[
+  { "id": "robot_arm_protectron",   "name": "Рука Протектрона" },
+  { "id": "robot_arm_mister_handy", "name": "Рука Мистера Помощника" },
+  { "id": "robot_arm_assaultron",   "name": "Рука Ассолтрона" },
+  { "id": "robot_arm_robobrain",    "name": "Рука Роботмозга" },
+  { "id": "robot_arm_sentry_bot",   "name": "Рука Сентри-бота" }
+]

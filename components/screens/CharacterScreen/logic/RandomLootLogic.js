@@ -130,6 +130,22 @@ export async function resolveRandomLoot(lootFormula) {
 
 export async function resolveRandomLootByRoll(tag, count = 1) {
     const normalizedTag = String(tag || '').toLowerCase();
+
+    // Таблица диковин — берётся из каталога, не из assets/RandomLoot
+    if (normalizedTag === 'oddity') {
+        const catalog = getEquipmentCatalog();
+        const oddities = catalog?.oddities || [];
+        if (!oddities.length) return [];
+        const totalRolls = Math.max(0, parseInt(count, 10) || 0);
+        const items = [];
+        for (let i = 0; i < totalRolls; i++) {
+            const idx = (rollDie(20) - 1) % oddities.length;
+            const item = oddities[idx];
+            if (item) items.push({ ...item, quantity: 1, itemType: item.itemType || 'misc' });
+        }
+        return items;
+    }
+
     const lootTable = lootTables[normalizedTag];
     if (!lootTable) return [];
 

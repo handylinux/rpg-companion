@@ -1,4 +1,4 @@
-import equipmentKitsData from '../../../../i18n/ru-RU/data/system/equipmentKits.json';
+import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
 import { loadOriginsData, tOrigin } from '../../../../domain/traits';
 
 const ORIGIN_IMAGES = {
@@ -21,7 +21,7 @@ const ORIGIN_IMAGES = {
   savage: require('../../../../assets/origins/savage.png'),
 };
 
-const equipmentKitGroups = equipmentKitsData.equipmentKitGroups || {};
+const { equipmentKits: equipmentKitGroups } = getEquipmentCatalog();
 
 // Build ORIGINS from data/origins/origins.json — single source of truth for origin ids/structure.
 // Names come from i18n via tOrigin(id). Equipment kits come from equipmentKits.json.

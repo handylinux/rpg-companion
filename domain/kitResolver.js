@@ -15,9 +15,11 @@ const ROLL_TABLE_TAG = {
   brewery: 'brewery',
   chem: 'chem',
   outcast: 'outcast',
+  oddity: 'oddity',
 };
 
 const MR_HANDY_BODY_ID = 'robot_body_mister_handy';
+const PROTECTRON_BODY_ID = 'robot_body_protectron';
 
 const toNumber = (value) => Number.isFinite(value) ? value : Number(value) || 0;
 
@@ -90,7 +92,7 @@ const resolveItemById = (item) => {
         ...found,
         ...item,
         name: found.name,
-        itemType: 'armor',
+        itemType: found.itemType || 'armor',
       };
     }
   }
@@ -112,11 +114,13 @@ const resolveItemById = (item) => {
     const all = [
       ...flattenGroupedItems(catalog?.miscellaneous),
       ...(catalog?.generalGoods || []),
+      ...(catalog?.oddities || []),
       ...(catalog?.chems || []),
       ...(catalog?.drinks || []),
+      ...(catalog?.food || []),
       ...(catalog?.robotModules || []),
       ...(catalog?.robotItems || []),
-      ...(catalog?.robotPartsUpgrade || []),
+      ...(catalog?.robotBody || []),
     ];
     const found = all.find((entry) => entry.id === item.itemId);
     if (found) {
@@ -244,14 +248,32 @@ export async function resolveKitItems(kit) {
 
   const withAutoRobotBody = [...flatEntries];
   const isMisterHandyKit = String(kit?.id || '').startsWith('mister_handy_');
+  const isProtectronKit = String(kit?.id || '').startsWith('protectron_');
   const hasMisterHandyBody = withAutoRobotBody.some(
     (entry) => entry?.id === MR_HANDY_BODY_ID || entry?.itemId === MR_HANDY_BODY_ID,
+  );
+  const hasProtectronBody = withAutoRobotBody.some(
+    (entry) => entry?.id === PROTECTRON_BODY_ID || entry?.itemId === PROTECTRON_BODY_ID,
   );
 
   if (isMisterHandyKit && !hasMisterHandyBody) {
     const bodyPart = resolveItemById({
       type: 'fixed',
       itemId: MR_HANDY_BODY_ID,
+      itemType: 'robotPart',
+      hiddenInKitModal: true,
+      quantity: 1,
+      autoInjected: true,
+    });
+    if (bodyPart) {
+      withAutoRobotBody.push(bodyPart);
+    }
+  }
+
+  if (isProtectronKit && !hasProtectronBody) {
+    const bodyPart = resolveItemById({
+      type: 'fixed',
+      itemId: PROTECTRON_BODY_ID,
       itemType: 'robotPart',
       hiddenInKitModal: true,
       quantity: 1,

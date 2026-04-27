@@ -1,0 +1,7 @@
+[
+  { "id": "robot_arm_protectron",   "name": "Protectron Arm" },
+  { "id": "robot_arm_mister_handy", "name": "Mister Handy Arm" },
+  { "id": "robot_arm_assaultron",   "name": "Assaultron Arm" },
+  { "id": "robot_arm_robobrain",    "name": "Robobrain Arm" },
+  { "id": "robot_arm_sentry_bot",   "name": "Sentry Bot Arm" }
+]

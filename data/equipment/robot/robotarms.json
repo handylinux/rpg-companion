@@ -1,0 +1,62 @@
+[
+  {
+    "id": "robot_arm_protectron",
+    "itemType": "robotArm",
+    "slots": ["Left Arm", "Right Arm"],
+    "maxSlots": 2,
+    "complexity": 4,
+    "perksRequired": ["Robotics Expert 1"],
+    "skill": "Repair",
+    "rarity": 1,
+    "melee": 2,
+    "guns": 2
+  },
+  {
+    "id": "robot_arm_mister_handy",
+    "itemType": "robotArm",
+    "slots": ["Arm 1", "Arm 2", "Arm 3"],
+    "maxSlots": 3,
+    "complexity": 5,
+    "perksRequired": ["Robotics Expert 1"],
+    "skill": "Repair",
+    "rarity": 1,
+    "melee": 3,
+    "guns": 1
+  },
+  {
+    "id": "robot_arm_assaultron",
+    "itemType": "robotArm",
+    "slots": ["Left Arm", "Right Arm"],
+    "maxSlots": 2,
+    "complexity": 5,
+    "perksRequired": ["Robotics Expert 2"],
+    "skill": "Repair",
+    "rarity": 1,
+    "melee": 5,
+    "guns": 5
+  },
+  {
+    "id": "robot_arm_robobrain",
+    "itemType": "robotArm",
+    "slots": ["Left Arm", "Right Arm"],
+    "maxSlots": 2,
+    "complexity": 5,
+    "perksRequired": ["Robotics Expert 2", "Science! 1"],
+    "skill": "Repair",
+    "rarity": 2,
+    "melee": 2,
+    "guns": 4
+  },
+  {
+    "id": "robot_arm_sentry_bot",
+    "itemType": "robotArm",
+    "slots": ["Left Arm", "Right Arm"],
+    "maxSlots": 2,
+    "complexity": 6,
+    "perksRequired": ["Armorer 1", "Robotics Expert 3", "Science! 1"],
+    "skill": "Repair",
+    "rarity": 2,
+    "melee": 4,
+    "guns": 5
+  }
+]
