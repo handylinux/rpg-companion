@@ -58,7 +58,9 @@ export const CharacterProvider = ({ children }) => {
   const [effects, setEffects] = useState([]);
   const [activeTimedEffects, setActiveTimedEffects] = useState([]);
   const [sceneCounter, setSceneCounter] = useState(0);
-  const [equippedWeapons, setEquippedWeapons] = useState([null, null]);
+  const [equippedWeapons, setEquippedWeapons] = useState([]);
+  const [equippedRobotSlots, setEquippedRobotSlots] = useState(null);
+  const [equippedRobotModules, setEquippedRobotModules] = useState([]);
   const [equippedArmor, setEquippedArmor] = useState({
     head: { armor: null, clothing: null },
     body: { armor: null, clothing: null },
@@ -117,6 +119,8 @@ export const CharacterProvider = ({ children }) => {
     activeTimedEffects,
     sceneCounter,
     equippedWeapons,
+    equippedRobotSlots,
+    equippedRobotModules,
     equippedArmor,
     caps,
     currentHealth,
@@ -136,7 +140,7 @@ export const CharacterProvider = ({ children }) => {
   }), [
     characterName, level, attributes, skills, selectedSkills, extraTaggedSkills,
     forcedSelectedSkills, origin, trait, equipment, effects, activeTimedEffects,
-    sceneCounter, equippedWeapons,
+    sceneCounter, equippedWeapons, equippedRobotSlots, equippedRobotModules,
     equippedArmor, caps, currentHealth, modifiedItems, availablePerkAttributePoints,
     luckPoints, maxLuckPoints, attributesSaved, skillsSaved, selectedPerks,
     carryWeight, meleeBonus, initiative, defense, conditions, chemDosesLog,
@@ -166,7 +170,7 @@ export const CharacterProvider = ({ children }) => {
   }, [
     characterName, level, attributes, skills, selectedSkills, extraTaggedSkills,
     forcedSelectedSkills, origin, trait, equipment, effects, activeTimedEffects,
-    sceneCounter, equippedWeapons,
+    sceneCounter, equippedWeapons, equippedRobotSlots, equippedRobotModules,
     equippedArmor, caps, currentHealth, modifiedItems, availablePerkAttributePoints,
     luckPoints, maxLuckPoints, attributesSaved, skillsSaved, selectedPerks,
     carryWeight, meleeBonus, initiative, defense, buildSnapshot,
@@ -221,7 +225,11 @@ export const CharacterProvider = ({ children }) => {
       setEffects(data.effects || []);
       setActiveTimedEffects(pruneExpiredTimedEffects(data.activeTimedEffects || []).effects);
       setSceneCounter(data.sceneCounter ?? 0);
-      setEquippedWeapons(data.equippedWeapons || [null, null]);
+      // Migrate old [null, null] format to dynamic array
+      const rawWeapons = data.equippedWeapons || [];
+      setEquippedWeapons(Array.isArray(rawWeapons) ? rawWeapons.filter(w => w !== null) : []);
+      setEquippedRobotSlots(data.equippedRobotSlots ?? null);
+      setEquippedRobotModules(data.equippedRobotModules ?? []);
       setEquippedArmor(data.equippedArmor || {
         head: { armor: null, clothing: null },
         body: { armor: null, clothing: null },
@@ -430,7 +438,9 @@ export const CharacterProvider = ({ children }) => {
     setEffects([]);
     setActiveTimedEffects([]);
     setSceneCounter(0);
-    setEquippedWeapons([null, null]);
+    setEquippedWeapons([]);
+    setEquippedRobotSlots(null);
+    setEquippedRobotModules([]);
     setEquippedArmor({
       head: { armor: null, clothing: null },
       body: { armor: null, clothing: null },
@@ -484,6 +494,8 @@ export const CharacterProvider = ({ children }) => {
     chemDosesLog,
     advanceScene,
     equippedWeapons, setEquippedWeapons,
+    equippedRobotSlots, setEquippedRobotSlots,
+    equippedRobotModules, setEquippedRobotModules,
     equippedArmor, setEquippedArmor,
     caps, setCaps,
     currentHealth, setCurrentHealth,

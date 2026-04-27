@@ -285,6 +285,9 @@ export default function CharacterScreen() {
     resetCharacter,
     availablePerkAttributePoints,
     commitAttributeChanges,
+    setEquippedWeapons,
+    setEquippedRobotSlots,
+    setEquippedRobotModules,
   } = useCharacter();
 
   const [isOriginModalVisible, setIsOriginModalVisible] = useState(false);
@@ -422,6 +425,23 @@ export default function CharacterScreen() {
       items: kit.items,
     });
     setCaps((prev) => prev + (kit.caps || 0));
+
+    // Robot: apply slot/weapon/module state from initRobotSlots
+    if (kit.robotSlots) {
+      setEquippedRobotSlots(kit.robotSlots);
+      setEquippedRobotModules(kit.robotModules || []);
+      setEquippedWeapons(kit.robotWeapons || []);
+    } else {
+      // Human: ensure unarmed_human is in equippedWeapons
+      if (kit.unarmedWeaponId) {
+        setEquippedWeapons((prev) => {
+          const already = prev.some((w) => w?.id === kit.unarmedWeaponId);
+          if (already) return prev;
+          return [{ id: kit.unarmedWeaponId, isBuiltin: true }, ...prev];
+        });
+      }
+    }
+
     setIsEquipmentKitModalVisible(false);
   };
 
@@ -1053,7 +1073,9 @@ export default function CharacterScreen() {
                         )
                       ) {
                         // Сбрасываем инвентарь и надетые предметы
-                        setEquippedWeapons([null, null]);
+                        setEquippedWeapons([]);
+                        setEquippedRobotSlots(null);
+                        setEquippedRobotModules([]);
                         setEquippedArmor({
                           head: { armor: null, clothing: null },
                           body: { armor: null, clothing: null },
@@ -1076,7 +1098,9 @@ export default function CharacterScreen() {
                             text: tCharacterScreen("buttons.continue", "Continue"),
                             onPress: () => {
                               // Сбрасываем инвентарь и надетые предметы
-                              setEquippedWeapons([null, null]);
+                              setEquippedWeapons([]);
+                              setEquippedRobotSlots(null);
+                              setEquippedRobotModules([]);
                               setEquippedArmor({
                                 head: { armor: null, clothing: null },
                                 body: { armor: null, clothing: null },
@@ -1278,6 +1302,7 @@ export default function CharacterScreen() {
           equipmentKits={origin?.equipmentKits}
           onSelectKit={handleSelectKit}
           setCaps={setCaps}
+          character={{ origin, trait }}
         />
 
         {/* Модальное окно для выбора 2 навыков «Доброй Души» */}

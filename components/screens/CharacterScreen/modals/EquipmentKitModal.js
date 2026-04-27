@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { resolveKitItems } from '../../../../domain/kitResolver';
+import { isRobotCharacter, initRobotSlots } from '../../../../domain/robotEquip';
 import styles from '../../../../styles/EquipmentKitModal.styles';
+
+// Lazy-load robot catalog data
+const loadRobotCatalog = () => ({
+  heads: require('../../../../data/equipment/robot/robotheads.json'),
+  bodies: require('../../../../data/equipment/robot/robotbody.json'),
+  arms: require('../../../../data/equipment/robot/robotarms.json'),
+  legs: require('../../../../data/equipment/robot/robotlegs.json'),
+});
 
 const CATEGORY_LABELS = {
   weapon: 'Оружие',
@@ -129,7 +138,7 @@ const formatAmmoSuffix = (ammo) => {
   return ` (${qtyText} ${ammo.name})`;
 };
 
-const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => {
+const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, character }) => {
   const [expandedKit, setExpandedKit] = useState(null);
   const [selectedChoices, setSelectedChoices] = useState({});
   const [calculatedKits, setCalculatedKits] = useState([]);
@@ -190,13 +199,48 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit }) => 
     const inventoryItems = toInventoryItems(chosenEntries);
     const { finalItems, totalCaps, weight, price } = summarizeItems(inventoryItems);
 
-    onSelectKit({
-      name: kit.name,
-      items: finalItems,
-      weight,
-      price,
-      caps: totalCaps,
-    });
+    const isRobot = isRobotCharacter(character);
+
+    if (isRobot) {
+      const bodyPlan = character?.trait?.modifiers?.robotBodyPlan
+        || character?.origin?.robotBodyPlan
+        || 'protectron';
+      const robotCatalog = loadRobotCatalog();
+      const { slots, weapons, modules, inventoryItems: robotInventory } = initRobotSlots(
+        bodyPlan,
+        chosenEntries,
+        robotCatalog,
+      );
+
+      // Non-limb/armor items go to equipment inventory
+      const allInventoryItems = [...finalItems.filter(
+        (item) => !['robotArm', 'robotHead', 'robotBody', 'robotLeg', 'robotLegs', 'plating', 'armor', 'frame', 'module'].includes(item.itemType)
+      ), ...robotInventory];
+
+      onSelectKit({
+        name: kit.name,
+        items: allInventoryItems,
+        weight,
+        price,
+        caps: totalCaps,
+        // Robot-specific fields
+        robotSlots: slots,
+        robotWeapons: weapons,
+        robotModules: modules,
+      });
+    } else {
+      // Human: ensure unarmed_human is included in weapons
+      const UNARMED_ID = 'unarmed_human';
+      onSelectKit({
+        name: kit.name,
+        items: finalItems,
+        weight,
+        price,
+        caps: totalCaps,
+        unarmedWeaponId: UNARMED_ID,
+      });
+    }
+
     onClose();
   };
 

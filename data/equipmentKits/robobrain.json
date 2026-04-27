@@ -3,6 +3,18 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_arm_robobrain",
+        "itemType": "robotArm",
+        "slot": "left"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_arm_robobrain",
+        "itemType": "robotArm",
+        "slot": "right"
+      },
+      {
+        "type": "fixed",
         "weaponId": "weapon_mesmetron",
         "itemType": "weapon",
         "ammo": {

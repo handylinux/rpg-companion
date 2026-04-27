@@ -3,13 +3,16 @@
     "items": [
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon"
+        "itemId": "robot_arm_mister_handy",
+        "itemType": "robotArm",
+        "slot": "arm1"
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_flamethrower",
         "itemType": "weapon",
+        "slot": "arm2",
+        "replacesArm": true,
         "ammo": {
           "ammoId": "ammo_flamer_fuel",
           "quantity": {
@@ -20,7 +23,15 @@
       {
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "arm3",
+        "replacesArm": true
+      },
+      {
+        "type": "fixed",
+        "weaponId": "robot_weapon_manipulator",
+        "itemType": "weapon",
+        "requiresWeaponId": "robot_arm_mister_handy"
       },
       {
         "type": "fixed",
@@ -50,6 +61,8 @@
         "type": "fixed",
         "weaponId": "robot_weapon_auto_10mm",
         "itemType": "weapon",
+        "slot": "arm1",
+        "replacesArm": true,
         "ammo": {
           "ammoId": "ammo_10mm",
           "quantity": {
@@ -60,12 +73,16 @@
       {
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "arm2",
+        "replacesArm": true
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_laser_cutter",
         "itemType": "weapon",
+        "slot": "arm3",
+        "replacesArm": true,
         "ammo": {
           "ammoId": "ammo_energy_cell",
           "quantity": {
@@ -94,13 +111,16 @@
     "items": [
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon"
+        "itemId": "robot_arm_mister_handy",
+        "itemType": "robotArm",
+        "slot": "arm1"
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_flamethrower",
         "itemType": "weapon",
+        "slot": "arm2",
+        "replacesArm": true,
         "ammo": {
           "ammoId": "ammo_flamer_fuel",
           "quantity": {
@@ -110,14 +130,18 @@
       },
       {
         "type": "choice",
+        "slot": "arm3",
         "items": [
           {
-            "weaponId": "robot_weapon_manipulator",
-            "itemType": "weapon"
+            "itemId": "robot_arm_mister_handy",
+            "itemType": "robotArm",
+            "slot": "arm3"
           },
           {
             "weaponId": "robot_weapon_laser_cutter",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_energy_cell",
               "quantity": {
@@ -127,11 +151,15 @@
           },
           {
             "weaponId": "robot_weapon_circular_saw",
-            "itemType": "weapon"
+            "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true
           },
           {
             "weaponId": "robot_weapon_flamethrower",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_flamer_fuel",
               "quantity": {
@@ -142,6 +170,8 @@
           {
             "weaponId": "robot_weapon_auto_10mm",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_10mm",
               "quantity": {
@@ -150,6 +180,12 @@
             }
           }
         ]
+      },
+      {
+        "type": "fixed",
+        "weaponId": "robot_weapon_manipulator",
+        "itemType": "weapon",
+        "requiresWeaponId": "robot_arm_mister_handy"
       },
       {
         "type": "fixed",
@@ -177,32 +213,42 @@
     "items": [
       {
         "type": "choice",
+        "slot": "arm1",
         "items": [
           {
-            "weaponId": "robot_weapon_manipulator",
-            "itemType": "weapon"
+            "itemId": "robot_arm_mister_handy",
+            "itemType": "robotArm",
+            "slot": "arm1"
           },
           {
             "weaponId": "robot_weapon_circular_saw",
-            "itemType": "weapon"
+            "itemType": "weapon",
+            "slot": "arm1",
+            "replacesArm": true
           }
         ]
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "arm2",
+        "replacesArm": true
       },
       {
         "type": "choice",
+        "slot": "arm3",
         "items": [
           {
-            "weaponId": "robot_weapon_manipulator",
-            "itemType": "weapon"
+            "itemId": "robot_arm_mister_handy",
+            "itemType": "robotArm",
+            "slot": "arm3"
           },
           {
             "weaponId": "robot_weapon_laser_cutter",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_energy_cell",
               "quantity": {
@@ -212,11 +258,15 @@
           },
           {
             "weaponId": "robot_weapon_circular_saw",
-            "itemType": "weapon"
+            "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true
           },
           {
             "weaponId": "robot_weapon_flamethrower",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_flamer_fuel",
               "quantity": {
@@ -227,6 +277,8 @@
           {
             "weaponId": "robot_weapon_auto_10mm",
             "itemType": "weapon",
+            "slot": "arm3",
+            "replacesArm": true,
             "ammo": {
               "ammoId": "ammo_10mm",
               "quantity": {
@@ -262,24 +314,35 @@
     "items": [
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon"
+        "itemId": "robot_arm_mister_handy",
+        "itemType": "robotArm",
+        "slot": "arm1"
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
-        "itemType": "weapon"
+        "itemType": "weapon",
+        "slot": "arm2",
+        "replacesArm": true
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_laser_cutter",
         "itemType": "weapon",
+        "slot": "arm3",
+        "replacesArm": true,
         "ammo": {
           "ammoId": "ammo_energy_cell",
           "quantity": {
             "base": 20
           }
         }
+      },
+      {
+        "type": "fixed",
+        "weaponId": "robot_weapon_manipulator",
+        "itemType": "weapon",
+        "requiresWeaponId": "robot_arm_mister_handy"
       },
       {
         "type": "fixed",
@@ -305,4 +368,3 @@
     ]
   }
 }
-

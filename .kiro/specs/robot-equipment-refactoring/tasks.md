@@ -64,7 +64,19 @@
     - Добавить `robotArm` предметы с `slot: "left"/"right"` в каждый вариант
     - Голова, корпус, ноги добавляются автоматически через `initRobotSlots` — в JSON не нужны
     - _Требования: 11.1–11.6_
-  - [ ] 5.2 Обновить `data/equipmentKits/misterHandy.json` — добавить конечности во все варианты
+  - [x] 5.2 Обновить `data/equipmentKits/misterHandy.json` — добавить конечности во все варианты
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -76,10 +88,19 @@
 
     - Добавить оружия-конечности для arm1/arm2/arm3 в каждый вариант
     - _Требования: 11.1–11.6_
-  - [ ] 5.3 Обновить `data/equipmentKits/robobrain.json` — добавить конечности
+  - [x] 5.3 Обновить `data/equipmentKits/robobrain.json` — добавить конечности
+
+
+
+
     - _Требования: 11.1–11.6_
 
-- [ ] 6. Обновить `CharacterContext` — новые поля состояния
+- [x] 6. Обновить `CharacterContext` — новые поля состояния
+
+
+
+
+
   - Добавить `equippedRobotSlots` (начальное значение `null`) и `equippedRobotModules` (начальное значение `[]`)
   - Изменить начальное значение `equippedWeapons` с `[null, null]` на `[]`
   - Обновить `buildSnapshot` для включения новых полей
@@ -89,7 +110,12 @@
   - Экспортировать `setEquippedRobotSlots`, `setEquippedRobotModules` в value
   - _Требования: 1.1, 1.5, 2.1–2.6, 10.1–10.6_
 
-- [ ] 7. Обновить `EquipmentKitModal` — интеграция `initRobotSlots`
+- [x] 7. Обновить `EquipmentKitModal` — интеграция `initRobotSlots`
+
+
+
+
+
   - В `handleSelectKit` определять робота через `isRobotCharacter`
   - Для роботов: вызывать `initRobotSlots`, передавать `{ slots, weapons, modules, inventoryItems, caps }` через `onSelectKit`
   - Для людей: добавить `unarmed_human` в `equippedWeapons` если его нет
