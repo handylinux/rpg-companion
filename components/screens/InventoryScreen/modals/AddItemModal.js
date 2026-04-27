@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Modal, View, Text, TouchableOpacity, FlatList, SafeAreaView, TextInput } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, FlatList, SafeAreaView, TextInput, StyleSheet } from 'react-native';
 import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
 import { getWeaponById, getWeapons, getRowCount } from '../../../../db';
 import { tInventory } from '../logic/inventoryI18n';
@@ -40,6 +40,8 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
   const [currentPath, setCurrentPath] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [weaponsByType, setWeaponsByType] = useState({});
+  const [pendingItem, setPendingItem] = useState(null);
+  const [pendingQuantity, setPendingQuantity] = useState('1');
 
   useEffect(() => {
     let cancelled = false;
@@ -159,6 +161,8 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     if (visible) {
       setCurrentPath([]);
       setSearchTerm('');
+      setPendingItem(null);
+      setPendingQuantity('1');
     }
   }, [visible]);
 
@@ -192,11 +196,23 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
 
   const handleSelect = (item) => {
     if (typeof item === 'object' && item?.name) {
-      onSelectItem(item);
-      onClose();
+      setPendingItem(item);
+      setPendingQuantity('1');
       return;
     }
     setCurrentPath([...currentPath, item]);
+  };
+
+  const handleConfirmAdd = () => {
+    const qty = Math.max(1, parseInt(pendingQuantity, 10) || 1);
+    onSelectItem(pendingItem, qty);
+    onClose();
+  };
+
+  const changeQuantity = (delta) => {
+    const current = parseInt(pendingQuantity, 10) || 1;
+    const next = current + delta;
+    if (next >= 1) setPendingQuantity(String(next));
   };
 
   const currentData = useMemo(() => {
@@ -248,34 +264,78 @@ const AddItemModal = ({ visible, onClose, onSelectItem, rootTitleKey = 'modals.a
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <SafeAreaView style={styles.modalContent}>
-          <Text style={styles.title}>{currentPath.length > 0 ? currentPath[currentPath.length - 1] : tInventory(rootTitleKey)}</Text>
+          {pendingItem ? (
+            <>
+              <Text style={styles.title}>{pendingItem.name}</Text>
+              <Text style={quantityStyles.label}>{tInventory('modals.addItemModal.quantityLabel')}</Text>
+              <View style={quantityStyles.control}>
+                <TouchableOpacity style={quantityStyles.button} onPress={() => changeQuantity(-1)}>
+                  <Text style={quantityStyles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <TextInput
+                  style={quantityStyles.valueInput}
+                  value={pendingQuantity}
+                  onChangeText={setPendingQuantity}
+                  keyboardType="number-pad"
+                />
+                <TouchableOpacity style={quantityStyles.button} onPress={() => changeQuantity(1)}>
+                  <Text style={quantityStyles.buttonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={quantityStyles.actionButtons}>
+                <TouchableOpacity style={[quantityStyles.actionButton, quantityStyles.confirmButton]} onPress={handleConfirmAdd}>
+                  <Text style={quantityStyles.actionButtonText}>{tInventory('modals.addItemModal.addButton')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[quantityStyles.actionButton, quantityStyles.cancelButton]} onPress={() => setPendingItem(null)}>
+                  <Text style={quantityStyles.actionButtonText}>{tInventory('modals.addItemModal.cancelButton')}</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <>
+              <Text style={styles.title}>{currentPath.length > 0 ? currentPath[currentPath.length - 1] : tInventory(rootTitleKey)}</Text>
 
-          {currentPath.length > 0 && !searchTerm && (
-            <TouchableOpacity style={styles.backButton} onPress={() => setCurrentPath(currentPath.slice(0, -1))}>
-              <Text style={styles.backButtonText}>{tInventory('modals.addItemModal.back')}</Text>
-            </TouchableOpacity>
+              {currentPath.length > 0 && !searchTerm && (
+                <TouchableOpacity style={styles.backButton} onPress={() => setCurrentPath(currentPath.slice(0, -1))}>
+                  <Text style={styles.backButtonText}>{tInventory('modals.addItemModal.back')}</Text>
+                </TouchableOpacity>
+              )}
+
+              <TextInput
+                style={styles.searchInput}
+                placeholder={tInventory('modals.addItemModal.searchPlaceholder')}
+                value={searchTerm}
+                onChangeText={setSearchTerm}
+              />
+
+              <FlatList
+                data={currentData.items || currentData.categories}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => `${typeof item === 'object' ? item.name : item}-${index}`}
+                ListEmptyComponent={<Text style={styles.emptyText}>{tInventory('modals.addItemModal.emptyCategory')}</Text>}
+              />
+              <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                <Text style={styles.closeButtonText}>{tInventory('modals.addItemModal.close')}</Text>
+              </TouchableOpacity>
+            </>
           )}
-
-          <TextInput
-            style={styles.searchInput}
-            placeholder={tInventory('modals.addItemModal.searchPlaceholder')}
-            value={searchTerm}
-            onChangeText={setSearchTerm}
-          />
-
-          <FlatList
-            data={currentData.items || currentData.categories}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => `${typeof item === 'object' ? item.name : item}-${index}`}
-            ListEmptyComponent={<Text style={styles.emptyText}>{tInventory('modals.addItemModal.emptyCategory')}</Text>}
-          />
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>{tInventory('modals.addItemModal.close')}</Text>
-          </TouchableOpacity>
         </SafeAreaView>
       </View>
     </Modal>
   );
 };
+
+const quantityStyles = StyleSheet.create({
+  label: { fontSize: 16, color: '#666', marginBottom: 8, textAlign: 'center' },
+  control: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 16 },
+  button: { backgroundColor: '#555', width: 45, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 22.5 },
+  buttonText: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
+  valueInput: { borderBottomWidth: 2, borderColor: '#333', width: 120, textAlign: 'center', fontSize: 26, fontWeight: 'bold', marginHorizontal: 20, color: '#333' },
+  actionButtons: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 24 },
+  actionButton: { flex: 1, padding: 15, borderRadius: 8, alignItems: 'center', marginHorizontal: 10 },
+  confirmButton: { backgroundColor: '#4CAF50' },
+  cancelButton: { backgroundColor: '#f44336' },
+  actionButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+});
 
 export default AddItemModal;

@@ -15,17 +15,8 @@
       },
       {
         "type": "fixed",
-        "weaponId": "weapon_mesmetron",
-        "itemType": "weapon",
-        "ammo": {
-          "ammoId": "ammo_gamma_round",
-          "quantity": {
-            "base": 5,
-            "rollType": "rollCD",
-            "rollValue": 5,
-            "op": "+"
-          }
-        }
+        "weaponId": "robot_weapon_mesmetron",
+        "itemType": "weapon"
       },
       {
         "type": "rollTable",

@@ -78,6 +78,7 @@ const toInventoryItems = (entries) => {
         appliedMods,
         quantity: item.quantity || 1,
         itemType: 'weapon',
+        hasMods: item.hasMods ?? false,
       });
 
       if (item.resolvedAmmunition) {
@@ -213,8 +214,14 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, chara
       );
 
       // Non-limb/armor items go to equipment inventory
+      // Exclude robot-specific weapons that replace limbs (they live in slots, not inventory)
       const allInventoryItems = [...finalItems.filter(
-        (item) => !['robotArm', 'robotHead', 'robotBody', 'robotLeg', 'robotLegs', 'plating', 'armor', 'frame', 'module'].includes(item.itemType)
+        (item) => {
+          if (['robotArm', 'robotHead', 'robotBody', 'robotLeg', 'robotLegs', 'plating', 'armor', 'frame', 'module'].includes(item.itemType)) return false;
+          // Weapons that replace arm slots are part of the robot body, not inventory
+          if (item.itemType === 'weapon' && (item.replacesArm || item.selfDestruct || item.builtinToHead || item.builtinToArm)) return false;
+          return true;
+        }
       ), ...robotInventory];
 
       onSelectKit({

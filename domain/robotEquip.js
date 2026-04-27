@@ -7,11 +7,11 @@
 // ---------------------------------------------------------------------------
 
 const BODY_PLAN_SLOTS = {
-  protectron: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  assaultron: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  sentryBot:  ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  misterHandy: ['head', 'body', 'arm1', 'arm2', 'arm3', 'thruster'],
-  robobrain:  ['head', 'body', 'leftArm', 'rightArm', 'chassis'],
+  protectron:  ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  assaultron:  ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  sentryBot:   ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  misterHandy: ['arm1', 'head', 'arm2', 'arm3', 'body', 'thruster'],
+  robobrain:   ['leftArm', 'head', 'rightArm', 'chassis', 'body'],
 };
 
 // Slots that can hold a weapon (arm-type slots)
@@ -162,11 +162,67 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
     if (itype === 'weapon') {
       const weaponData = item._weapon ?? item;
 
-      // replacesArm: weapon occupies the limb slot itself
-      if (weaponData.replacesArm || item.replacesArm) {
-        const targetKey = slotKeyForDirection(item.slot ?? null);
+      // selfDestruct: goes into body slot as builtinWeaponId reference
+      if (weaponData.selfDestruct || item.selfDestruct) {
+        if (slots['body'] !== undefined) {
+          slots['body'].limb = slots['body'].limb
+            ? { ...slots['body'].limb, builtinWeaponId: weaponData.id, _builtinWeapon: weaponData }
+            : { id: '_body_weapon', builtinWeaponId: weaponData.id, _builtinWeapon: weaponData };
+        }
+        continue;
+      }
+
+      // builtinToHead: weapon is built into a specific head — attach to head slot
+      if (weaponData.builtinToHead || item.builtinToHead) {
+        if (slots['head'] !== undefined) {
+          slots['head'].limb = slots['head'].limb
+            ? { ...slots['head'].limb, builtinWeaponId: weaponData.id, _builtinWeapon: weaponData }
+            : { id: '_head_weapon', builtinWeaponId: weaponData.id, _builtinWeapon: weaponData };
+        }
+        continue;
+      }
+
+      // builtinToArm: weapon is built into a specific arm — attach to matching arm slot
+      if (weaponData.builtinToArm || item.builtinToArm) {
+        const armId = weaponData.builtinToArm || item.builtinToArm;
+        const targetKey = slotKeys.find((k) => isArmSlot(k) && slots[k].limb?.id === armId)
+          ?? firstFreeArmSlot();
         if (targetKey && slots[targetKey] !== undefined) {
-          slots[targetKey].limb = { ...weaponData, replacesArm: true };
+          slots[targetKey].limb = slots[targetKey].limb
+            ? { ...slots[targetKey].limb, builtinWeaponId: weaponData.id, _builtinWeapon: weaponData }
+            : { id: '_arm_weapon', builtinWeaponId: weaponData.id, _builtinWeapon: weaponData };
+        }
+        continue;
+      }
+
+      // replacesArm: weapon occupies the limb slot itself (claw, drill, saw, etc.)
+      // fillsAllArmSlots: weapon fills ALL arm slots (shocker-arms, smoke-claws)
+      if (weaponData.replacesArm || item.replacesArm) {
+        if (weaponData.fillsAllArmSlots || item.fillsAllArmSlots) {
+          // Fill every arm slot with this weapon, show only once in equippedWeapons
+          const armSlotKeys = slotKeys.filter((k) => isArmSlot(k));
+          for (const k of armSlotKeys) {
+            slots[k].limb = { ...weaponData, replacesArm: true };
+          }
+        } else {
+          const targetKey = slotKeyForDirection(item.slot ?? null);
+          if (targetKey && slots[targetKey] !== undefined) {
+            slots[targetKey].limb = { ...weaponData, replacesArm: true };
+          }
+        }
+        continue;
+      }
+
+      // shocker_arms style: occupies BOTH arm slots, no manipulator needed
+      // Detected by: robotOnly + no replacesArm + no slot direction + UNARMED skill
+      if (weaponData.robotOnly && !weaponData.replacesArm && !item.slot &&
+          weaponData.mainSkill === 'UNARMED' && !weaponData.builtinManipulator) {
+        // Fill all free arm slots with this weapon as limb
+        const armSlotKeys = slotKeys.filter((k) => isArmSlot(k));
+        for (const k of armSlotKeys) {
+          if (slots[k].limb === null) {
+            slots[k].limb = { ...weaponData, replacesArm: true };
+          }
         }
         continue;
       }
@@ -315,12 +371,26 @@ export function getBuiltinWeaponsFromSlots(slots) {
     const { limb, heldWeapon } = slotData;
 
     if (limb) {
-      // Built-in weapon on the limb (e.g. Assaultron laser head)
+      // Limb IS the weapon (replacesArm: claw, drill, saw, shocker-arms, etc.)
+      if (limb.replacesArm) {
+        // Avoid duplicates: fillsAllArmSlots weapons appear in multiple slots
+        if (!weapons.some((w) => w.id === limb.id)) {
+          weapons.push({
+            ...limb,
+            sourceSlot: slotKey,
+            isBuiltin: true,
+          });
+        }
+        continue;
+      }
+
+      // Built-in weapon referenced by id (head laser, mesmetron, self-destruct, smoke claws)
       if (limb.builtinWeaponId) {
         weapons.push({
           id: limb.builtinWeaponId,
           sourceSlot: slotKey,
           isBuiltin: true,
+          ...(limb._builtinWeapon ?? {}),
         });
       }
 

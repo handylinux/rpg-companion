@@ -20,7 +20,12 @@
     "installComplexity": null,
     "installPerksRequired": null,
     "installSkill": null,
-    "qualities": [{ "qualityId": "quality_close_quarters" }]
+    "qualities": [
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_protectron_manipulator",
@@ -43,7 +48,12 @@
     "installComplexity": null,
     "installPerksRequired": null,
     "installSkill": null,
-    "qualities": [{ "qualityId": "quality_close_quarters" }]
+    "qualities": [
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_flamethrower",
@@ -66,9 +76,14 @@
     "installPerksRequired": null,
     "installSkill": null,
     "qualities": [
-      { "qualityId": "quality_persistent" },
-      { "qualityId": "quality_spread" }
-    ]
+      {
+        "qualityId": "quality_persistent"
+      },
+      {
+        "qualityId": "quality_spread"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_circular_saw",
@@ -76,7 +91,9 @@
     "weaponType": "Melee",
     "damage": 3,
     "damageType": "physical",
-    "damageEffects": ["piercing"],
+    "damageEffects": [
+      "piercing"
+    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "MELEE_WEAPONS",
@@ -88,12 +105,19 @@
     "replacesArm": true,
     "blocksStandardWeapons": true,
     "installComplexity": 3,
-    "installPerksRequired": ["Blacksmith 1"],
+    "installPerksRequired": [
+      "Blacksmith 1"
+    ],
     "installSkill": "Repair",
     "qualities": [
-      { "qualityId": "quality_vicious" },
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_vicious"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_laser_cutter",
@@ -116,8 +140,12 @@
     "installPerksRequired": null,
     "installSkill": null,
     "qualities": [
-      { "qualityId": "quality_piercing_x", "value": 1 }
-    ]
+      {
+        "qualityId": "quality_piercing_x",
+        "value": 1
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_auto_10mm",
@@ -140,9 +168,14 @@
     "installPerksRequired": null,
     "installSkill": null,
     "qualities": [
-      { "qualityId": "quality_burst" },
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_burst"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_cryojet",
@@ -162,13 +195,23 @@
     "replacesArm": true,
     "blocksStandardWeapons": true,
     "installComplexity": 4,
-    "installPerksRequired": ["Robotics Expert 1", "Science! 1"],
+    "installPerksRequired": [
+      "Robotics Expert 1",
+      "Science! 1"
+    ],
     "installSkill": "Science",
     "qualities": [
-      { "qualityId": "quality_burst" },
-      { "qualityId": "quality_freeze" },
-      { "qualityId": "quality_inaccurate" }
-    ]
+      {
+        "qualityId": "quality_burst"
+      },
+      {
+        "qualityId": "quality_freeze"
+      },
+      {
+        "qualityId": "quality_inaccurate"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_shocker_arms",
@@ -184,15 +227,21 @@
     "rarity": 0,
     "robotOnly": true,
     "meleeBonusApplies": true,
-    "replacesArm": false,
-    "blocksStandardWeapons": false,
+    "replacesArm": true,
+    "fillsAllArmSlots": true,
+    "blocksStandardWeapons": true,
     "installComplexity": null,
     "installPerksRequired": null,
     "installSkill": null,
     "qualities": [
-      { "qualityId": "quality_stun" },
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_stun"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_self_destruct",
@@ -213,7 +262,12 @@
     "installComplexity": null,
     "installPerksRequired": null,
     "installSkill": null,
-    "qualities": [{ "qualityId": "quality_blast" }]
+    "qualities": [
+      {
+        "qualityId": "quality_blast"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_construction_claw",
@@ -221,7 +275,9 @@
     "weaponType": "Unarmed",
     "damage": 4,
     "damageType": "physical",
-    "damageEffects": ["breaking"],
+    "damageEffects": [
+      "breaking"
+    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -233,11 +289,16 @@
     "replacesArm": true,
     "blocksStandardWeapons": true,
     "installComplexity": 3,
-    "installPerksRequired": ["Blacksmith 1"],
+    "installPerksRequired": [
+      "Blacksmith 1"
+    ],
     "installSkill": "Repair",
     "qualities": [
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_drill",
@@ -245,7 +306,9 @@
     "weaponType": "Unarmed",
     "damage": 5,
     "damageType": "physical",
-    "damageEffects": ["vicious"],
+    "damageEffects": [
+      "vicious"
+    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -257,12 +320,19 @@
     "replacesArm": true,
     "blocksStandardWeapons": true,
     "installComplexity": 3,
-    "installPerksRequired": ["Blacksmith 2"],
+    "installPerksRequired": [
+      "Blacksmith 2"
+    ],
     "installSkill": "Repair",
     "qualities": [
-      { "qualityId": "quality_debilitating" },
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_debilitating"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_vice_grip",
@@ -270,7 +340,9 @@
     "weaponType": "Unarmed",
     "damage": 4,
     "damageType": "physical",
-    "damageEffects": ["breaking"],
+    "damageEffects": [
+      "breaking"
+    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -282,12 +354,19 @@
     "replacesArm": true,
     "blocksStandardWeapons": true,
     "installComplexity": 4,
-    "installPerksRequired": ["Blacksmith 3"],
+    "installPerksRequired": [
+      "Blacksmith 3"
+    ],
     "installSkill": "Repair",
     "qualities": [
-      { "qualityId": "quality_vicious" },
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_vicious"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_mod_shock",
@@ -306,11 +385,17 @@
     "replacesArm": false,
     "blocksStandardWeapons": false,
     "installComplexity": 4,
-    "installPerksRequired": ["Robotics Expert 2", "Science! 1"],
+    "installPerksRequired": [
+      "Robotics Expert 2",
+      "Science! 1"
+    ],
     "installSkill": "Science",
     "qualities": [
-      { "qualityId": "quality_stun" }
-    ]
+      {
+        "qualityId": "quality_stun"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_mod_stun",
@@ -329,11 +414,17 @@
     "replacesArm": false,
     "blocksStandardWeapons": false,
     "installComplexity": 4,
-    "installPerksRequired": ["Robotics Expert 2", "Science! 1"],
+    "installPerksRequired": [
+      "Robotics Expert 2",
+      "Science! 1"
+    ],
     "installSkill": "Science",
     "qualities": [
-      { "qualityId": "quality_stun" }
-    ]
+      {
+        "qualityId": "quality_stun"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_assaultron_head_laser",
@@ -363,8 +454,12 @@
       "damageReductionPerAmmoSaved": 1
     },
     "qualities": [
-      { "qualityId": "quality_piercing_x", "value": 1 }
-    ]
+      {
+        "qualityId": "quality_piercing_x",
+        "value": 1
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_mesmetron",
@@ -388,8 +483,11 @@
     "installSkill": null,
     "ammoId": "ammo_energy_cell",
     "qualities": [
-      { "qualityId": "quality_stun" }
-    ]
+      {
+        "qualityId": "quality_stun"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_claw",
@@ -411,8 +509,11 @@
     "installPerksRequired": null,
     "installSkill": null,
     "qualities": [
-      { "qualityId": "quality_close_quarters" }
-    ]
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ],
+    "withoutMods": true
   },
   {
     "id": "robot_weapon_smoke_claws",
@@ -420,7 +521,9 @@
     "weaponType": "Small Guns",
     "damage": 4,
     "damageType": "poison",
-    "damageEffects": ["persistent"],
+    "damageEffects": [
+      "persistent"
+    ],
     "fireRate": 0,
     "range": "M",
     "mainAttr": "AGI",
@@ -429,16 +532,21 @@
     "cost": 0,
     "rarity": 0,
     "robotOnly": true,
-    "builtinToArm": "robot_arm_robobrain",
-    "replacesArm": false,
-    "blocksStandardWeapons": false,
+    "replacesArm": true,
+    "fillsAllArmSlots": true,
+    "blocksStandardWeapons": true,
     "installComplexity": null,
     "installPerksRequired": null,
     "installSkill": null,
     "ammoId": "ammo_gas_grenade",
     "qualities": [
-      { "qualityId": "quality_blast" },
-      { "qualityId": "quality_inaccurate" }
-    ]
+      {
+        "qualityId": "quality_blast"
+      },
+      {
+        "qualityId": "quality_inaccurate"
+      }
+    ],
+    "withoutMods": true
   }
 ]

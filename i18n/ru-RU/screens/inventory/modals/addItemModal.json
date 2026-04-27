@@ -44,5 +44,8 @@
   "searchPlaceholder": "Поиск по всем предметам...",
   "emptyCategory": "Категория пуста",
   "close": "Закрыть",
-  "buyTitle": "Купить предметы"
+  "buyTitle": "Купить предметы",
+  "quantityLabel": "Количество",
+  "addButton": "Добавить",
+  "cancelButton": "Отмена"
 }

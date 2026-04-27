@@ -48,6 +48,7 @@
   "weapon": {
     "emptySlot": "Пустой слот",
     "notEquipped": "Оружие не надето",
+    "unequip": "Снять",
     "rangeDefault": "Близкая",
     "rangeNames": {
       "Close": "Близкая",
@@ -87,6 +88,38 @@
       "range": "ДИСТАНЦИЯ",
       "qualities": "КАЧЕСТВА",
       "modification": "Модификация"
+    }
+  },
+  "robotSlot": {
+    "noLimb": "Нет конечности",
+    "slotNames": {
+      "head": "Голова",
+      "body": "Корпус",
+      "leftArm": "Левая рука",
+      "rightArm": "Правая рука",
+      "leftLeg": "Левая нога",
+      "rightLeg": "Правая нога",
+      "arm1": "Рука 1",
+      "arm2": "Рука 2",
+      "arm3": "Рука 3",
+      "thruster": "Двигатель",
+      "chassis": "Шасси"
+    },
+    "layers": {
+      "plating": "Обшивка",
+      "armor": "Броня",
+      "frame": "Рама"
+    },
+    "weapon": {
+      "builtin": "Встроенное",
+      "held": "Удерживаемое",
+      "damage": "Урон"
+    },
+    "buttons": {
+      "upgradeLimb": "Модернизировать конечность",
+      "upgradeArmor": "Улучшить броню",
+      "upgradePlating": "Улучшить обшивку",
+      "upgradeFrame": "Улучшить раму"
     }
   },
   "common": {

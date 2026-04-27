@@ -149,6 +149,7 @@ export async function resolveWeaponItem(item) {
       _weapon: null,
       _mods: [],
       resolvedAmmunition: null,
+      hasMods: false,
     };
   }
 
@@ -171,6 +172,7 @@ export async function resolveWeaponItem(item) {
     name: displayName,
     itemType: 'weapon',
     resolvedAmmunition,
+    hasMods: weaponData.hasMods ?? false,
   };
 }
 
