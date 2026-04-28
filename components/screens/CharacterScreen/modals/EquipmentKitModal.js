@@ -8,7 +8,7 @@ import styles from '../../../../styles/EquipmentKitModal.styles';
 const loadRobotCatalog = () => ({
   heads: require('../../../../data/equipment/robot/robotheads.json'),
   bodies: require('../../../../data/equipment/robot/robotbody.json'),
-  arms: require('../../../../data/equipment/robot/robotarms.json'),
+  arms: require('../../../../data/equipment/robot/weapons.json').filter((item) => item.itemType === 'robotArm'),
   legs: require('../../../../data/equipment/robot/robotlegs.json'),
 });
 

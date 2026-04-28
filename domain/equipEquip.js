@@ -5,7 +5,7 @@
 // Design principle: access is OPEN by default.
 // Restrictions are declared only on origins/traits that have them.
 // Currently restricted:
-//   - Robots  → can only wear robot armor (robotOnly: true)
+//   - Robots  → can only wear robot armor
 //   - Mutants → can only wear mutant-tagged armor (mutantOnly: true)
 //     (currently raider armor from armor.json; a dedicated mutant armor file
 //      may be added later — the flag will remain the same)
@@ -23,9 +23,13 @@ const isRobotArmor = (armorItem) =>
 /** True if the armor item is mutant-specific. */
 const isMutantArmor = (armorItem) => Boolean(armorItem?.mutantOnly);
 
-/** True if the weapon is robot-specific. */
+/** True if the weapon comes from robot weapons catalog. */
 const isRobotOnlyWeapon = (weaponItem) =>
-  Boolean(weaponItem?.robotOnly || String(weaponItem?.id || '').startsWith('robot_'));
+  Boolean(
+    weaponItem?.isRobotWeapon
+    || String(weaponItem?.id || '').startsWith('robot_weapon_')
+    || String(weaponItem?.id || '').startsWith('robot_arm_')
+  );
 
 // ---------------------------------------------------------------------------
 // canEquipArmor
@@ -35,7 +39,7 @@ const isRobotOnlyWeapon = (weaponItem) =>
  * Check whether a character can equip a given armor item.
  *
  * Rules:
- *  - Robot origin  → only robot armor (robotOnly: true). Everything else is blocked.
+ *  - Robot origin  → only robot armor. Everything else is blocked.
  *  - Mutant origin (isMutant: true on origin, or armorConstraint: 'mutantOnly' on trait)
  *                  → only mutant armor (mutantOnly: true). Everything else is blocked.
  *  - Everyone else → allowed by default; robot/mutant-tagged armor is blocked.
@@ -95,7 +99,7 @@ export function canEquipArmor(armorItem, character) {
  *  - Standard weapon  + robot character      → blocked (needs manipulator; caller handles that).
  *  - Everything else                         → allowed.
  *
- * @param {object} weaponItem - Weapon item. Relevant flags: robotOnly, id.
+ * @param {object} weaponItem - Weapon item. Relevant fields: id, limbSlot.
  * @param {object} character  - { origin }
  * @returns {{ allowed: boolean, reason: string | null }}
  */
