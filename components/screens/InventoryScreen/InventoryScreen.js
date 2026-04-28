@@ -10,6 +10,7 @@ import { getInstantHealAmount } from '../../../domain/effects';
 import { formatInventoryText, tInventory } from './logic/inventoryI18n';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
+import { isRobotCharacter as checkIsRobotCharacter } from '../../../domain/robotEquip';
 import styles from '../../../styles/InventoryScreen.styles';
 
 const CapsSection = ({ caps, onAdd, onSubtract }) => (
@@ -30,6 +31,7 @@ const InventoryScreen = () => {
     equipment, setEquipment, 
     equippedWeapons, setEquippedWeapons, 
     equippedArmor, setEquippedArmor,
+    equippedRobotSlots,
     caps, setCaps,
     attributes, level,
     currentHealth, setCurrentHealth,
@@ -37,7 +39,8 @@ const InventoryScreen = () => {
     applyConsumableFull,
     conditions, setConditions,
     getModifiedItem,
-    trait
+    trait,
+    origin,
   } = useCharacter();
 
   const showAlert = (title, message = '') => {
@@ -114,13 +117,25 @@ const InventoryScreen = () => {
     || equippedRobotBodyPart?.robotBodyPlan
     || null;
 
-  const isRobotCharacter = Boolean(trait?.modifiers?.isRobot || robotBodyPlan);
+  const isRobotCharacter = checkIsRobotCharacter({ origin }) || Boolean(trait?.modifiers?.isRobot || robotBodyPlan);
   const robotBodyUpgrade = useMemo(() => {
     if (!robotBodyPlan) return null;
     const parts = Array.isArray(equipmentCatalog?.robotPartsUpgrade) ? equipmentCatalog.robotPartsUpgrade : [];
     return parts.find((part) => part?.robotBodyPlan === robotBodyPlan) || null;
   }, [equipmentCatalog, robotBodyPlan]);
+  const isRobotLimbItem = (item) => {
+    const itype = item?.itemType;
+    return itype === 'robotArm' || itype === 'robotHead' || itype === 'robotBody' || itype === 'robotLeg';
+  };
+
   const isRobotOnlyItem = (item) => Boolean(item?.robotOnly || String(item?.id || '').startsWith('robot_'));
+
+  // Проверяем наличие руки с canHoldWeapons в слотах робота (Requirement 7.2)
+  const robotHasHoldingArm = useMemo(() => {
+    if (!isRobotCharacter) return true;
+    const slots = equippedRobotSlots || {};
+    return Object.values(slots).some((slotData) => slotData?.limb?.canHoldWeapons === true);
+  }, [isRobotCharacter, equippedRobotSlots]);
   const isPowerArmorItem = (item) => {
     const category = String(item?.category || item?.armorCategoryKey || '').toLowerCase();
     const name = String(getItemName(item) || '').toLowerCase();
@@ -469,13 +484,13 @@ const InventoryScreen = () => {
 
 
 
-  const handleSelectCatalogItem = (item) => {
+  const handleSelectCatalogItem = (item, quantity = 1) => {
     if (itemSelectionMode === 'buy') {
       setSelectedItemForBuy(item);
       setIsBuyItemModalVisible(true);
       return;
     }
-    handleAddItem(item, 1);
+    handleAddItem(item, quantity);
   };
 
   const handleConfirmBuy = (quantity, unitPrice) => {
@@ -558,11 +573,14 @@ const InventoryScreen = () => {
       return;
     }
     if (!isRobotOnlyItem(displayWeapon) && isRobotCharacter) {
-      const handlers = (equippedWeapons || [])
-        .filter(Boolean)
-        .filter((w) => Boolean(w?.canHandelWeapon));
+      // Robot equip flow: check for arm slot with canHoldWeapons (Requirement 7.2, 7.6)
+      const slots = equippedRobotSlots || {};
+      const armWithHoldCapability = Object.entries(slots).find(([_key, slotData]) => {
+        return slotData?.limb?.canHoldWeapons === true;
+      });
 
-      if (!handlers.length) {
+      if (!armWithHoldCapability) {
+        // No arm that can hold weapons — show warning, no equip button (Requirement 7.2 / design §9)
         showAlert(
           tInventory('screen.alerts.manipulatorRequiredTitle'),
           tInventory('screen.alerts.robotNoHandlingLimbMessage')
@@ -570,42 +588,63 @@ const InventoryScreen = () => {
         return;
       }
 
+      // Validate weight / two-handed against the arm (Requirement 7.6)
+      const [armSlotKey, armSlotData] = armWithHoldCapability;
+      const armLimb = armSlotData.limb;
       const candidateWeight = toWeight(displayWeapon.weight);
-      const canAnyHandlerEquip = handlers.some((handler) => {
-        const excludeTwoHanded = Boolean(handler?.excludeTwoHanded);
-        if (excludeTwoHanded && isTwoHandedWeapon) return false;
-
-        const maxWeightRaw = handler?.maxHandelWeaponWeight;
-        if (maxWeightRaw === null || maxWeightRaw === undefined || maxWeightRaw === '' || maxWeightRaw === 'unlimited') {
-          return true;
-        }
-        const maxHeldWeight = toWeight(maxWeightRaw);
-        return candidateWeight <= maxHeldWeight;
-      });
-
-      if (!canAnyHandlerEquip) {
-        if (isTwoHandedWeapon && handlers.some((handler) => Boolean(handler?.excludeTwoHanded))) {
-          showAlert(
-            tInventory('screen.alerts.manipulatorWeightTitle'),
-            tInventory('screen.alerts.robotCannotUseTwoHandedMessage')
-          );
-          return;
-        }
-        const numericLimits = handlers
-          .map((handler) => handler?.maxHandelWeaponWeight)
-          .filter((value) => value !== null && value !== undefined && value !== '' && value !== 'unlimited')
-          .map((value) => toWeight(value))
-          .filter((value) => value > 0);
-        const maxHeldWeight = numericLimits.length ? Math.max(...numericLimits) : 0;
+      const excludeTwoHanded = Boolean(armLimb?.excludeTwoHanded);
+      if (excludeTwoHanded && isTwoHandedWeapon) {
         showAlert(
           tInventory('screen.alerts.manipulatorWeightTitle'),
-          formatInventoryText(
-            tInventory('screen.alerts.manipulatorWeightMessage'),
-            { maxHeldWeight },
-          ),
+          tInventory('screen.alerts.robotCannotUseTwoHandedMessage')
         );
         return;
       }
+      const maxWeightRaw = armLimb?.maxHandelWeaponWeight;
+      if (maxWeightRaw !== null && maxWeightRaw !== undefined && maxWeightRaw !== '' && maxWeightRaw !== 'unlimited') {
+        const maxHeldWeight = toWeight(maxWeightRaw);
+        if (candidateWeight > maxHeldWeight) {
+          showAlert(
+            tInventory('screen.alerts.manipulatorWeightTitle'),
+            formatInventoryText(
+              tInventory('screen.alerts.manipulatorWeightMessage'),
+              { maxHeldWeight },
+            ),
+          );
+          return;
+        }
+      }
+
+      // Add weapon directly to equippedWeapons with sourceSlot (Requirement 7.2 / design §9)
+      const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
+      const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
+      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
+
+      if (totalOwned <= alreadyEquippedCount) {
+        showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
+        return;
+      }
+
+      const weaponEntry = {
+        ...displayWeapon,
+        itemType: 'weapon',
+        stackKey: sourceStackKey,
+        uniqueId: displayWeapon.uniqueId || createWeaponInstanceId(),
+        sourceSlot: armSlotKey,
+      };
+
+      setEquippedWeapons(prev => [...prev, weaponEntry]);
+
+      const newItems = equipment?.items ? [...equipment.items] : [];
+      const itemIndex = newItems.findIndex(i => (i.stackKey || getStackKey(i)) === sourceStackKey);
+      if (itemIndex !== -1) {
+        newItems[itemIndex].quantity -= 1;
+        if (newItems[itemIndex].quantity <= 0) {
+          newItems.splice(itemIndex, 1);
+        }
+        updateInventoryItems(newItems);
+      }
+      return;
     }
 
     const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
@@ -713,6 +752,10 @@ const InventoryScreen = () => {
   };
 
   const handleUnequipWeapon = (weapon, slot) => {
+    // Кнопка "Снять" скрыта/неактивна для встроенного и манипуляторного оружия (Requirement 7.5)
+    if (weapon?.isBuiltin || weapon?.isManipulator) {
+      return;
+    }
     setEquippedWeapons(prev => {
         const newEquipped = [...prev];
         if (newEquipped[slot] && (
@@ -972,6 +1015,11 @@ const InventoryScreen = () => {
         .map(item => {
             const itemName = getItemName(item);
             
+            // Скрываем предметы-конечности из инвентаря для роботов (Requirement 7.1)
+            if (isRobotCharacter && isRobotLimbItem(item)) {
+              return null;
+            }
+
             // Проверяем, является ли это модифицированным оружием
             // Если у предмета есть uniqueId, начинающийся с 'modified-', то это модифицированное оружие
             const itemStackKey = item.stackKey || getStackKey(item);
@@ -1010,7 +1058,7 @@ const InventoryScreen = () => {
     const result = [...equippedItemsList, ...inventoryItemsList];
 
     return result;
-  }, [equipment, equippedWeapons, equippedArmor, getModifiedItem]);
+  }, [equipment, equippedWeapons, equippedArmor, getModifiedItem, isRobotCharacter]);
 
   const renderTableHeader = () => {
     return (
@@ -1037,6 +1085,13 @@ const InventoryScreen = () => {
     const itemIcon = getItemTypeIcon(item.itemType);
     const isEquippable = item.itemType === 'weapon' || item.itemType === 'armor' || item.itemType === 'clothing';
     const isConsumable = item.itemType === 'chem' || item.itemType === 'chems' || item.itemType === 'drinks' || item.itemType === 'food';
+
+    // Скрыть кнопку "Снять" для встроенного/манипуляторного оружия (Requirement 7.5)
+    const isBuiltinOrManipulator = Boolean(item?.isBuiltin || item?.isManipulator);
+    // Для роботов: скрыть кнопку "Экипировать" если нет руки с canHoldWeapons
+    const hideEquipButton = isRobotCharacter && item.itemType === 'weapon' && !item.isEquipped && !robotHasHoldingArm;
+    // Скрыть кнопку действия для экипированного встроенного/манипуляторного оружия
+    const hideActionButton = item.isEquipped && item.itemType === 'weapon' && isBuiltinOrManipulator;
 
     const handleActionPress = () => {
         if (item.isEquipped) {
@@ -1069,12 +1124,15 @@ const InventoryScreen = () => {
           </View>
         </View>
         <View style={styles.actionContainer}>
-          {isEquippable && (
+          {isEquippable && !hideActionButton && !hideEquipButton && (
               <TouchableOpacity 
                   style={[styles.actionButton, item.isEquipped ? styles.unequipButton : {}]} 
                   onPress={handleActionPress}>
                   <Text style={styles.actionButtonText}>{item.isEquipped ? tInventory('screen.actions.unequip') : tInventory('screen.actions.equip')}</Text>
               </TouchableOpacity>
+          )}
+          {hideEquipButton && (
+              <Text style={styles.itemSubText}>{tInventory('screen.alerts.manipulatorRequiredTitle')}</Text>
           )}
 
           {isConsumable && !item.isEquipped && !isRobotCharacter && (

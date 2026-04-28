@@ -48,6 +48,7 @@
   "weapon": {
     "emptySlot": "Empty Slot",
     "notEquipped": "No weapon equipped",
+    "unequip": "Unequip",
     "rangeDefault": "Close",
     "rangeNames": {
       "Close": "Close",
@@ -87,6 +88,38 @@
       "range": "RANGE",
       "qualities": "QUALITIES",
       "modification": "Modification"
+    }
+  },
+  "robotSlot": {
+    "noLimb": "No Limb",
+    "slotNames": {
+      "head": "Head",
+      "body": "Body",
+      "leftArm": "Left Arm",
+      "rightArm": "Right Arm",
+      "leftLeg": "Left Leg",
+      "rightLeg": "Right Leg",
+      "arm1": "Arm 1",
+      "arm2": "Arm 2",
+      "arm3": "Arm 3",
+      "thruster": "Thruster",
+      "chassis": "Chassis"
+    },
+    "layers": {
+      "plating": "Plating",
+      "armor": "Armor",
+      "frame": "Frame"
+    },
+    "weapon": {
+      "builtin": "Built-in",
+      "held": "Held",
+      "damage": "DMG"
+    },
+    "buttons": {
+      "upgradeLimb": "Upgrade Limb",
+      "upgradeArmor": "Upgrade Armor",
+      "upgradePlating": "Upgrade Plating",
+      "upgradeFrame": "Upgrade Frame"
     }
   },
   "common": {

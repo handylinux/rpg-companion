@@ -15,6 +15,9 @@ import { loadOriginsData } from '../domain/traits';
 import { meetsPerkRequirements, getPerkUnmetReasons, annotatePerks } from '../domain/perks';
 import { applyConsumableToEffects, checkAddiction, applyRemoveConditions, advanceEffectsByScene, pruneExpiredTimedEffects, SCENE_RULES } from '../domain/effects';
 import { syncCharacterToCloudIfEnabled } from './cloudSync/googleDriveSync';
+import { isRobotCharacter } from '../domain/robotEquip';
+
+const UNARMED_HUMAN_WEAPON = { id: 'unarmed_human', isBuiltin: true };
 
 const CharacterContext = createContext();
 const ORIGINS = loadOriginsData();
@@ -227,7 +230,16 @@ export const CharacterProvider = ({ children }) => {
       setSceneCounter(data.sceneCounter ?? 0);
       // Migrate old [null, null] format to dynamic array
       const rawWeapons = data.equippedWeapons || [];
-      setEquippedWeapons(Array.isArray(rawWeapons) ? rawWeapons.filter(w => w !== null) : []);
+      let migratedWeapons = Array.isArray(rawWeapons) ? rawWeapons.filter(w => w !== null) : [];
+      // Add unarmed_human for human characters if not present (Requirement 13.1)
+      const loadedOrigin = resolveOrigin(data.origin);
+      const loadedTrait = data.trait || null;
+      if (!isRobotCharacter({ origin: loadedOrigin, trait: loadedTrait })) {
+        if (!migratedWeapons.some(w => w?.id === 'unarmed_human')) {
+          migratedWeapons = [UNARMED_HUMAN_WEAPON, ...migratedWeapons];
+        }
+      }
+      setEquippedWeapons(migratedWeapons);
       setEquippedRobotSlots(data.equippedRobotSlots ?? null);
       setEquippedRobotModules(data.equippedRobotModules ?? []);
       setEquippedArmor(data.equippedArmor || {

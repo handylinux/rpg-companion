@@ -14,10 +14,14 @@ import { getSkillDisplayName } from '../CharacterScreen/logic/characterScreenI18
 import { getEffectTimeText, getTimedMaxHpBonus, getTimedDamageResistanceBonus } from '../../../domain/effects';
 import { resolveWeaponQualities, resolveWeaponDamageType } from '../../../domain/weaponDisplay';
 import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
+import { isRobotCharacter, getRobotSlotKeys } from '../../../domain/robotEquip';
 
 // Импортируем модальное окно модификаций
 import WeaponModificationModal from './WeaponModificationModal';
 import ArmorModificationModal from './ArmorModificationModal';
+import RobotSlot from './RobotSlot';
+import LimbUpgradeModal from '../CharacterScreen/modals/LimbUpgradeModal';
+import ArmorLayerModal from '../CharacterScreen/modals/ArmorLayerModal';
 
 
 const HealthCounter = ({ max, isEnabled }) => {
@@ -235,8 +239,10 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const isNcrInfantryWeapon = displayWeapon && ncrInfantryWeaponIds.includes(displayWeapon.id ?? displayWeapon.weaponId);
 
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
-    const hasSecondaryWeaponOverManipulator = Boolean(displayWeapon?.builtinManipulator) && (equippedWeapons || []).some((w) => w && !w.builtinManipulator);
-    const visibleDamage = hasSecondaryWeaponOverManipulator ? 0 : damageWithNcr;
+    // Бонус ближнего боя применяется к UNARMED и Melee оружию (или если meleeBonusApplies: true)
+    const isMeleeType = ['Melee', 'Unarmed', 'MELEE_WEAPONS', 'UNARMED'].includes(displayWeapon?.weaponType ?? displayWeapon?.weapon_type ?? '');
+    const applyMeleeBonus = displayWeapon?.meleeBonusApplies === true || isMeleeType;
+    const visibleDamage = applyMeleeBonus ? damageWithNcr + (meleeBonus || 0) : damageWithNcr;
 
     // Снижение базовой скорострельности на 1 при "Техника спуска" для стрелкового и энергооружия
     const equippedWeaponTypes = (equippedWeapons || [])
@@ -259,13 +265,18 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
       { label: tWeaponsAndArmorScreen('weapon.fields.fireRate'), value: fireRateWithTrait },
       { label: tWeaponsAndArmorScreen('weapon.fields.range'), value: rangeValue },
       { label: tWeaponsAndArmorScreen('weapon.fields.qualities'), value: qualitiesValue },
-      { label: tWeaponsAndArmorScreen('weapon.fields.modification'), type: 'button' }
+      ...(displayWeapon?.withoutMods ? [] : [{ label: tWeaponsAndArmorScreen('weapon.fields.modification'), type: 'button' }]),
     ];
   
     return (
       <View style={localStyles.weaponCardContainer}>
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { textAlign: 'center', width: '100%' }]}>{weaponName}</Text>
+          {showSourceSlot && weapon?.sourceSlot ? (
+            <Text style={{ fontSize: 10, color: '#888', textAlign: 'center', width: '100%', marginTop: 2 }}>
+              {tWeaponsAndArmorScreen(`robotSlot.slotNames.${weapon.sourceSlot}`) || weapon.sourceSlot}
+            </Text>
+          ) : null}
         </View>
         <View>
           {stats.map((stat, index) => (
@@ -285,6 +296,7 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
               )}
             </View>
           ))}
+
         </View>
       </View>
     );
@@ -295,9 +307,18 @@ const findLocalizedWeapon = (catalog, weapon) => {
   if (!weapon?.id) return weapon;
   const base = (catalog?.weapons || []).find((entry) => entry.id === weapon.id);
   if (!base) return weapon;
+  // base имеет приоритет для игровых данных, weapon — для мета-полей (sourceSlot, isBuiltin, appliedMods и т.д.)
   return {
-    ...base,
     ...weapon,
+    ...base,
+    // мета-поля из weapon сохраняем
+    sourceSlot: weapon.sourceSlot,
+    isBuiltin: weapon.isBuiltin,
+    isManipulator: weapon.isManipulator,
+    appliedMods: weapon.appliedMods,
+    uniqueId: weapon.uniqueId,
+    hasMods: base.hasMods ?? weapon.hasMods,
+    withoutMods: base.withoutMods ?? weapon.withoutMods,
     name: base.name || base.Name || weapon.name || weapon.Name,
     Name: base.Name || base.name || weapon.Name || weapon.name,
     Название: base.Название || base.Name || base.name || weapon.Название || weapon.Name || weapon.name,
@@ -331,6 +352,14 @@ const findLocalizedClothing = (catalog, clothingItem) => {
   };
 };
 
+const chunkSlotKeys = (keys, size) => {
+  const chunks = [];
+  for (let i = 0; i < keys.length; i += size) {
+    chunks.push(keys.slice(i, i + size));
+  }
+  return chunks;
+};
+
 const findRobotBodyUpgrade = (catalog, robotBodyPlan, inventoryItems = []) => {
   const parts = catalog?.robotPartsUpgrade || [];
   if (robotBodyPlan) {
@@ -361,6 +390,7 @@ const WeaponsAndArmorScreen = () => {
     activeTimedEffects,
     attributesSaved,
     trait,
+    origin,
   } = useCharacter();
   const locale = useLocale();
 
@@ -424,7 +454,11 @@ const WeaponsAndArmorScreen = () => {
     setEquippedWeapons(newEquippedWeapons);
   };
 
-
+  // Снять оружие (только для не-встроенного оружия, Requirement 13.5–13.6)
+  const handleUnequipWeapon = (weapon) => {
+    if (!weapon || weapon.isBuiltin || weapon.isManipulator) return;
+    setEquippedWeapons((prev) => prev.filter((w) => w !== weapon));
+  };
   const handleOpenArmorModal = (slotKey, mode = 'armor') => {
     const item = mode === 'clothing' ? equippedArmor?.[slotKey]?.clothing : equippedArmor?.[slotKey]?.armor;
     if (!item) return;
@@ -448,6 +482,31 @@ const WeaponsAndArmorScreen = () => {
     }));
     setArmorModalVisible(false);
     setSelectedArmorSlot(null);
+  };
+
+  // Robot-specific state and handlers
+  const isRobot = isRobotCharacter({ origin, trait });
+  const bodyPlan = trait?.modifiers?.robotBodyPlan || null;
+  const [limbUpgradeModalVisible, setLimbUpgradeModalVisible] = useState(false);
+  const [selectedLimbSlot, setSelectedLimbSlot] = useState(null);
+  const [robotArmorLayerModalVisible, setRobotArmorLayerModalVisible] = useState(false);
+  const [selectedRobotArmorSlot, setSelectedRobotArmorSlot] = useState(null);
+  const [selectedRobotArmorLayer, setSelectedRobotArmorLayer] = useState(null);
+
+  const handleOpenLimbUpgradeModal = (slotKey) => {
+    setSelectedLimbSlot(slotKey);
+    setLimbUpgradeModalVisible(true);
+  };
+
+  const handleOpenRobotArmorLayerModal = (slotKey, layer) => {
+    setSelectedRobotArmorSlot(slotKey);
+    setSelectedRobotArmorLayer(layer);
+    setRobotArmorLayerModalVisible(true);
+  };
+
+  const handleWeaponPress = (weapon) => {
+    // Open weapon card or details — for now, just open modification modal
+    handleOpenModificationModal(weapon);
   };
 
   const renderArmorPart = (slotKey) => {
@@ -557,31 +616,61 @@ const WeaponsAndArmorScreen = () => {
             </View>
             </View>
 
-            {/* Броня */}
-            <View style={{ marginBottom: 16 }}>
-            <View style={localStyles.statsRow}>
-                {renderArmorPart('leftArm')}
-                {renderArmorPart('head')}
-                {renderArmorPart('rightArm')}
-            </View>
-            <View style={[localStyles.statsRow, { marginTop: 8 }]}>
-                {renderArmorPart('leftLeg')}
-                {renderArmorPart('body')}
-                {renderArmorPart('rightLeg')}
-            </View>
-            </View>
+            {/* Броня / Слоты робота */}
+            {isRobot && equippedRobotSlots ? (
+              <View style={{ marginBottom: 16 }}>
+                {chunkSlotKeys(getRobotSlotKeys(bodyPlan), 3).map((chunk, rowIndex) => (
+                  <View
+                    key={rowIndex}
+                    style={[localStyles.statsRow, rowIndex > 0 ? { marginTop: 8 } : null]}
+                  >
+                    {chunk.map((slotKey) => (
+                      <RobotSlot
+                        key={slotKey}
+                        slotKey={slotKey}
+                        slotData={equippedRobotSlots[slotKey]}
+                        bodyPlan={bodyPlan}
+                        onUpgradeLimb={handleOpenLimbUpgradeModal}
+                        onUpgradeArmor={(layer) => handleOpenRobotArmorLayerModal(slotKey, layer)}
+                        onWeaponPress={handleWeaponPress}
+                      />
+                    ))}
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={{ marginBottom: 16 }}>
+              <View style={localStyles.statsRow}>
+                  {renderArmorPart('leftArm')}
+                  {renderArmorPart('head')}
+                  {renderArmorPart('rightArm')}
+              </View>
+              <View style={[localStyles.statsRow, { marginTop: 8 }]}>
+                  {renderArmorPart('leftLeg')}
+                  {renderArmorPart('body')}
+                  {renderArmorPart('rightLeg')}
+              </View>
+              </View>
+            )}
             
             {/* Оружие */}
-            <View>
-            <View style={localStyles.statsRow}>
-                {localizedEquippedWeapons.map((weapon, index) => (
-                  <WeaponCard 
-                    key={index} 
-                    weapon={weapon} 
+            <View style={{ marginBottom: 16 }}>
+              {Array.from({ length: Math.ceil(localizedEquippedWeapons.length / 2) || 1 }, (_, rowIndex) => (
+                <View key={rowIndex} style={[localStyles.statsRow, rowIndex > 0 ? { marginTop: 8 } : null]}>
+                  <WeaponCard
+                    weapon={localizedEquippedWeapons[rowIndex * 2] ?? null}
                     onModifyWeapon={handleOpenModificationModal}
+                    onUnequip={isRobot ? null : handleUnequipWeapon}
+                    showSourceSlot={false}
                   />
-                ))}
-            </View>
+                  <WeaponCard
+                    weapon={localizedEquippedWeapons[rowIndex * 2 + 1] ?? null}
+                    onModifyWeapon={handleOpenModificationModal}
+                    onUnequip={isRobot ? null : handleUnequipWeapon}
+                    showSourceSlot={false}
+                  />
+                </View>
+              ))}
             </View>
             
 
@@ -605,6 +694,23 @@ const WeaponsAndArmorScreen = () => {
           : null}
         mode={armorModalMode}
         onApply={handleApplyArmorModification}
+      />
+      {/* Robot modals */}
+      <LimbUpgradeModal
+        visible={limbUpgradeModalVisible}
+        slotKey={selectedLimbSlot}
+        currentLimb={selectedLimbSlot && equippedRobotSlots ? equippedRobotSlots[selectedLimbSlot]?.limb : null}
+        bodyPlan={bodyPlan}
+        onClose={() => { setLimbUpgradeModalVisible(false); setSelectedLimbSlot(null); }}
+      />
+      <ArmorLayerModal
+        visible={robotArmorLayerModalVisible}
+        slotKey={selectedRobotArmorSlot}
+        layer={selectedRobotArmorLayer}
+        currentItem={selectedRobotArmorSlot && selectedRobotArmorLayer && equippedRobotSlots
+          ? equippedRobotSlots[selectedRobotArmorSlot]?.[selectedRobotArmorLayer]
+          : null}
+        onClose={() => { setRobotArmorLayerModalVisible(false); setSelectedRobotArmorSlot(null); setSelectedRobotArmorLayer(null); }}
       />
       <Modal
         visible={robotBodyUpgradeModalVisible}

@@ -7,11 +7,11 @@
 // ---------------------------------------------------------------------------
 
 const BODY_PLAN_SLOTS = {
-  protectron: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  assaultron: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  sentryBot:  ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'],
-  misterHandy: ['head', 'body', 'arm1', 'arm2', 'arm3', 'thruster'],
-  robobrain:  ['head', 'body', 'leftArm', 'rightArm', 'chassis'],
+  protectron:  ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  assaultron:  ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  sentryBot:   ['leftArm', 'head', 'rightArm', 'leftLeg', 'body', 'rightLeg'],
+  misterHandy: ['arm1', 'head', 'arm2', 'arm3', 'body', 'thruster'],
+  robobrain:   ['leftArm', 'head', 'rightArm', 'chassis', 'body'],
 };
 
 // ---------------------------------------------------------------------------
@@ -233,6 +233,7 @@ export function getBuiltinWeaponsFromSlots(slots) {
           sourceSlot: slotKey,
           sourceLimb: limb.id,
           isBuiltin: true,
+          ...(limb._builtinWeapon ?? {}),
         });
       });
     }

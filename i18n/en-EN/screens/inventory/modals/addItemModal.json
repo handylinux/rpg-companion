@@ -44,5 +44,8 @@
   "searchPlaceholder": "Search all items...",
   "emptyCategory": "Category is empty",
   "close": "Close",
-  "buyTitle": "Buy items"
+  "buyTitle": "Buy items",
+  "quantityLabel": "Quantity",
+  "addButton": "Add",
+  "cancelButton": "Cancel"
 }

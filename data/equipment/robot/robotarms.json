@@ -9,7 +9,10 @@
     "skill": "Repair",
     "rarity": 1,
     "melee": 2,
-    "guns": 2
+    "guns": 2,
+    "physicalDR": 2,
+    "energyDR": 1,
+    "radDR": 0
   },
   {
     "id": "robot_arm_mister_handy",
@@ -21,7 +24,10 @@
     "skill": "Repair",
     "rarity": 1,
     "melee": 3,
-    "guns": 1
+    "guns": 1,
+    "physicalDR": 2,
+    "energyDR": 2,
+    "radDR": 0
   },
   {
     "id": "robot_arm_assaultron",
@@ -33,7 +39,26 @@
     "skill": "Repair",
     "rarity": 1,
     "melee": 5,
-    "guns": 5
+    "guns": 5,
+    "physicalDR": 3,
+    "energyDR": 3,
+    "radDR": 0
+  },
+  {
+    "id": "robot_arm_assaultron_shocker",
+    "itemType": "robotArm",
+    "slots": ["Left Arm", "Right Arm"],
+    "maxSlots": 2,
+    "complexity": 6,
+    "perksRequired": ["Robotics Expert 2", "Science! 1"],
+    "skill": "Repair",
+    "rarity": 2,
+    "melee": 5,
+    "guns": 3,
+    "builtinWeaponId": "assaultron_shocker",
+    "physicalDR": 3,
+    "energyDR": 4,
+    "radDR": 0
   },
   {
     "id": "robot_arm_robobrain",
@@ -45,7 +70,10 @@
     "skill": "Repair",
     "rarity": 2,
     "melee": 2,
-    "guns": 4
+    "guns": 4,
+    "physicalDR": 2,
+    "energyDR": 3,
+    "radDR": 0
   },
   {
     "id": "robot_arm_sentry_bot",
@@ -57,6 +85,9 @@
     "skill": "Repair",
     "rarity": 2,
     "melee": 4,
-    "guns": 5
+    "guns": 5,
+    "physicalDR": 4,
+    "energyDR": 3,
+    "radDR": 0
   }
 ]

@@ -1023,11 +1023,9 @@ export default function CharacterScreen() {
                       : styles.saveNameButtonDisabled,
                   ]}
                   onPress={() => {
-                    if (characterName.length > 0) {
-                      saveCharacter(characterName);
-                    }
+                    saveCharacter(characterName.trim() || 'Персонаж');
                   }}
-                  disabled={characterName.length === 0}
+                  disabled={false}
                 >
                   <Text
                     style={[

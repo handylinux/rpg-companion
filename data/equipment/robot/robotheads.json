@@ -9,7 +9,10 @@
     "skill": "Repair",
     "rarity": 1,
     "mind": 5,
-    "other": 2
+    "other": 2,
+    "physicalDR": 2,
+    "energyDR": 1,
+    "radDR": 0
   },
   {
     "id": "robot_head_mister_handy_eye_stalk",
@@ -21,7 +24,10 @@
     "skill": "Repair",
     "rarity": 1,
     "mind": null,
-    "other": null
+    "other": null,
+    "physicalDR": 1,
+    "energyDR": 1,
+    "radDR": 0
   },
   {
     "id": "robot_head_assaultron",
@@ -33,7 +39,10 @@
     "skill": "Repair",
     "rarity": 1,
     "mind": 6,
-    "other": 4
+    "other": 4,
+    "physicalDR": 3,
+    "energyDR": 3,
+    "radDR": 0
   },
   {
     "id": "robot_head_assaultron_laser",
@@ -45,7 +54,10 @@
     "skill": "Repair",
     "rarity": 2,
     "mind": 6,
-    "other": 4
+    "other": 4,
+    "physicalDR": 3,
+    "energyDR": 4,
+    "radDR": 0
   },
   {
     "id": "robot_head_robobrain",
@@ -57,7 +69,10 @@
     "skill": "Repair",
     "rarity": 2,
     "mind": 7,
-    "other": 3
+    "other": 3,
+    "physicalDR": 2,
+    "energyDR": 3,
+    "radDR": 0
   },
   {
     "id": "robot_head_sentry_bot",
@@ -69,7 +84,9 @@
     "skill": "Repair",
     "rarity": 2,
     "mind": 6,
-    "other": 4
+    "other": 4,
+    "physicalDR": 4,
+    "energyDR": 3,
+    "radDR": 0
   }
 ]
-

@@ -7,7 +7,10 @@
     "complexity": 4,
     "perksRequired": ["Robotics Expert 1"],
     "skill": "Repair",
-    "rarity": 1
+    "rarity": 1,
+    "physicalDR": 2,
+    "energyDR": 2,
+    "radDR": 0
   },
   {
     "id": "robot_legs_protectron",
@@ -17,7 +20,10 @@
     "complexity": 3,
     "perksRequired": ["Robotics Expert 1"],
     "skill": "Repair",
-    "rarity": 1
+    "rarity": 1,
+    "physicalDR": 2,
+    "energyDR": 1,
+    "radDR": 0
   },
   {
     "id": "robot_legs_assaultron",
@@ -27,7 +33,10 @@
     "complexity": 5,
     "perksRequired": ["Robotics Expert 2"],
     "skill": "Repair",
-    "rarity": 1
+    "rarity": 1,
+    "physicalDR": 3,
+    "energyDR": 2,
+    "radDR": 0
   },
   {
     "id": "robot_legs_robobrain_treads",
@@ -37,7 +46,10 @@
     "complexity": 5,
     "perksRequired": ["Robotics Expert 2", "Science! 1"],
     "skill": "Repair",
-    "rarity": 1
+    "rarity": 1,
+    "physicalDR": 2,
+    "energyDR": 2,
+    "radDR": 0
   },
   {
     "id": "robot_legs_sentry_bot",
@@ -47,6 +59,9 @@
     "complexity": 6,
     "perksRequired": ["Armorer 1", "Robotics Expert 3"],
     "skill": "Repair",
-    "rarity": 2
+    "rarity": 2,
+    "physicalDR": 4,
+    "energyDR": 3,
+    "radDR": 0
   }
 ]

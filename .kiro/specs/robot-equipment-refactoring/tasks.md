@@ -122,33 +122,33 @@
   - Обновить `CharacterScreen` для приёма и применения новых полей через контекст
   - _Требования: 1.2, 3.1–3.10_
 
-- [ ] 8. Создать компонент `RobotSlot` для `WeaponsAndArmorScreen`
+- [x] 8. Создать компонент `RobotSlot` для `WeaponsAndArmorScreen`
   - Отображать: название слота, название конечности, индикаторы слоёв брони (plating/armor/frame + значения DR)
   - Отображать информацию об оружии слота (встроенное или удерживаемое) со ссылкой на карточку
   - Кнопки: "Модернизировать конечность", "Улучшить броню", "Улучшить обшивку", "Улучшить раму"
   - _Требования: 6.1–6.7_
 
-- [ ] 9. Создать `LimbUpgradeModal`
+- [x] 9. Создать `LimbUpgradeModal`
   - Загружать данные из `data/equipment/robot/robotarms.json`, `robotheads.json`, `robotbody.json`, `robotlegs.json`
   - Фильтровать по `itemType` слота и `compatibleBodyPlans`/`defaultForBodyPlan`
   - При выборе: вызывать `applyLimbReplacement`, обновлять `equippedRobotSlots` и `equippedWeapons` в контексте
   - _Требования: 8.1–8.5_
 
-- [ ] 10. Создать `ArmorLayerModal`
+- [x] 10. Создать `ArmorLayerModal`
   - Загружать данные из `data/equipment/robot/armor_plating.json`, `armor.json`, `frames.json`
   - Фильтровать по `layer` и `robotLocation`
   - Проверять совместимость через `canEquipRobotArmor` перед отображением
   - При выборе: обновлять соответствующий слой в `equippedRobotSlots[slotKey]`
   - _Требования: 5.1–5.7, 6.6–6.7_
 
-- [ ] 11. Обновить `WeaponsAndArmorScreen` — ветка робота
+- [x] 11. Обновить `WeaponsAndArmorScreen` — ветка робота
   - Добавить условный рендеринг: если `isRobotCharacter` → рендерить `RobotEquipmentSection` вместо `ArmorPart`
   - `RobotEquipmentSection` итерирует по `getRobotSlotKeys(bodyPlan)` и рендерит `RobotSlot` для каждого
   - Обновить секцию оружия: рендерить динамический список из `equippedWeapons` (убрать ограничение на 2 слота)
   - Для карточек оружия роботов: показывать метку `sourceSlot`
   - _Требования: 6.1–6.9_
 
-- [ ] 12. Обновить `InventoryScreen` — поток экипировки для роботов
+- [x] 12. Обновить `InventoryScreen` — поток экипировки для роботов
   - Для роботов: проверять наличие руки с `canHoldWeapons` перед показом кнопки "Экипировать"
   - Если руки нет — скрыть кнопку "Экипировать", показать предупреждение (существующий алерт `manipulatorRequiredTitle`)
   - Если рука есть — добавлять оружие напрямую в `equippedWeapons` без диалога выбора слота
@@ -156,7 +156,7 @@
   - Скрыть предметы-конечности (`robotArm`, `robotHead`, `robotBody`, `robotLeg`) из списка инвентаря
   - _Требования: 7.1–7.6_
 
-- [ ] 13. Обновить `AddItemModal` — выбор количества
+- [x] 13. Обновить `AddItemModal` — выбор количества
   - Добавить внутреннее состояние `pendingItem` и `pendingQuantity`
   - При нажатии на предмет: установить `pendingItem`, показать шаг выбора количества
   - Элементы управления количеством: кнопка `-`, числовой `TextInput`, кнопка `+` (стиль как в `SellItemModal`)
@@ -164,13 +164,13 @@
   - Обновить `InventoryScreen.handleSelectCatalogItem` для приёма `(item, quantity)`
   - _Требования: 9.1–9.6_
 
-- [ ] 14. Добавить `unarmed_human` в `equippedWeapons` для людей
+- [x] 14. Добавить `unarmed_human` в `equippedWeapons` для людей
   - При создании нового персонажа-человека: добавить `unarmed_human` в `equippedWeapons`
   - При загрузке персонажа-человека: добавить `unarmed_human` если его нет
   - В `WeaponsAndArmorScreen`: скрыть кнопку "Снять" для оружия с `isBuiltin: true`
   - _Требования: 1.2, 13.1–13.6_
 
-- [ ] 15. Создать документ для будущей задачи: управление конечностями в инвентаре
+- [x] 15. Создать документ для будущей задачи: управление конечностями в инвентаре
   - Создать `docs/robot-limb-inventory-management.md`
   - Описать задачи: отображение снятых конечностей в инвентаре, экипировка конечностей из инвентаря, кнопка "Снять конечность" в `WeaponsAndArmorScreen`
   - _Требования: 14.1–14.3_
