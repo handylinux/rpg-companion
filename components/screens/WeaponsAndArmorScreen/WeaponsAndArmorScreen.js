@@ -14,7 +14,7 @@ import { getSkillDisplayName } from '../CharacterScreen/logic/characterScreenI18
 import { getEffectTimeText, getTimedMaxHpBonus, getTimedDamageResistanceBonus } from '../../../domain/effects';
 import { resolveWeaponQualities, resolveWeaponDamageType } from '../../../domain/weaponDisplay';
 import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
-import { isRobotCharacter, getRobotSlotKeys } from '../../../domain/robotEquip';
+import { getRobotSlotKeys } from '../../../domain/robotEquip';
 
 // Импортируем модальное окно модификаций
 import WeaponModificationModal from './WeaponModificationModal';
@@ -102,76 +102,7 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
     );
 };
 
-// Компонент для отображения слота робота
-const RobotSlot = ({ slotKey, slotData }) => {
-    const limbName = slotData?.limb?.name || slotData?.limb?.Название || 'Нет конечности';
-    const heldWeaponName = slotData?.heldWeapon?.name || slotData?.heldWeapon?.Название || null;
-    const platingName = slotData?.plating?.name || slotData?.plating?.Название || null;
-    const armorName = slotData?.armor?.name || slotData?.armor?.Название || null;
-    const frameName = slotData?.frame?.name || slotData?.frame?.Название || null;
-    
-    // Определяем тип слота для отображения
-    let slotTitle = slotKey;
-    if (slotKey === 'head') slotTitle = 'Голова';
-    else if (slotKey === 'body') slotTitle = 'Корпус';
-    else if (slotKey.includes('Arm') || slotKey.includes('arm')) slotTitle = 'Рука';
-    else if (slotKey.includes('Leg') || slotKey === 'chassis' || slotKey === 'thruster') slotTitle = 'Шасси';
-    
-    const stats = [];
-    
-    // Конечность
-    stats.push({
-        label: 'Конечность',
-        value: limbName,
-    });
-    
-    // Оружие в руке
-    if (heldWeaponName) {
-        stats.push({
-            label: 'Оружие',
-            value: heldWeaponName,
-        });
-    }
-    
-    // Броня
-    if (platingName) {
-        stats.push({
-            label: 'Обшивка',
-            value: platingName,
-        });
-    }
-    
-    if (armorName) {
-        stats.push({
-            label: 'Броня',
-            value: armorName,
-        });
-    }
-    
-    if (frameName) {
-        stats.push({
-            label: 'Рама',
-            value: frameName,
-        });
-    }
-    
-    return (
-        <View style={localStyles.armorPartContainer}>
-            <View style={[styles.sectionHeader, { flexDirection: 'column', alignItems: 'center', paddingBottom: 2, minHeight: 50 }]}>
-                <Text style={styles.sectionTitle}>{slotTitle}</Text>
-                <Text style={[styles.sectionTitle, { fontSize: 12 }]}>{slotKey}</Text>
-            </View>
-            <View style={localStyles.armorStatsContainer}>
-                {stats.map((stat, index) => (
-                    <View key={index} style={[localStyles.armorStatRow, { borderBottomWidth: index === stats.length - 1 ? 0 : 1 }]}>
-                        <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
-                        <Text style={localStyles.armorStatValue}>{stat.value}</Text>
-                    </View>
-                ))}
-            </View>
-        </View>
-    );
-};
+
 
 const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const { hasTrait, attributes, skills, equippedWeapons } = useCharacter();
