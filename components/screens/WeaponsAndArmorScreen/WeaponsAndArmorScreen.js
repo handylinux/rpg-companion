@@ -3,6 +3,7 @@ import { View, Text, ScrollView, ImageBackground, TouchableOpacity, SafeAreaView
 import { useCharacter } from '../../CharacterContext';
 import { calculateInitiative, calculateDefense, calculateMeleeBonus, calculateMaxHealth, getAttributeValue } from '../../../domain/characterCreation';
 import { TRAITS } from '../CharacterScreen/logic/traitsData';
+import { isRobotCharacter } from '../../../domain/robotEquip';
 import styles from '../../../styles/CharacterScreen.styles';
 import localStyles from '../../../styles/WeaponsAndArmorScreen.styles';
 import { renderTextWithIcons } from './textUtils';
@@ -90,6 +91,77 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
                         ) : (
                           <Text style={localStyles.armorStatValue}>{stat.value}</Text>
                         )}
+                    </View>
+                ))}
+            </View>
+        </View>
+    );
+};
+
+// Компонент для отображения слота робота
+const RobotSlot = ({ slotKey, slotData }) => {
+    const limbName = slotData?.limb?.name || slotData?.limb?.Название || 'Нет конечности';
+    const heldWeaponName = slotData?.heldWeapon?.name || slotData?.heldWeapon?.Название || null;
+    const platingName = slotData?.plating?.name || slotData?.plating?.Название || null;
+    const armorName = slotData?.armor?.name || slotData?.armor?.Название || null;
+    const frameName = slotData?.frame?.name || slotData?.frame?.Название || null;
+    
+    // Определяем тип слота для отображения
+    let slotTitle = slotKey;
+    if (slotKey === 'head') slotTitle = 'Голова';
+    else if (slotKey === 'body') slotTitle = 'Корпус';
+    else if (slotKey.includes('Arm') || slotKey.includes('arm')) slotTitle = 'Рука';
+    else if (slotKey.includes('Leg') || slotKey === 'chassis' || slotKey === 'thruster') slotTitle = 'Шасси';
+    
+    const stats = [];
+    
+    // Конечность
+    stats.push({
+        label: 'Конечность',
+        value: limbName,
+    });
+    
+    // Оружие в руке
+    if (heldWeaponName) {
+        stats.push({
+            label: 'Оружие',
+            value: heldWeaponName,
+        });
+    }
+    
+    // Броня
+    if (platingName) {
+        stats.push({
+            label: 'Обшивка',
+            value: platingName,
+        });
+    }
+    
+    if (armorName) {
+        stats.push({
+            label: 'Броня',
+            value: armorName,
+        });
+    }
+    
+    if (frameName) {
+        stats.push({
+            label: 'Рама',
+            value: frameName,
+        });
+    }
+    
+    return (
+        <View style={localStyles.armorPartContainer}>
+            <View style={[styles.sectionHeader, { flexDirection: 'column', alignItems: 'center', paddingBottom: 2, minHeight: 50 }]}>
+                <Text style={styles.sectionTitle}>{slotTitle}</Text>
+                <Text style={[styles.sectionTitle, { fontSize: 12 }]}>{slotKey}</Text>
+            </View>
+            <View style={localStyles.armorStatsContainer}>
+                {stats.map((stat, index) => (
+                    <View key={index} style={[localStyles.armorStatRow, { borderBottomWidth: index === stats.length - 1 ? 0 : 1 }]}>
+                        <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
+                        <Text style={localStyles.armorStatValue}>{stat.value}</Text>
                     </View>
                 ))}
             </View>
@@ -282,6 +354,7 @@ const WeaponsAndArmorScreen = () => {
     setEquippedWeapons,
     equippedArmor,
     setEquippedArmor,
+    equippedRobotSlots,
     equipment,
     saveModifiedItem,
     effects,
@@ -378,6 +451,15 @@ const WeaponsAndArmorScreen = () => {
   };
 
   const renderArmorPart = (slotKey) => {
+    // Проверяем является ли персонаж роботом
+    const isRobot = trait?.modifiers?.isRobot || false;
+    
+    // Если робот и есть equippedRobotSlots, отображаем RobotSlot
+    if (isRobot && equippedRobotSlots && equippedRobotSlots[slotKey]) {
+      return <RobotSlot key={slotKey} slotKey={slotKey} slotData={equippedRobotSlots[slotKey]} />;
+    }
+    
+    // Иначе отображаем обычный ArmorPart
     const slotData = equippedArmor[slotKey];
     const armorItem = findLocalizedArmor(equipmentCatalog, slotData ? slotData.armor : null);
     const clothingItem = findLocalizedClothing(equipmentCatalog, slotData ? slotData.clothing : null);

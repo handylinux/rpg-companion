@@ -16,16 +16,23 @@ import {
 // ---------------------------------------------------------------------------
 
 const protectronManipulator = {
-  id: 'robot_weapon_protectron_manipulator',
-  itemType: 'weapon',
-  builtinManipulator: true,
-  canHoldWeapons: true,
-  maxHandelWeaponWeight: 5,
+  id: 'robot_arm_protectron_manipulator',
+  itemType: 'robotArm',
+  slot: 'left',
+  builtinWeapons: [
+    {
+      id: 'protectron_manipulator_punch',
+      damage: 3,
+      damageType: 'physical',
+      weaponType: 'Melee',
+    }
+  ]
 };
 
 const laserGun = {
   id: 'weapon_laser_gun',
   itemType: 'weapon',
+  slot: 'right',
   damage: 5,
   weight: 2,
 };
@@ -66,39 +73,43 @@ const robotCatalog = {
 
 // Mister Handy fixtures
 const manipulatorArm = {
-  id: 'robot_weapon_manipulator',
-  itemType: 'weapon',
-  builtinManipulator: true,
-  canHoldWeapons: true,
+  id: 'robot_arm_manipulator',
+  itemType: 'robotArm',
+  slot: 'left',
+  builtinWeapons: [
+    {
+      id: 'manipulator_punch',
+      damage: 2,
+      damageType: 'physical',
+      weaponType: 'Melee',
+    }
+  ]
 };
 
 const flamethrower = {
   id: 'robot_weapon_flamethrower',
   itemType: 'weapon',
+  slot: 'right',
   damage: 3,
   damageType: 'fire',
   weight: 0,
-  replacesArm: true,
-  blocksStandardWeapons: true,
 };
 
 const circularSaw = {
   id: 'robot_weapon_circular_saw',
   itemType: 'weapon',
+  slot: 'right',
   damage: 3,
   weight: 3,
-  replacesArm: true,
-  blocksStandardWeapons: true,
 };
 
 const laserCutter = {
   id: 'robot_weapon_laser_cutter',
   itemType: 'weapon',
+  slot: 'left',
   damage: 4,
   damageType: 'energy',
   weight: 0,
-  replacesArm: true,
-  blocksStandardWeapons: true,
 };
 
 const handyHead = {
@@ -202,11 +213,11 @@ describe('createEmptyRobotSlots', () => {
 
 describe('initRobotSlots — protectron_standard', () => {
   // Simulates the resolved kit items for protectron_standard:
-  // 2x manipulator arms (builtinManipulator), laser gun (requiresWeaponId), plating, module, module, misc, currency
+  // 2x manipulator arms, laser gun, plating, module, module, misc, currency
   const resolvedItems = [
-    { ...protectronManipulator, itemType: 'weapon' },
-    { ...protectronManipulator, itemType: 'weapon' },
-    { ...laserGun, itemType: 'weapon', requiresWeaponId: 'robot_weapon_protectron_manipulator' },
+    { ...protectronManipulator, itemType: 'robotArm', slot: 'left' },
+    { ...protectronManipulator, itemType: 'robotArm', slot: 'right' },
+    { ...laserGun, itemType: 'weapon', slot: 'left' },
     { ...standardPlating },
     { id: 'robot_module_recon_sensors', itemType: 'module' },
     { id: 'robot_module_hazard_detection', itemType: 'module' },
@@ -224,8 +235,8 @@ describe('initRobotSlots — protectron_standard', () => {
 
   it('places manipulator arms in leftArm and rightArm', () => {
     const { slots } = initRobotSlots('protectron', resolvedItems, robotCatalog);
-    expect(slots.leftArm.limb?.id).toBe('robot_weapon_protectron_manipulator');
-    expect(slots.rightArm.limb?.id).toBe('robot_weapon_protectron_manipulator');
+    expect(slots.leftArm.limb?.id).toBe('robot_arm_protectron_manipulator');
+    expect(slots.rightArm.limb?.id).toBe('robot_arm_protectron_manipulator');
   });
 
   it('auto-fills head, body, legs from catalog', () => {
