@@ -231,6 +231,7 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
       if (item.requiresWeaponId) {
         const targetKey = slotKeys.find(
           (k) => slots[k].limb?.id === item.requiresWeaponId ||
+                 slots[k].limb?.itemId === item.requiresWeaponId ||
                  slots[k].limb?.builtinManipulator && slots[k].limb?.id === item.requiresWeaponId,
         );
         if (targetKey) {
@@ -307,7 +308,8 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
     if (alreadyPlaced) continue;
 
     const targetKey = slotKeys.find(
-      (k) => slots[k].limb?.id === item.requiresWeaponId,
+      (k) => slots[k].limb?.id === item.requiresWeaponId ||
+             slots[k].limb?.itemId === item.requiresWeaponId,
     );
     if (targetKey) {
       slots[targetKey].heldWeapon = weaponData;

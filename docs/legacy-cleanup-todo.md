@@ -41,6 +41,10 @@
 - Кнопка "Снять" удалена из рендера
 - Проп `onUnequip` и `handleUnequipWeapon` в `WeaponsAndArmorScreen` больше не нужны
 
+### `hasSecondaryWeaponOverManipulator` — удалено
+- Логика скрытия урона манипулятора когда есть другое оружие
+- Удалена, т.к. манипулятор всегда `robotOnly` и у людей не бывает
+
 ### `uniqueKey: 'unused'` в `ArmorModificationModal`
 - Явно помечен как неиспользуемый при вызове `applyArmorMods`
 

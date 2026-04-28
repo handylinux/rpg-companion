@@ -102,7 +102,7 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
 };
 
 const WeaponCard = ({ weapon, onModifyWeapon, onUnequip, showSourceSlot = false }) => {
-    const { hasTrait, attributes, skills, equippedWeapons } = useCharacter();
+    const { hasTrait, attributes, skills, equippedWeapons, meleeBonus } = useCharacter();
     if (!weapon) {
       return (
         <View style={localStyles.weaponCardContainer}>
@@ -167,8 +167,10 @@ const WeaponCard = ({ weapon, onModifyWeapon, onUnequip, showSourceSlot = false 
     const isNcrInfantryWeapon = displayWeapon && ncrInfantryWeaponIds.includes(displayWeapon.id ?? displayWeapon.weaponId);
 
     const damageWithNcr = hasTrait('Пехотинец') && isNcrInfantryWeapon ? baseDamage + 1 : baseDamage;
-    const hasSecondaryWeaponOverManipulator = Boolean(displayWeapon?.builtinManipulator) && (equippedWeapons || []).some((w) => w && !w.builtinManipulator);
-    const visibleDamage = hasSecondaryWeaponOverManipulator ? 0 : damageWithNcr;
+    // Бонус ближнего боя применяется к UNARMED и Melee оружию (или если meleeBonusApplies: true)
+    const isMeleeType = ['Melee', 'Unarmed', 'MELEE_WEAPONS', 'UNARMED'].includes(displayWeapon?.weaponType ?? displayWeapon?.weapon_type ?? '');
+    const applyMeleeBonus = displayWeapon?.meleeBonusApplies === true || isMeleeType;
+    const visibleDamage = applyMeleeBonus ? damageWithNcr + (meleeBonus || 0) : damageWithNcr;
 
     // Снижение базовой скорострельности на 1 при "Техника спуска" для стрелкового и энергооружия
     const equippedWeaponTypes = (equippedWeapons || [])
@@ -233,9 +235,18 @@ const findLocalizedWeapon = (catalog, weapon) => {
   if (!weapon?.id) return weapon;
   const base = (catalog?.weapons || []).find((entry) => entry.id === weapon.id);
   if (!base) return weapon;
+  // base имеет приоритет для игровых данных, weapon — для мета-полей (sourceSlot, isBuiltin, appliedMods и т.д.)
   return {
-    ...base,
     ...weapon,
+    ...base,
+    // мета-поля из weapon сохраняем
+    sourceSlot: weapon.sourceSlot,
+    isBuiltin: weapon.isBuiltin,
+    isManipulator: weapon.isManipulator,
+    appliedMods: weapon.appliedMods,
+    uniqueId: weapon.uniqueId,
+    hasMods: base.hasMods ?? weapon.hasMods,
+    withoutMods: base.withoutMods ?? weapon.withoutMods,
     name: base.name || base.Name || weapon.name || weapon.Name,
     Name: base.Name || base.name || weapon.Name || weapon.name,
     Название: base.Название || base.Name || base.name || weapon.Название || weapon.Name || weapon.name,
