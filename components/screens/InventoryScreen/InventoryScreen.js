@@ -10,7 +10,7 @@ import { getInstantHealAmount } from '../../../domain/effects';
 import { formatInventoryText, tInventory } from './logic/inventoryI18n';
 import { useLocale } from '../../../i18n/locale';
 import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
-import { isRobotCharacter as checkIsRobotCharacter } from '../../../domain/robotEquip';
+import { isRobotCharacter as checkIsRobotCharacter, getBuiltinWeaponsFromSlots } from '../../../domain/robotEquip';
 import styles from '../../../styles/InventoryScreen.styles';
 
 const CapsSection = ({ caps, onAdd, onSubtract }) => (
@@ -68,7 +68,7 @@ const InventoryScreen = () => {
   const locale = useLocale();
   const equipmentCatalog = useMemo(() => getEquipmentCatalog(locale), [locale]);
 
-  const getItemName = (item) => item?.name || item?.Name || '';
+  const getItemName = (item) => item?.name || item?.id || '';
   const getItemType = (item) => {
     if (item?.itemType) return item.itemType;
     if (item?.effectType || item?.durationInScenes || item?.duration || item?.positiveEffect) return 'chem';
@@ -128,7 +128,12 @@ const InventoryScreen = () => {
     return itype === 'robotArm' || itype === 'robotHead' || itype === 'robotBody' || itype === 'robotLeg';
   };
 
-  const isRobotOnlyItem = (item) => Boolean(item?.robotOnly || String(item?.id || '').startsWith('robot_'));
+  const robotWeaponIds = useMemo(
+    () => new Set((equipmentCatalog?.robotWeapons || []).map((entry) => entry.id)),
+    [equipmentCatalog],
+  );
+  const isRobotOnlyItem = (item) => Boolean(item?.id && robotWeaponIds.has(item.id));
+  const isRobotLimbWeapon = (item) => item?.itemType === 'weapon' && Boolean(item?.limbSlot);
 
   // Проверяем наличие руки с canHoldWeapons в слотах робота (Requirement 7.2)
   const robotHasHoldingArm = useMemo(() => {
@@ -160,8 +165,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -171,8 +175,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -183,8 +186,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -197,8 +199,7 @@ const InventoryScreen = () => {
       const result = {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
       console.log('[resolveLocalizedItem] chem result:', result.id, 'positiveEffect:', result.positiveEffect);
       return result;
@@ -210,8 +211,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -221,8 +221,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -232,8 +231,7 @@ const InventoryScreen = () => {
       return {
         ...base,
         ...item,
-        name: base.name || base.Name || item.name || item.Name,
-        Name: base.Name || base.name || item.Name || item.name,
+        name: base.name || item.name || item.id,
       };
     }
 
@@ -246,8 +244,7 @@ const InventoryScreen = () => {
     return {
       ...base,
       ...item,
-      name: base.name || base.Name || item.name || item.Name,
-      Name: base.Name || base.name || item.Name || item.name,
+      name: base.name || item.name || item.id,
     };
   };
 
@@ -570,6 +567,84 @@ const InventoryScreen = () => {
 
     if (isRobotOnlyItem(displayWeapon) && !isRobotCharacter) {
       showAlert(tInventory('screen.alerts.robotOnlyWeaponTitle', 'Ограничение экипировки'), tInventory('screen.alerts.robotOnlyWeaponMessage', 'Это оружие могут использовать только роботы.'));
+      return;
+    }
+    if (isRobotCharacter && isRobotLimbWeapon(displayWeapon)) {
+      const slots = equippedRobotSlots || {};
+      const slotKeys = Object.keys(slots);
+      const armKeys = slotKeys.filter((key) => key.toLowerCase().includes('arm'));
+      const firstFreeArm = () => armKeys.find((key) => !slots[key]?.limb) || armKeys[0] || null;
+      const rawTargets = Array.isArray(displayWeapon.limbSlot)
+        ? displayWeapon.limbSlot
+        : String(displayWeapon.limbSlot || '').split('+');
+      const resolvedTargets = [];
+
+      rawTargets
+        .map((token) => String(token || '').trim())
+        .filter(Boolean)
+        .forEach((token) => {
+          const normalized = token.toLowerCase().replace(/[\s_-]/g, '');
+          if (normalized === 'leftarm') {
+            resolvedTargets.push(slotKeys.includes('leftArm') ? 'leftArm' : firstFreeArm());
+            return;
+          }
+          if (normalized === 'rightarm') {
+            resolvedTargets.push(slotKeys.includes('rightArm') ? 'rightArm' : firstFreeArm());
+            return;
+          }
+          if (normalized === 'arms') {
+            const freeArm = firstFreeArm();
+            if (freeArm) resolvedTargets.push(freeArm);
+            return;
+          }
+          const byExact = slotKeys.find((key) => key.toLowerCase() === normalized);
+          if (byExact) resolvedTargets.push(byExact);
+        });
+
+      const finalTargets = [...new Set(resolvedTargets.filter(Boolean))];
+      if (finalTargets.length === 0) {
+        const freeArm = firstFreeArm();
+        if (freeArm) finalTargets.push(freeArm);
+      }
+      if (finalTargets.length === 0) {
+        showAlert(tInventory('screen.alerts.manipulatorRequiredTitle'), tInventory('screen.alerts.robotNoHandlingLimbMessage'));
+        return;
+      }
+
+      const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
+      const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
+      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
+      if (totalOwned <= alreadyEquippedCount) {
+        showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
+        return;
+      }
+
+      const updatedSlots = { ...slots };
+      const weaponSlots = Number(displayWeapon.weaponSlots ?? displayWeapon.weaponSlot ?? 0);
+      const weaponLimb = {
+        ...displayWeapon,
+        itemType: 'robotArm',
+        weaponSlots,
+        canHoldWeapons: weaponSlots > 0,
+        builtinWeapons: Array.isArray(displayWeapon.builtinWeapons) && displayWeapon.builtinWeapons.length
+          ? displayWeapon.builtinWeapons
+          : [{ ...displayWeapon }],
+      };
+      finalTargets.forEach((key) => {
+        if (!updatedSlots[key]) return;
+        updatedSlots[key] = { ...updatedSlots[key], limb: weaponLimb, heldWeapon: null };
+      });
+
+      setEquippedRobotSlots(updatedSlots);
+      setEquippedWeapons(getBuiltinWeaponsFromSlots(updatedSlots));
+
+      const newItems = equipment?.items ? [...equipment.items] : [];
+      const itemIndex = newItems.findIndex(i => (i.stackKey || getStackKey(i)) === sourceStackKey);
+      if (itemIndex !== -1) {
+        newItems[itemIndex].quantity -= 1;
+        if (newItems[itemIndex].quantity <= 0) newItems.splice(itemIndex, 1);
+        updateInventoryItems(newItems);
+      }
       return;
     }
     if (!isRobotOnlyItem(displayWeapon) && isRobotCharacter) {
@@ -1089,7 +1164,11 @@ const InventoryScreen = () => {
     // Скрыть кнопку "Снять" для встроенного/манипуляторного оружия (Requirement 7.5)
     const isBuiltinOrManipulator = Boolean(item?.isBuiltin || item?.isManipulator);
     // Для роботов: скрыть кнопку "Экипировать" если нет руки с canHoldWeapons
-    const hideEquipButton = isRobotCharacter && item.itemType === 'weapon' && !item.isEquipped && !robotHasHoldingArm;
+    const hideEquipButton = isRobotCharacter
+      && item.itemType === 'weapon'
+      && !item.isEquipped
+      && !robotHasHoldingArm
+      && !isRobotLimbWeapon(item);
     // Скрыть кнопку действия для экипированного встроенного/манипуляторного оружия
     const hideActionButton = item.isEquipped && item.itemType === 'weapon' && isBuiltinOrManipulator;
 

@@ -6,7 +6,6 @@
       "weight": 0,
       "cost": 0,
       "rarity": 0,
-      "robotOnly": true,
       "healAmount": 6
     },
     {
@@ -31,7 +30,6 @@
       "weight": 0,
       "cost": 0,
       "rarity": 0,
-      "robotOnly": true,
       "grantsItemId": "drink_clean_water",
       "grantsEveryHours": 24
     },
@@ -40,56 +38,49 @@
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_behavior_analysis",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_hazard_detection",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_diagnostics",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_sensor_array",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_hacking",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     },
     {
       "id": "robot_module_radiation_coils",
       "itemType": "module",
       "weight": 0,
       "cost": 0,
-      "rarity": 0,
-      "robotOnly": true
+      "rarity": 0
     }
   ],
   "robotPartsUpgrade": []

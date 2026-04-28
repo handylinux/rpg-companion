@@ -213,7 +213,8 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
 
   // Weapons: merge data/ stats with i18n names/flavour
   const weapons = mergeById(dataWeapons, i18n.weapons).map((w) => ({ ...w, itemType: 'weapon' }));
-  const robotWeapons = mergeById(dataRobotWeapons, i18n.robotWeapons || []).map((w) => ({ ...w, itemType: 'weapon' }));
+  const robotWeapons = mergeById(dataRobotWeapons, i18n.robotWeapons || [])
+    .map((w) => ({ ...w, itemType: 'weapon', isRobotWeapon: true }));
   const allWeapons = [...weapons, ...robotWeapons];
 
   // Robot plating and armor: merge data stats with i18n names, add to armorIndex

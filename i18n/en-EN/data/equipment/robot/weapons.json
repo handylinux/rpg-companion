@@ -1,4 +1,12 @@
 [
+  { "id": "robot_arm_manipulator",              "name": "Manipulator",               "rangeName": "Close" },
+  { "id": "robot_arm_protectron_manipulator",   "name": "Manipulator (Protectron)",  "rangeName": "Close" },
+  { "id": "robot_arm_protectron",               "name": "Protectron Arm" },
+  { "id": "robot_arm_mister_handy",             "name": "Mister Handy Arm" },
+  { "id": "robot_arm_assaultron",               "name": "Assaultron Arm" },
+  { "id": "robot_arm_assaultron_shocker",       "name": "Assaultron Shocker Arm" },
+  { "id": "robot_arm_robobrain",                "name": "Robobrain Arm" },
+  { "id": "robot_arm_sentry_bot",               "name": "Sentry Bot Arm" },
   { "id": "robot_weapon_manipulator",           "name": "Manipulator",               "rangeName": "Close" },
   { "id": "robot_weapon_flamethrower",           "name": "Flamethrower (Robot)",      "rangeName": "Close" },
   { "id": "robot_weapon_circular_saw",           "name": "Circular Saw",              "rangeName": "Close" },

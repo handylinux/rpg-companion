@@ -1,4 +1,12 @@
 [
+  { "id": "robot_arm_manipulator",              "name": "Манипулятор",                        "rangeName": "Близкая" },
+  { "id": "robot_arm_protectron_manipulator",   "name": "Манипулятор (Протектрон)",           "rangeName": "Близкая" },
+  { "id": "robot_arm_protectron",               "name": "Рука Протектрона" },
+  { "id": "robot_arm_mister_handy",             "name": "Рука Мистера Помощника" },
+  { "id": "robot_arm_assaultron",               "name": "Рука Ассолтрона" },
+  { "id": "robot_arm_assaultron_shocker",       "name": "Шоковые руки Ассолтрона" },
+  { "id": "robot_arm_robobrain",                "name": "Рука Роботмозга" },
+  { "id": "robot_arm_sentry_bot",               "name": "Рука Сентри-бота" },
   { "id": "robot_weapon_manipulator",           "name": "Манипулятор",                        "rangeName": "Близкая" },
   { "id": "robot_weapon_flamethrower",           "name": "Огнемёт (робот)",                    "rangeName": "Близкая" },
   { "id": "robot_weapon_circular_saw",           "name": "Циркулярная пила",                   "rangeName": "Близкая" },
