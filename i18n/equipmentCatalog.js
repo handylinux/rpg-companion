@@ -228,7 +228,11 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
     i18n.robotWeapons || [],
   )
     .map((w) => ({ ...w, itemType: 'weapon', isRobotWeapon: true }));
-  const robotArms = mergeById(dataRobotArms || [], i18n.robotArms || [])
+  const robotArmsI18n = [
+    ...(i18n.robotArms || []),
+    ...(i18n.robotWeapons || []),
+  ].filter((item, index, arr) => item?.id && arr.findIndex((x) => x?.id === item.id) === index);
+  const robotArms = mergeById(dataRobotArms || [], robotArmsI18n)
     .map((arm) => ({ ...arm, itemType: 'robotArm', isRobotArm: true }));
   const allWeapons = [...weapons, ...robotWeapons];
 
