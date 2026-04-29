@@ -55,21 +55,21 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
     type: 'value',
   });
 
-  // --- Встроенное оружие (только builtinWeaponId, не heldWeapon) ---
+  // --- Оружие конечности ---
   if (limb?.builtinWeaponId) {
     const builtinWeapon = { id: limb.builtinWeaponId, isBuiltin: true, ...limb._builtinWeapon };
     const weaponName = builtinWeapon.name ?? builtinWeapon.id ?? t('common.empty');
 
     if (onWeaponPress) {
       stats.push({
-        label: t('robotSlot.weapon.builtin'),
+        label: '',
         value: weaponName,
         type: 'button',
         onPress: () => onWeaponPress(builtinWeapon),
       });
     } else {
       stats.push({
-        label: t('robotSlot.weapon.builtin'),
+        label: '',
         value: weaponName,
         type: 'value',
       });
