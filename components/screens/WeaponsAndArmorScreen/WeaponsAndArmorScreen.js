@@ -17,8 +17,8 @@ import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
 import { getRobotSlotKeys } from '../../../domain/robotEquip';
 
 // Импортируем модальное окно модификаций
-import WeaponModificationModal from './WeaponModificationModal';
-import ArmorModificationModal from './ArmorModificationModal';
+import WeaponModificationModal from './modal/WeaponModificationModal';
+import ArmorModificationModal from './modal/ArmorModificationModal';
 import RobotSlot from './RobotSlot';
 import LimbUpgradeModal from '../CharacterScreen/modals/LimbUpgradeModal';
 import ArmorLayerModal from '../CharacterScreen/modals/ArmorLayerModal';
@@ -104,7 +104,7 @@ const ArmorPart = ({ title, subtitle, armorName, clothingName, stats }) => {
 
 
 
-const WeaponCard = ({ weapon, onModifyWeapon }) => {
+const WeaponCard = ({ weapon, onModifyWeapon, meleeBonus = 0, showSourceSlot = false }) => {
     const { hasTrait, attributes, skills, equippedWeapons } = useCharacter();
     if (!weapon) {
       return (
@@ -122,7 +122,7 @@ const WeaponCard = ({ weapon, onModifyWeapon }) => {
     const displayWeapon = weapon;
 
     // Канонический формат полей оружия
-    const weaponName = displayWeapon.Name ?? displayWeapon.name ?? tWeaponsAndArmorScreen('common.empty');
+    const weaponName = displayWeapon.name ?? tWeaponsAndArmorScreen('common.empty');
     const damageType = resolveWeaponDamageType(displayWeapon.damage_type ?? displayWeapon.damageType);
     const baseDamage = Number(displayWeapon.damage ?? 0) || 0;
     const effectsValue = displayWeapon.damage_effects ?? displayWeapon.damageEffects ?? tWeaponsAndArmorScreen('common.empty');
@@ -250,9 +250,7 @@ const findLocalizedWeapon = (catalog, weapon) => {
     uniqueId: weapon.uniqueId,
     hasMods: base.hasMods ?? weapon.hasMods,
     withoutMods: base.withoutMods ?? weapon.withoutMods,
-    name: base.name || base.Name || weapon.name || weapon.Name,
-    Name: base.Name || base.name || weapon.Name || weapon.name,
-    Название: base.Название || base.Name || base.name || weapon.Название || weapon.Name || weapon.name,
+    name: base.name || weapon.name,
   };
 };
 
@@ -263,9 +261,7 @@ const findLocalizedArmor = (catalog, armorItem) => {
   return {
     ...base,
     ...armorItem,
-    name: base.name || base.Name || armorItem.name || armorItem.Name,
-    Name: base.Name || base.name || armorItem.Name || armorItem.name,
-    Название: base.Название || base.Name || base.name || armorItem.Название || armorItem.Name || armorItem.name,
+    name: base.name || armorItem.name,
   };
 };
 
@@ -277,9 +273,7 @@ const findLocalizedClothing = (catalog, clothingItem) => {
   return {
     ...base,
     ...clothingItem,
-    name: base.name || base.Name || clothingItem.name || clothingItem.Name,
-    Name: base.Name || base.name || clothingItem.Name || clothingItem.name,
-    Название: base.Название || base.Name || base.name || clothingItem.Название || clothingItem.Name || clothingItem.name,
+    name: base.name || clothingItem.name,
   };
 };
 
@@ -495,8 +489,8 @@ const WeaponsAndArmorScreen = () => {
             key={slotKey} 
             title={config.title} 
             subtitle={config.subtitle}
-            armorName={(slotKey === 'body' && robotBodyUpgrade ? robotBodyUpgrade?.name : null) || modifiedArmor?.name || modifiedArmor?.Name}
-            clothingName={modifiedClothing?.name || modifiedClothing?.Name}
+            armorName={(slotKey === 'body' && robotBodyUpgrade ? robotBodyUpgrade?.name : null) || modifiedArmor?.name}
+            clothingName={modifiedClothing?.name}
             stats={stats}
         />
     );

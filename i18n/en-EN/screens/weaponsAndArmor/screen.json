@@ -111,15 +111,13 @@
       "frame": "Frame"
     },
     "weapon": {
-      "builtin": "Built-in",
-      "held": "Held",
       "damage": "DMG"
     },
     "buttons": {
-      "upgradeLimb": "Upgrade Limb",
-      "upgradeArmor": "Upgrade Armor",
-      "upgradePlating": "Upgrade Plating",
-      "upgradeFrame": "Upgrade Frame"
+      "upgradeLimb": "Limb",
+      "upgradeArmor": "Armor",
+      "upgradePlating": "Plating",
+      "upgradeFrame": "Frame"
     }
   },
   "common": {
