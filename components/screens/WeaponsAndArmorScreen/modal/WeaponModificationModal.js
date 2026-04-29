@@ -7,10 +7,11 @@ import {
   ScrollView,
   Alert
 } from 'react-native';
-import { getSlotsForWeapon, getModsForWeaponSlot, getWeaponById, getWeaponModById, getWeaponMods } from '../../../db/Database';
-import { declinePrefix } from '../../../domain/modsEquip';
-import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
-import styles from '../../../styles/WeaponModificationModal.styles';
+import { getSlotsForWeapon, getModsForWeaponSlot, getWeaponById, getWeaponModById, getWeaponMods } from '../../../../db/Database';
+import { declinePrefix } from '../../../../domain/modsEquip';
+import { tWeaponsAndArmorScreen } from '../weaponsAndArmorScreenI18n';
+import styles from '../../../../styles/WeaponModificationModal.styles';
+
 
 function toNumber(v) {
   if (v === null || v === undefined) return 0;
@@ -81,7 +82,7 @@ function getModDisplayName(mod, weaponBaseName) {
 
 function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
   const selectedMods = Object.values(selectedBySlot).filter(Boolean);
-  const baseName = baseWeapon._baseName ?? baseWeapon.base_name ?? baseWeapon.name ?? '';
+  const baseName = baseWeapon.baseWeaponName ?? baseWeapon.name ?? '';
 
   // строим имя только от базового имени, чтобы не дублировать префиксы при повторных открытиях
   const prefixesRu = [];
@@ -158,9 +159,8 @@ function applyDbModEffectsToWeapon(baseWeapon, selectedBySlot) {
 
   return {
     ...baseWeapon,
-    Name: name,
     name,
-    _baseName: baseName,
+    baseWeaponName: baseName,
     damage,
     fire_rate,
     range_name,
@@ -217,7 +217,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
           ...(dbWeapon || {}),
           id: weaponId ?? dbWeapon?.id,
           weaponId: weaponId ?? dbWeapon?.id,
-          _baseName: dbWeapon?.name ?? weapon._baseName ?? weapon.base_name ?? weapon.name ?? '',
+          baseWeaponName: dbWeapon?.name ?? weapon?.name ?? '',
           appliedMods: weapon.appliedMods || {},
         };
 
@@ -373,7 +373,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                       ]}
                       onPress={() => handleSelectModification(slot, mod)}
                     >
-                      <Text style={styles.modificationName}>{getModDisplayName(mod, weapon?._baseName ?? weapon?.name) || mod.name}</Text>
+                      <Text style={styles.modificationName}>{getModDisplayName(mod, weapon?.baseWeaponName ?? weapon?.name) || mod.name}</Text>
                       <Text style={styles.modificationEffects}>{mod.effect_description || mod.effects}</Text>
                       <Text style={styles.modificationStats}>
                         {tWeaponsAndArmorScreen('modals.weight')}: {toNumber(mod.weight) >= 0 ? '+' : ''}{toNumber(mod.weight)} | {tWeaponsAndArmorScreen('modals.cost')}: +{toNumber(mod.cost)}
@@ -390,7 +390,7 @@ const WeaponModificationModal = ({ visible, onClose, weapon, onApplyModification
                 <Text style={styles.sectionTitle}>{tWeaponsAndArmorScreen('modals.previewLabel')}</Text>
                 <View style={styles.previewContent}>
                   <Text style={styles.previewTitle}>
-                    {modifiedWeapon.name}
+                    {modifiedWeapon?.name || tWeaponsAndArmorScreen('common.empty')}
                   </Text>
                   <Text style={styles.previewStats}>
                     {tWeaponsAndArmorScreen('modals.weaponDamage')}: {modifiedWeapon.damage} | {tWeaponsAndArmorScreen('modals.weaponFireRate')}: {modifiedWeapon.fire_rate} |

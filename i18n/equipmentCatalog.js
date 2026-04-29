@@ -10,10 +10,13 @@ import ruAmmoTypes from './ru-RU/data/equipment/ammo/ammo_types.json';
 import ruAmmoData from './ru-RU/data/equipment/ammo/ammoData.json';
 import ruMiscItems from './ru-RU/data/equipment/items.json';
 import ruRobotWeapons from './ru-RU/data/equipment/robot/weapons.json';
+import ruRobotArms from './ru-RU/data/equipment/robot/robotarms.json';
 import ruRobotArmor from './ru-RU/data/equipment/robot/armor.json';
 import ruRobotPlating from './ru-RU/data/equipment/robot/plating.json';
+import ruRobotFrames from './ru-RU/data/equipment/robot/frames.json';
 import ruRobotLocations from './ru-RU/data/equipment/robot/locations.json';
-import ruRobotModules from './ru-RU/data/equipment/robot/modules.json';import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
+import ruRobotModules from './ru-RU/data/equipment/robot/modules.json';
+import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
 import ruRobotBody from './ru-RU/data/equipment/robot/robotbody.json';
 import ruChems from './ru-RU/data/consumables/chems.json';
 import ruDrinks from './ru-RU/data/consumables/drinks.json';
@@ -35,8 +38,10 @@ import enAmmoTypes from './en-EN/data/equipment/ammo/ammo_types.json';
 import enAmmoData from './en-EN/data/equipment/ammo/ammoData.json';
 import enMiscItems from './en-EN/data/equipment/items.json';
 import enRobotWeapons from './en-EN/data/equipment/robot/weapons.json';
+import enRobotArms from './en-EN/data/equipment/robot/robotarms.json';
 import enRobotArmor from './en-EN/data/equipment/robot/armor.json';
 import enRobotPlating from './en-EN/data/equipment/robot/plating.json';
+import enRobotFrames from './en-EN/data/equipment/robot/frames.json';
 import enRobotLocations from './en-EN/data/equipment/robot/locations.json';
 import enRobotModules from './en-EN/data/equipment/robot/modules.json';
 import enRobotItems from './en-EN/data/equipment/robot/items.json';
@@ -79,6 +84,7 @@ import dataDrinks from '../data/consumables/drinks.json';
 import dataFood from '../data/consumables/food.json';
 import dataWeaponModSlots from '../data/equipment/weapon_mod_slots.json';
 import dataRobotBody from '../data/equipment/robot/robotbody.json';
+import dataRobotArms from '../data/equipment/robot/robotarms.json';
 import dataRobotArmor from '../data/equipment/robot/armor.json';
 import dataRobotPlating from '../data/equipment/robot/armor_plating.json';
 import dataRobotFrames from '../data/equipment/robot/frames.json';
@@ -126,8 +132,10 @@ const EQUIPMENT_BY_LOCALE = {
     oddities: ruOddities,
     ammoData: ruAmmoData,
     robotWeapons: ruRobotWeapons,
+    robotArms: ruRobotArms,
     robotArmor: ruRobotArmor,
     robotPlating: ruRobotPlating,
+    robotFrames: ruRobotFrames,
     robotLocations: ruRobotLocations,
     robotModules: ruRobotModules,
     robotItems: ruRobotItems,
@@ -153,8 +161,10 @@ const EQUIPMENT_BY_LOCALE = {
     oddities: enOddities,
     ammoData: enAmmoData,
     robotWeapons: enRobotWeapons,
+    robotArms: enRobotArms,
     robotArmor: enRobotArmor,
     robotPlating: enRobotPlating,
+    robotFrames: enRobotFrames,
     robotLocations: enRobotLocations,
     robotModules: enRobotModules,
     robotItems: enRobotItems,
@@ -213,8 +223,17 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
 
   // Weapons: merge data/ stats with i18n names/flavour
   const weapons = mergeById(dataWeapons, i18n.weapons).map((w) => ({ ...w, itemType: 'weapon' }));
-  const robotWeapons = mergeById(dataRobotWeapons, i18n.robotWeapons || [])
+  const robotWeapons = mergeById(
+    (dataRobotWeapons || []).filter((item) => item.itemType === 'weapon'),
+    i18n.robotWeapons || [],
+  )
     .map((w) => ({ ...w, itemType: 'weapon', isRobotWeapon: true }));
+  const robotArmsI18n = [
+    ...(i18n.robotArms || []),
+    ...(i18n.robotWeapons || []),
+  ].filter((item, index, arr) => item?.id && arr.findIndex((x) => x?.id === item.id) === index);
+  const robotArms = mergeById(dataRobotArms || [], robotArmsI18n)
+    .map((arm) => ({ ...arm, itemType: 'robotArm', isRobotArm: true }));
   const allWeapons = [...weapons, ...robotWeapons];
 
   // Robot plating and armor: merge data stats with i18n names, add to armorIndex
@@ -292,7 +311,8 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
     uniqArmorMods: mergedUniqArmorMods,
     modsOverrides: dataWeaponModSlots,
     armorEffects: dataArmorEffects,
-    robotWeaponsOnly: mergeById(dataRobotWeapons, i18n.robotWeapons || []).map((w) => ({ ...w, itemType: 'weapon' })),
+    robotWeaponsOnly: robotWeapons,
+    robotArms,
     robotPlating: robotPlatingList,
     robotArmorLayer: robotArmorList,
     robotFrames: robotFramesList,
