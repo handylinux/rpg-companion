@@ -150,7 +150,22 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
       }
 
       if (targetKey && slots[targetKey] !== undefined) {
-        slots[targetKey].limb = item;
+        if (itype === 'robotArm') {
+          // Build the limb so that builtinWeaponId is resolved into builtinWeapons.
+          // Preserve any kit-level overrides (e.g. slot, name) that came on `item`.
+          const armEntry = resolveArmEntry(item.id) || item;
+          const limbFromArm = buildLimbFromArmEntry(armEntry);
+          slots[targetKey].limb = {
+            ...limbFromArm,
+            ...item,
+            builtinWeapons: limbFromArm.builtinWeapons,
+            canHoldWeapons: limbFromArm.canHoldWeapons,
+            weaponSlots: limbFromArm.weaponSlots,
+            itemType: 'robotArm',
+          };
+        } else {
+          slots[targetKey].limb = item;
+        }
       }
       continue;
     }
