@@ -9,7 +9,7 @@
     "rarity": 0,
     "weaponSlots": 1,
     "canHoldWeapons": true,
-    "builtinWeaponId": "manipulator_punch"
+    "builtinWeaponId": "robot_weapon_manipulator"
   },
   {
     "id": "robot_arm_protectron_manipulator",
@@ -21,7 +21,7 @@
     "rarity": 0,
     "weaponSlots": 1,
     "canHoldWeapons": true,
-    "builtinWeaponId": "protectron_manipulator_punch"
+    "builtinWeaponId": "robot_weapon_protectron_manipulator"
   },
   {
     "id": "robot_arm_protectron",
@@ -56,7 +56,7 @@
     "radDR": 0,
     "weaponSlots": 1,
     "canHoldWeapons": true,
-    "builtinWeaponId": "manipulator_punch"
+    "builtinWeaponId": "robot_weapon_manipulator"
   },
   {
     "id": "robot_arm_assaultron",
@@ -91,7 +91,7 @@
     "radDR": 0,
     "weaponSlots": 1,
     "canHoldWeapons": true,
-    "builtinWeaponId": "assaultron_shocker"
+    "builtinWeaponId": "robot_weapon_shocker_arms"
   },
   {
     "id": "robot_arm_robobrain",
