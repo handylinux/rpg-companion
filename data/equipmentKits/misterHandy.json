@@ -42,12 +42,6 @@
       },
       {
         "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon",
-        "requiresWeaponId": "robot_arm_mister_handy"
-      },
-      {
-        "type": "fixed",
         "armorId": "robot_plating_standard_body",
         "itemType": "plating"
       },
@@ -215,12 +209,6 @@
             }
           }
         ]
-      },
-      {
-        "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon",
-        "requiresWeaponId": "robot_arm_mister_handy"
       },
       {
         "type": "fixed",
@@ -394,12 +382,6 @@
             "base": 20
           }
         }
-      },
-      {
-        "type": "fixed",
-        "weaponId": "robot_weapon_manipulator",
-        "itemType": "weapon",
-        "requiresWeaponId": "robot_arm_mister_handy"
       },
       {
         "type": "fixed",
