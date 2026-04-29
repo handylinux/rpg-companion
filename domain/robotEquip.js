@@ -162,7 +162,11 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
       if (armEntry) {
         const targetKey = findFreeCompatibleSlot(armEntry);
         if (targetKey && slots[targetKey] !== undefined) {
-          slots[targetKey].limb = buildLimbFromArmEntry(armEntry);
+          const limbFromArm = buildLimbFromArmEntry(armEntry);
+          slots[targetKey].limb = {
+            ...limbFromArm,
+            name: weaponData.name || limbFromArm.name || limbFromArm.id,
+          };
           slots[targetKey].heldWeapon = null;
           continue;
         }

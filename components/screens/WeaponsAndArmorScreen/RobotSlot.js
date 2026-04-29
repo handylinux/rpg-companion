@@ -50,13 +50,15 @@ const RobotSlot = ({
             {stat.type === 'weapon' ? (
               <Text style={[localStyles.armorStatValue, { width: '100%', textAlign: 'center' }]}>{stat.value}</Text>
             ) : stat.type === 'button' ? (
-              <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
-              <TouchableOpacity
-                style={localStyles.armorModificationButton}
-                onPress={stat.onPress}
-              >
-                <Text style={localStyles.armorModificationButtonText}>{stat.value}</Text>
-              </TouchableOpacity>
+              <>
+                <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
+                <TouchableOpacity
+                  style={localStyles.armorModificationButton}
+                  onPress={stat.onPress}
+                >
+                  <Text style={localStyles.armorModificationButtonText}>{stat.value}</Text>
+                </TouchableOpacity>
+              </>
             ) : (
               <>
                 <Text style={localStyles.armorStatLabel}>{stat.label}</Text>

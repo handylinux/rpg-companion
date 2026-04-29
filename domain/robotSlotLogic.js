@@ -57,7 +57,7 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
 
   // --- Оружие конечности (не интерактивно, имя берём от конечности) ---
   if (limb?.builtinWeaponId) {
-    const weaponName = limb.name ?? t('common.empty');
+    const weaponName = limb.name ?? limb._builtinWeapon?.name ?? limb.builtinWeaponId ?? t('common.empty');
     stats.push({
       label: null,
       value: weaponName,
