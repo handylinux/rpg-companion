@@ -2,7 +2,6 @@
   {
     "id": "robot_weapon_manipulator",
     "itemType": "weapon",
-    "limbSlot": "leftArm",
     "weaponSlots": 0,
     "weaponType": "Unarmed",
     "damage": 2,
@@ -23,7 +22,6 @@
   {
     "id": "robot_weapon_flamethrower",
     "itemType": "weapon",
-    "limbSlot": "leftArm",
     "weaponSlots": 0,
     "name": "Огнемёт",
     "weaponType": "Heavy",
@@ -52,7 +50,6 @@
   {
     "id": "robot_weapon_circular_saw",
     "itemType": "weapon",
-    "limbSlot": "leftArm",
     "weaponSlots": 0,
     "name": "Циркулярная пила",
     "weaponType": "Melee",
@@ -85,7 +82,6 @@
   {
     "id": "robot_weapon_laser_cutter",
     "itemType": "weapon",
-    "limbSlot": "leftArm",
     "weaponSlots": 0,
     "name": "Лазерный резак",
     "weaponType": "Energy",
@@ -112,7 +108,6 @@
   {
     "id": "robot_weapon_auto_10mm",
     "itemType": "weapon",
-    "limbSlot": "leftArm",
     "weaponSlots": 0,
     "name": "Автоматическая 10мм пушка",
     "weaponType": "Light",
