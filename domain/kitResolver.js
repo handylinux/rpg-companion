@@ -119,6 +119,7 @@ const resolveItemById = (item) => {
       ...(catalog?.drinks || []),
       ...(catalog?.food || []),
       ...(catalog?.robotModules || []),
+      ...(catalog?.robotArms || []),
       ...(catalog?.robotItems || []),
       ...(catalog?.robotBody || []),
     ];

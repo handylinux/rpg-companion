@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Pressable,
 } from 'react-native';
 import { useCharacter } from '../../../CharacterContext';
 import { canEquipRobotArmor } from '../../../../domain/robotEquip';
@@ -162,6 +163,15 @@ const ArmorLayerModal = ({ visible, slotKey, layer, currentItem, onClose }) => {
   const locale = getCurrentLocale();
   const isRu = locale === 'ru-RU';
   const layerColor = LAYER_COLORS[layer] ?? '#888';
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    if (!visible) {
+      setSelectedItem(null);
+      return;
+    }
+    setSelectedItem(currentItem || null);
+  }, [visible, currentItem]);
 
   const compatibleItems = useMemo(() => {
     if (!slotKey || !layer || !equippedRobotSlots) return [];
@@ -176,25 +186,13 @@ const ArmorLayerModal = ({ visible, slotKey, layer, currentItem, onClose }) => {
     });
   }, [slotKey, layer, equippedRobotSlots, locale]);
 
-  const handleSelect = (selectedItem) => {
+  const handleApply = () => {
     if (!equippedRobotSlots || !slotKey) return;
     setEquippedRobotSlots((prev) => ({
       ...prev,
       [slotKey]: {
         ...prev[slotKey],
-        [layer]: selectedItem,
-      },
-    }));
-    onClose();
-  };
-
-  const handleRemove = () => {
-    if (!equippedRobotSlots || !slotKey) return;
-    setEquippedRobotSlots((prev) => ({
-      ...prev,
-      [slotKey]: {
-        ...prev[slotKey],
-        [layer]: null,
+        [layer]: selectedItem || null,
       },
     }));
     onClose();
@@ -209,8 +207,8 @@ const ArmorLayerModal = ({ visible, slotKey, layer, currentItem, onClose }) => {
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.container}>
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <Pressable style={styles.container} onPress={(e) => e.stopPropagation()}>
           <Text style={[styles.title, { color: layerColor }]}>{title}</Text>
 
           {compatibleItems.length === 0 && !currentItem ? (
@@ -219,27 +217,15 @@ const ArmorLayerModal = ({ visible, slotKey, layer, currentItem, onClose }) => {
             </Text>
           ) : (
             <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
-              {/* Remove option */}
-              <TouchableOpacity
-                style={[styles.removeButton, !currentItem && styles.removeButtonDisabled]}
-                onPress={handleRemove}
-                activeOpacity={0.75}
-                disabled={!currentItem}
-              >
-                <Text style={[styles.removeButtonText, !currentItem && styles.removeButtonTextDisabled]}>
-                  {isRu ? '✕  Снять' : '✕  Remove'}
-                </Text>
-              </TouchableOpacity>
-
               {compatibleItems.map((item) => {
-                const isSelected = currentItem?.id === item.id;
+                const isSelected = selectedItem?.id === item.id;
                 return (
                   <ArmorCard
                     key={item.id}
                     item={item}
                     isSelected={isSelected}
                     layerColor={layerColor}
-                    onPress={() => handleSelect(item)}
+                    onPress={() => setSelectedItem((prev) => (prev?.id === item.id ? null : item))}
                     locale={locale}
                   />
                 );
@@ -247,13 +233,19 @@ const ArmorLayerModal = ({ visible, slotKey, layer, currentItem, onClose }) => {
             </ScrollView>
           )}
 
+          <TouchableOpacity style={[styles.closeButton, { backgroundColor: layerColor, marginHorizontal: 12 }]} onPress={handleApply}>
+            <Text style={styles.closeButtonText}>
+              {isRu ? 'Применить' : 'Apply'}
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>
               {isRu ? 'Закрыть' : 'Close'}
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 };
@@ -295,27 +287,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 12,
     paddingBottom: 8,
-  },
-  removeButton: {
-    borderWidth: 1,
-    borderColor: '#c0392b',
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 8,
-    alignItems: 'center',
-    backgroundColor: '#fff5f5',
-  },
-  removeButtonDisabled: {
-    borderColor: '#ccc',
-    backgroundColor: '#fafafa',
-  },
-  removeButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#c0392b',
-  },
-  removeButtonTextDisabled: {
-    color: '#aaa',
   },
   armorCard: {
     borderWidth: 1,

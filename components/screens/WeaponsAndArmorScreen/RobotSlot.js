@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import globalStyles from '../../../styles/CharacterScreen.styles';
 import localStyles from '../../../styles/WeaponsAndArmorScreen.styles';
-import { buildRobotSlotStats } from './RobotSlotLogic';
+import { buildRobotSlotStats } from '../../../domain/robotSlotLogic';
 
 // ---------------------------------------------------------------------------
 // RobotSlot
@@ -47,13 +47,23 @@ const RobotSlot = ({
             key={index}
             style={[localStyles.armorStatRow, { borderBottomWidth: index === stats.length - 1 ? 0 : 1 }]}
           >
-            <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
-            {stat.type === 'button' ? (
-              <TouchableOpacity style={localStyles.armorModificationButton} onPress={stat.onPress}>
-                <Text style={localStyles.armorModificationButtonText}>{stat.value}</Text>
-              </TouchableOpacity>
+            {stat.type === 'weapon' ? (
+              <Text style={[localStyles.armorStatValue, { width: '100%', textAlign: 'center' }]}>{stat.value}</Text>
+            ) : stat.type === 'button' ? (
+              <>
+                <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
+                <TouchableOpacity
+                  style={localStyles.armorModificationButton}
+                  onPress={stat.onPress}
+                >
+                  <Text style={localStyles.armorModificationButtonText}>{stat.value}</Text>
+                </TouchableOpacity>
+              </>
             ) : (
-              <Text style={localStyles.armorStatValue}>{stat.value}</Text>
+              <>
+                <Text style={localStyles.armorStatLabel}>{stat.label}</Text>
+                <Text style={localStyles.armorStatValue}>{stat.value}</Text>
+              </>
             )}
           </View>
         ))}

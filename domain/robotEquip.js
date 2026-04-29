@@ -14,19 +14,6 @@ const BODY_PLAN_SLOTS = {
   robobrain:   ['head', 'body', 'leftArm', 'rightArm', 'chassis'],
 };
 
-const SLOT_ALIASES = {
-  head: ['head', 'optics'],
-  body: ['body', 'mainbody', 'main_body'],
-  leftarm: ['leftarm', 'arm1'],
-  rightarm: ['rightarm', 'arm2'],
-  arm3: ['arm3'],
-  leftleg: ['leftleg'],
-  rightleg: ['rightleg'],
-  legs: ['legs'],
-  arms: ['arms'],
-  thruster: ['thruster'],
-  chassis: ['chassis'],
-};
 
 // ---------------------------------------------------------------------------
 // Простые хелперы
@@ -81,7 +68,6 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
   const inventoryItems = [];
 
   const armSlotKeys = slotKeys.filter((key) => key.toLowerCase().includes('arm'));
-  const legSlotKeys = slotKeys.filter((key) => key.toLowerCase().includes('leg') || key === 'chassis' || key === 'thruster');
 
   // Lookup helpers for robotarms catalog and weapons catalog
   const armscatalog = Array.isArray(robotCatalog.arms) ? robotCatalog.arms : [];
@@ -118,40 +104,6 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
       canHoldWeapons: armEntry.canHoldWeapons ?? (armEntry.weaponSlots > 0),
       weaponSlots: armEntry.weaponSlots ?? 0,
     };
-  };
-
-  const parseLimbSlots = (limbSlot, explicitSlot) => {
-    if (!limbSlot && explicitSlot) return [explicitSlot];
-    const rawTokens = Array.isArray(limbSlot)
-      ? limbSlot
-      : String(limbSlot || '')
-        .split('+')
-        .map((token) => token.trim())
-        .filter(Boolean);
-
-    const resolved = new Set();
-    for (const rawToken of rawTokens) {
-      const normalized = rawToken.toLowerCase().replace(/[\s_-]/g, '');
-      const aliasKey = Object.keys(SLOT_ALIASES).find((key) => SLOT_ALIASES[key].includes(normalized));
-      const token = aliasKey || normalized;
-
-      if (token === 'arms') armSlotKeys.forEach((slot) => resolved.add(slot));
-      else if (token === 'legs') legSlotKeys.forEach((slot) => resolved.add(slot));
-      else if (slotKeys.includes(token)) resolved.add(token);
-      else if (token === 'leftarm' && slotKeys.includes('leftArm')) resolved.add('leftArm');
-      else if (token === 'rightarm' && slotKeys.includes('rightArm')) resolved.add('rightArm');
-      else if (token === 'leftleg' && slotKeys.includes('leftLeg')) resolved.add('leftLeg');
-      else if (token === 'rightleg' && slotKeys.includes('rightLeg')) resolved.add('rightLeg');
-      else if (token === 'arm1' && slotKeys.includes('arm1')) resolved.add('arm1');
-      else if (token === 'arm2' && slotKeys.includes('arm2')) resolved.add('arm2');
-      else if (token === 'arm3' && slotKeys.includes('arm3')) resolved.add('arm3');
-      else if (token === 'head' && slotKeys.includes('head')) resolved.add('head');
-      else if (token === 'body' && slotKeys.includes('body')) resolved.add('body');
-      else if (token === 'thruster' && slotKeys.includes('thruster')) resolved.add('thruster');
-      else if (token === 'chassis' && slotKeys.includes('chassis')) resolved.add('chassis');
-    }
-
-    return [...resolved];
   };
 
   const buildBuiltinWeapons = (weaponData) => {
@@ -206,25 +158,18 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
     // Оружие
     if (itype === 'weapon') {
       const weaponData = item._weapon ?? item;
-
-      // Weapon-as-limb schema: limbSlot + optional weaponSlot/weaponDetailsN.
-      const explicitSlot = getSlotForDirection(bodyPlan, item.slot);
-      const limbSlots = parseLimbSlots(weaponData.limbSlot ?? item.limbSlot, explicitSlot);
-      if (limbSlots.length > 0) {
-        const weaponLimb = {
-          ...weaponData,
-          itemType: weaponData.itemType || 'robotArm',
-          canHoldWeapons: (weaponData.weaponSlot ?? weaponData.weaponSlots ?? 0) > 0,
-          weaponSlots: weaponData.weaponSlot ?? weaponData.weaponSlots ?? 0,
-          builtinWeapons: buildBuiltinWeapons(weaponData),
-        };
-        for (const targetKey of limbSlots) {
-          if (slots[targetKey] !== undefined) {
-            slots[targetKey].limb = weaponLimb;
-            slots[targetKey].heldWeapon = null;
-          }
+      const armEntry = resolveArmEntry(weaponData.id ?? item.weaponId);
+      if (armEntry) {
+        const targetKey = findFreeCompatibleSlot(armEntry);
+        if (targetKey && slots[targetKey] !== undefined) {
+          const limbFromArm = buildLimbFromArmEntry(armEntry);
+          slots[targetKey].limb = {
+            ...limbFromArm,
+            name: weaponData.name || limbFromArm.name || limbFromArm.id,
+          };
+          slots[targetKey].heldWeapon = null;
+          continue;
         }
-        continue;
       }
 
       // Иначе как обычное оружие в руке.
