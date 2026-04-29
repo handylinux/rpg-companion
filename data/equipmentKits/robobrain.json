@@ -3,6 +3,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_robobrain",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_robobrain",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_robobrain_treads",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "itemId": "robot_arm_robobrain",
         "itemType": "robotArm",
         "slot": "left"

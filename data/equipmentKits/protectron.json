@@ -3,6 +3,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "itemId": "robot_arm_protectron",
         "itemType": "robotArm",
         "slot": "left"
@@ -72,6 +87,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "weaponId": "robot_weapon_shocker_arms",
         "itemType": "weapon"
       },
@@ -100,6 +130,21 @@
   },
   "protectron_firefighter": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
       {
         "type": "fixed",
         "itemId": "robot_arm_protectron",
@@ -148,6 +193,21 @@
   },
   "protectron_nukatron": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
       {
         "type": "fixed",
         "itemId": "robot_arm_protectron",
@@ -218,6 +278,21 @@
   },
   "protectron_worker": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
       {
         "type": "fixed",
         "itemId": "robot_arm_protectron",
@@ -297,6 +372,21 @@
   },
   "protectron_model_x": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_head_protectron",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_protectron",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_protectron",
+        "itemType": "robotLeg"
+      },
       {
         "type": "fixed",
         "itemId": "robot_arm_protectron",
