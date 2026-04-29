@@ -3,6 +3,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_mister_handy_eye_stalk",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_mister_handy",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_mister_handy_thruster",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "itemId": "robot_arm_mister_handy",
         "itemType": "robotArm",
         "slot": "arm1"
@@ -23,7 +38,8 @@
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
         "itemType": "weapon",
-        "slot": "arm3"},
+        "slot": "arm3"
+      },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_manipulator",
@@ -56,6 +72,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_mister_handy_eye_stalk",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_mister_handy",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_mister_handy_thruster",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "weaponId": "robot_weapon_auto_10mm",
         "itemType": "weapon",
         "slot": "arm1",
@@ -70,7 +101,8 @@
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
         "itemType": "weapon",
-        "slot": "arm2"},
+        "slot": "arm2"
+      },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_laser_cutter",
@@ -102,6 +134,21 @@
   },
   "mister_handy_nanny": {
     "items": [
+      {
+        "type": "fixed",
+        "itemId": "robot_head_mister_handy_eye_stalk",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_mister_handy",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_mister_handy_thruster",
+        "itemType": "robotLeg"
+      },
       {
         "type": "fixed",
         "itemId": "robot_arm_mister_handy",
@@ -143,7 +190,8 @@
           {
             "weaponId": "robot_weapon_circular_saw",
             "itemType": "weapon",
-            "slot": "arm3"},
+            "slot": "arm3"
+          },
           {
             "weaponId": "robot_weapon_flamethrower",
             "itemType": "weapon",
@@ -199,6 +247,21 @@
   "mister_handy_medic": {
     "items": [
       {
+        "type": "fixed",
+        "itemId": "robot_head_mister_handy_eye_stalk",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_mister_handy",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_mister_handy_thruster",
+        "itemType": "robotLeg"
+      },
+      {
         "type": "choice",
         "slot": "arm1",
         "items": [
@@ -210,14 +273,16 @@
           {
             "weaponId": "robot_weapon_circular_saw",
             "itemType": "weapon",
-            "slot": "arm1"}
+            "slot": "arm1"
+          }
         ]
       },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
         "itemType": "weapon",
-        "slot": "arm2"},
+        "slot": "arm2"
+      },
       {
         "type": "choice",
         "slot": "arm3",
@@ -241,7 +306,8 @@
           {
             "weaponId": "robot_weapon_circular_saw",
             "itemType": "weapon",
-            "slot": "arm3"},
+            "slot": "arm3"
+          },
           {
             "weaponId": "robot_weapon_flamethrower",
             "itemType": "weapon",
@@ -292,6 +358,21 @@
     "items": [
       {
         "type": "fixed",
+        "itemId": "robot_head_mister_handy_eye_stalk",
+        "itemType": "robotHead"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_body_mister_handy",
+        "itemType": "robotBody"
+      },
+      {
+        "type": "fixed",
+        "itemId": "robot_legs_mister_handy_thruster",
+        "itemType": "robotLeg"
+      },
+      {
+        "type": "fixed",
         "itemId": "robot_arm_mister_handy",
         "itemType": "robotArm",
         "slot": "arm1"
@@ -300,7 +381,8 @@
         "type": "fixed",
         "weaponId": "robot_weapon_circular_saw",
         "itemType": "weapon",
-        "slot": "arm2"},
+        "slot": "arm2"
+      },
       {
         "type": "fixed",
         "weaponId": "robot_weapon_laser_cutter",
