@@ -22,7 +22,7 @@ import { tWeaponsAndArmorScreen } from '../components/screens/WeaponsAndArmorScr
  * @returns {{ slotTitle: string, limbName: string|null, stats: object[] }}
  */
 export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
-  const { onUpgradeLimb, onUpgradeArmor, onWeaponPress, t = tWeaponsAndArmorScreen } = callbacks;
+  const { onUpgradeLimb, onUpgradeArmor, t = tWeaponsAndArmorScreen } = callbacks;
 
   const limb = slotData?.limb;
 
@@ -55,25 +55,14 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
     type: 'value',
   });
 
-  // --- Оружие конечности ---
+  // --- Оружие конечности (не интерактивно, имя берём от конечности) ---
   if (limb?.builtinWeaponId) {
-    const builtinWeapon = { id: limb.builtinWeaponId, isBuiltin: true, ...limb._builtinWeapon };
-    const weaponName = builtinWeapon.name ?? builtinWeapon.id ?? t('common.empty');
-
-    if (onWeaponPress) {
-      stats.push({
-        label: '',
-        value: weaponName,
-        type: 'button',
-        onPress: () => onWeaponPress(builtinWeapon),
-      });
-    } else {
-      stats.push({
-        label: '',
-        value: weaponName,
-        type: 'value',
-      });
-    }
+    const weaponName = limb.name ?? t('common.empty');
+    stats.push({
+      label: null,
+      value: weaponName,
+      type: 'weapon',
+    });
   }
 
   // --- Кнопки апгрейда ---
