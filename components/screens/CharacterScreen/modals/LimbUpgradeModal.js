@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Pressable,
 } from 'react-native';
 import { useCharacter } from '../../../CharacterContext';
 import { applyLimbReplacement } from '../../../../domain/robotEquip';
@@ -26,11 +27,13 @@ import ruRobotArms from '../../../../i18n/ru-RU/data/equipment/robot/robotarms.j
 import ruRobotHeads from '../../../../i18n/ru-RU/data/equipment/robot/robotheads.json';
 import ruRobotBody  from '../../../../i18n/ru-RU/data/equipment/robot/robotbody.json';
 import ruRobotLegs  from '../../../../i18n/ru-RU/data/equipment/robot/robotlegs.json';
+import ruRobotWeapons from '../../../../i18n/ru-RU/data/equipment/robot/weapons.json';
 
 import enRobotArms from '../../../../i18n/en-EN/data/equipment/robot/robotarms.json';
 import enRobotHeads from '../../../../i18n/en-EN/data/equipment/robot/robotheads.json';
 import enRobotBody  from '../../../../i18n/en-EN/data/equipment/robot/robotbody.json';
 import enRobotLegs  from '../../../../i18n/en-EN/data/equipment/robot/robotlegs.json';
+import enRobotWeapons from '../../../../i18n/en-EN/data/equipment/robot/weapons.json';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -68,7 +71,10 @@ const getLimbCatalogForSlot = (slotKey) => {
     slotKey === 'rightArm' ||
     slotKey.startsWith('arm')
   ) {
-    const i18nRobotArms = isRu ? ruRobotArms : enRobotArms;
+    const i18nRobotArms = [
+      ...(isRu ? ruRobotArms : enRobotArms),
+      ...(isRu ? ruRobotWeapons : enRobotWeapons),
+    ].filter((item, index, arr) => item?.id && arr.findIndex((x) => x?.id === item.id) === index);
     return mergeById(dataRobotArms || [], i18nRobotArms);
   }
   // legs / thruster / chassis
@@ -227,8 +233,8 @@ const LimbUpgradeModal = ({ visible, slotKey, currentLimb, bodyPlan, onClose }) 
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.container}>
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <Pressable style={styles.container} onPress={(e) => e.stopPropagation()}>
           <Text style={styles.title}>Модернизировать конечность</Text>
 
           {compatibleLimbs.length === 0 ? (
@@ -252,8 +258,8 @@ const LimbUpgradeModal = ({ visible, slotKey, currentLimb, bodyPlan, onClose }) 
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Закрыть</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 };
