@@ -138,8 +138,19 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
       if (token === 'arms') armSlotKeys.forEach((slot) => resolved.add(slot));
       else if (token === 'legs') legSlotKeys.forEach((slot) => resolved.add(slot));
       else if (slotKeys.includes(token)) resolved.add(token);
-      else if (token === 'leftarm' && slotKeys.includes('leftArm')) resolved.add('leftArm');
-      else if (token === 'rightarm' && slotKeys.includes('rightArm')) resolved.add('rightArm');
+      else if (token === 'leftarm') {
+        if (slotKeys.includes('leftArm')) resolved.add('leftArm');
+        else {
+          const mapped = getSlotForDirection(bodyPlan, 'left');
+          if (mapped) resolved.add(mapped);
+        }
+      } else if (token === 'rightarm') {
+        if (slotKeys.includes('rightArm')) resolved.add('rightArm');
+        else {
+          const mapped = getSlotForDirection(bodyPlan, 'right');
+          if (mapped) resolved.add(mapped);
+        }
+      }
       else if (token === 'leftleg' && slotKeys.includes('leftLeg')) resolved.add('leftLeg');
       else if (token === 'rightleg' && slotKeys.includes('rightLeg')) resolved.add('rightLeg');
       else if (token === 'arm1' && slotKeys.includes('arm1')) resolved.add('arm1');
