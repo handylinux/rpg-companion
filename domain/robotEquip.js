@@ -83,6 +83,43 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
   const armSlotKeys = slotKeys.filter((key) => key.toLowerCase().includes('arm'));
   const legSlotKeys = slotKeys.filter((key) => key.toLowerCase().includes('leg') || key === 'chassis' || key === 'thruster');
 
+  // Lookup helpers for robotarms catalog and weapons catalog
+  const armscatalog = Array.isArray(robotCatalog.arms) ? robotCatalog.arms : [];
+  const weaponsCatalog = Array.isArray(robotCatalog.weapons) ? robotCatalog.weapons : [];
+
+  // Resolve a weapon's stats from weapons catalog by id
+  const resolveWeaponStats = (weaponId) => {
+    if (!weaponId) return null;
+    return weaponsCatalog.find((w) => w.id === weaponId) || null;
+  };
+
+  // Resolve arm entry from robotarms catalog by id
+  const resolveArmEntry = (id) => {
+    if (!id) return null;
+    return armscatalog.find((a) => a.id === id) || null;
+  };
+
+  // Find a free compatible slot for an arm entry
+  const findFreeCompatibleSlot = (armEntry) => {
+    const compatible = Array.isArray(armEntry?.compatibleSlots) ? armEntry.compatibleSlots : armSlotKeys;
+    return compatible.find((s) => slotKeys.includes(s) && slots[s]?.limb === null) || null;
+  };
+
+  // Build a limb object from a robotarms entry + its weapon stats
+  const buildLimbFromArmEntry = (armEntry) => {
+    const weaponStats = resolveWeaponStats(armEntry.builtinWeaponId);
+    const builtinWeapons = weaponStats
+      ? [{ ...weaponStats, isBuiltin: true }]
+      : (armEntry.builtinWeapons || []);
+    return {
+      ...armEntry,
+      itemType: 'robotArm',
+      builtinWeapons,
+      canHoldWeapons: armEntry.canHoldWeapons ?? (armEntry.weaponSlots > 0),
+      weaponSlots: armEntry.weaponSlots ?? 0,
+    };
+  };
+
   const parseLimbSlots = (limbSlot, explicitSlot) => {
     if (!limbSlot && explicitSlot) return [explicitSlot];
     const rawTokens = Array.isArray(limbSlot)
