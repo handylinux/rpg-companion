@@ -613,8 +613,7 @@ const InventoryScreen = () => {
 
       const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
       const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-      if (totalOwned <= alreadyEquippedCount) {
+      if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
       }
@@ -693,9 +692,7 @@ const InventoryScreen = () => {
       // Add weapon directly to equippedWeapons with sourceSlot (Requirement 7.2 / design §9)
       const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
       const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-
-      if (totalOwned <= alreadyEquippedCount) {
+      if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
       }
@@ -726,9 +723,7 @@ const InventoryScreen = () => {
     
     // Проверяем количество этого конкретного предмета в инвентаре
     const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-    const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-
-    if (totalOwned <= alreadyEquippedCount) {
+    if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
     }
