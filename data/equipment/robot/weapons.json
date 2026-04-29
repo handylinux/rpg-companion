@@ -1,154 +1,87 @@
 [
   {
-    "id": "robot_arm_mister_handy",
-    "itemType": "robotArm",
-    "limbSlot": "leftArm",
-    "weaponSlots": 1,
-    "builtinWeapons": [
+    "id": "manipulator_punch",
+    "itemType": "weapon",
+    "name": "Удар манипулятором",
+    "weaponType": "Unarmed",
+    "damage": 2,
+    "damageType": "physical",
+    "range": "C",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "weight": 0,
+    "cost": 0,
+    "rarity": 0,
+    "meleeBonusApplies": true,
+    "qualities": [
       {
-        "id": "manipulator_punch",
-        "damage": 2,
-        "damageType": "physical",
-        "weaponType": "Melee",
-        "range": "C",
-        "mainAttr": "STR",
-        "mainSkill": "UNARMED",
-        "weight": 0,
-        "cost": 0,
-        "qualities": [
-          {
-            "qualityId": "quality_close_quarters"
-          }
-        ]
+        "qualityId": "quality_close_quarters"
       }
     ]
   },
   {
-    "id": "robot_arm_protectron_manipulator",
-    "itemType": "robotArm",
-    "limbSlot": "leftArm",
-    "weaponSlots": 1,
-    "builtinWeapons": [
+    "id": "protectron_manipulator_punch",
+    "itemType": "weapon",
+    "name": "Удар манипулятором (Протектрон)",
+    "weaponType": "Unarmed",
+    "damage": 3,
+    "damageType": "physical",
+    "range": "C",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "weight": 0,
+    "cost": 0,
+    "rarity": 0,
+    "meleeBonusApplies": true,
+    "qualities": [
       {
-        "id": "protectron_manipulator_punch",
-        "damage": 3,
-        "damageType": "physical",
-        "weaponType": "Melee",
-        "range": "C",
-        "mainAttr": "STR",
-        "mainSkill": "UNARMED",
-        "weight": 0,
-        "cost": 0,
-        "qualities": [
-          {
-            "qualityId": "quality_close_quarters"
-          }
-        ]
+        "qualityId": "quality_close_quarters"
       }
     ]
   },
   {
-    "id": "robot_arm_protectron",
-    "itemType": "robotArm",
-    "slots": ["Left Arm", "Right Arm"],
-    "maxSlots": 2,
-    "complexity": 4,
-    "perksRequired": ["Robotics Expert 1"],
-    "skill": "Repair",
-    "rarity": 1,
-    "melee": 2,
-    "guns": 2,
-    "physicalDR": 2,
-    "energyDR": 1,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
+    "id": "assaultron_shocker",
+    "itemType": "weapon",
+    "name": "Шокер Ассалтрона",
+    "weaponType": "Melee",
+    "damage": 4,
+    "damageType": "energy",
+    "range": "C",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "weight": 0,
+    "cost": 0,
+    "rarity": 0,
+    "meleeBonusApplies": true,
+    "qualities": [
+      {
+        "qualityId": "quality_stun"
+      },
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ]
   },
   {
-    "id": "robot_arm_mister_handy",
-    "itemType": "robotArm",
-    "slots": ["Arm 1", "Arm 2", "Arm 3"],
-    "maxSlots": 3,
-    "complexity": 5,
-    "perksRequired": ["Robotics Expert 1"],
-    "skill": "Repair",
-    "rarity": 1,
-    "melee": 3,
-    "guns": 1,
-    "physicalDR": 2,
-    "energyDR": 2,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
-  },
-  {
-    "id": "robot_arm_assaultron",
-    "itemType": "robotArm",
-    "slots": ["Left Arm", "Right Arm"],
-    "maxSlots": 2,
-    "complexity": 5,
-    "perksRequired": ["Robotics Expert 2"],
-    "skill": "Repair",
-    "rarity": 1,
-    "melee": 5,
-    "guns": 5,
-    "physicalDR": 3,
-    "energyDR": 3,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
-  },
-  {
-    "id": "robot_arm_assaultron_shocker",
-    "itemType": "robotArm",
-    "slots": ["Left Arm", "Right Arm"],
-    "maxSlots": 2,
-    "complexity": 6,
-    "perksRequired": ["Robotics Expert 2", "Science! 1"],
-    "skill": "Repair",
-    "rarity": 2,
-    "melee": 5,
-    "guns": 3,
-    "builtinWeaponId": "assaultron_shocker",
-    "physicalDR": 3,
-    "energyDR": 4,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
-  },
-  {
-    "id": "robot_arm_robobrain",
-    "itemType": "robotArm",
-    "slots": ["Left Arm", "Right Arm"],
-    "maxSlots": 2,
-    "complexity": 5,
-    "perksRequired": ["Robotics Expert 2", "Science! 1"],
-    "skill": "Repair",
-    "rarity": 2,
-    "melee": 2,
-    "guns": 4,
-    "physicalDR": 2,
-    "energyDR": 3,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
-  },
-  {
-    "id": "robot_arm_sentry_bot",
-    "itemType": "robotArm",
-    "slots": ["Left Arm", "Right Arm"],
-    "maxSlots": 2,
-    "complexity": 6,
-    "perksRequired": ["Armorer 1", "Robotics Expert 3", "Science! 1"],
-    "skill": "Repair",
-    "rarity": 2,
-    "melee": 4,
-    "guns": 5,
-    "physicalDR": 4,
-    "energyDR": 3,
-    "radDR": 0,
-    "weaponSlots": 1,
-    "canHoldWeapons": true
+    "id": "robot_weapon_manipulator",
+    "itemType": "weapon",
+    "limbSlot": "leftArm",
+    "weaponSlots": 0,
+    "weaponType": "Unarmed",
+    "damage": 2,
+    "damageType": "physical",
+    "range": "C",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "weight": 0,
+    "cost": 0,
+    "rarity": 0,
+    "meleeBonusApplies": true,
+    "qualities": [
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ]
   },
   {
     "id": "robot_weapon_flamethrower",
@@ -191,9 +124,6 @@
     "damageEffects": [
       "piercing"
     ],
-    "damageEffects": [
-      "piercing"
-    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "MELEE_WEAPONS",
@@ -202,9 +132,6 @@
     "rarity": 2,
     "meleeBonusApplies": true,
     "installComplexity": 3,
-    "installPerksRequired": [
-      "Blacksmith 1"
-    ],
     "installPerksRequired": [
       "Blacksmith 1"
     ],
@@ -294,10 +221,6 @@
       "Robotics Expert 1",
       "Science! 1"
     ],
-    "installPerksRequired": [
-      "Robotics Expert 1",
-      "Science! 1"
-    ],
     "installSkill": "Science",
     "qualities": [
       {
@@ -370,9 +293,6 @@
     "damageEffects": [
       "breaking"
     ],
-    "damageEffects": [
-      "breaking"
-    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -381,9 +301,6 @@
     "rarity": 0,
     "meleeBonusApplies": true,
     "installComplexity": 3,
-    "installPerksRequired": [
-      "Blacksmith 1"
-    ],
     "installPerksRequired": [
       "Blacksmith 1"
     ],
@@ -404,9 +321,6 @@
     "damageEffects": [
       "vicious"
     ],
-    "damageEffects": [
-      "vicious"
-    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -415,9 +329,6 @@
     "rarity": 1,
     "meleeBonusApplies": true,
     "installComplexity": 3,
-    "installPerksRequired": [
-      "Blacksmith 2"
-    ],
     "installPerksRequired": [
       "Blacksmith 2"
     ],
@@ -441,9 +352,6 @@
     "damageEffects": [
       "breaking"
     ],
-    "damageEffects": [
-      "breaking"
-    ],
     "range": "C",
     "mainAttr": "STR",
     "mainSkill": "UNARMED",
@@ -452,9 +360,6 @@
     "rarity": 2,
     "meleeBonusApplies": true,
     "installComplexity": 4,
-    "installPerksRequired": [
-      "Blacksmith 3"
-    ],
     "installPerksRequired": [
       "Blacksmith 3"
     ],
@@ -487,10 +392,6 @@
       "Robotics Expert 2",
       "Science! 1"
     ],
-    "installPerksRequired": [
-      "Robotics Expert 2",
-      "Science! 1"
-    ],
     "installSkill": "Science",
     "qualities": [
       {
@@ -513,10 +414,6 @@
     "rarity": 1,
     "isMod": true,
     "installComplexity": 4,
-    "installPerksRequired": [
-      "Robotics Expert 2",
-      "Science! 1"
-    ],
     "installPerksRequired": [
       "Robotics Expert 2",
       "Science! 1"
@@ -615,9 +512,6 @@
     "weaponType": "Small Guns",
     "damage": 4,
     "damageType": "poison",
-    "damageEffects": [
-      "persistent"
-    ],
     "damageEffects": [
       "persistent"
     ],
