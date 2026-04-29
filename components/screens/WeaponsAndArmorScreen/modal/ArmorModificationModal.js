@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useLocale } from '../../../i18n/locale';
-import { getEquipmentCatalog } from '../../../i18n/equipmentCatalog';
-import { applyArmorMods, formatModBonuses } from '../../../domain/modsEquip';
-import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
-import styles from '../../../styles/ArmorModificationModal.styles';
+import { useLocale } from '../../../../i18n/locale';
+import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
+import { applyArmorMods, formatModBonuses } from '../../../../domain/modsEquip';
+import { tWeaponsAndArmorScreen } from '../weaponsAndArmorScreenI18n';
+import styles from '../../../../styles/ArmorModificationModal.styles';
 
 const hasIntersection = (a = [], b = []) => a.some((x) => b.includes(x));
 
@@ -33,8 +33,7 @@ const resolveLocalizedItem = (catalog, targetItem, isClothingMode) => {
   return {
     ...(byId || {}),
     ...targetItem,
-    name: byId?.name || byId?.Name || targetItem?.name || targetItem?.Name,
-    Name: byId?.Name || byId?.name || targetItem?.Name || targetItem?.name,
+    name: byId?.name || targetItem?.name,
   };
 };
 
@@ -137,7 +136,7 @@ const ArmorModificationModal = ({ visible, onClose, targetItem, mode = 'armor', 
     return null;
   }
 
-  const baseName = localizedTargetItem?.name || localizedTargetItem?.Name || '—';
+  const baseName = localizedTargetItem?.name || '—';
   const previewEffects = (previewItem?.effects?.bonusEffects || []).map((x) => x.description).filter(Boolean);
 
   return (
@@ -202,7 +201,7 @@ const ArmorModificationModal = ({ visible, onClose, targetItem, mode = 'armor', 
             <View style={styles.previewSection}>
               <Text style={styles.sectionTitle}>{tWeaponsAndArmorScreen('modals.preview')}:</Text>
               <View style={styles.previewContent}>
-                <Text style={styles.previewTitle}>{previewItem?.item?.name || previewItem?.item?.Name || baseName}</Text>
+                <Text style={styles.previewTitle}>{previewItem?.item?.name || baseName}</Text>
                 <Text style={styles.previewStats}>
                   {tWeaponsAndArmorScreen('armor.fields.physical')}: {previewItem?.item?.physicalDamageRating || 0} | {tWeaponsAndArmorScreen('armor.fields.energy')}: {previewItem?.item?.energyDamageRating || 0} | {tWeaponsAndArmorScreen('armor.fields.radiation')}: {previewItem?.item?.radiationDamageRating || 0}
                 </Text>

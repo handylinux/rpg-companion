@@ -1,7 +1,7 @@
 // RobotSlotLogic.js
 // Pure logic extracted from RobotSlot for testability (no React, no UI deps).
 
-import { tWeaponsAndArmorScreen } from './weaponsAndArmorScreenI18n';
+import { tWeaponsAndArmorScreen } from '../components/screens/WeaponsAndArmorScreen/weaponsAndArmorScreenI18n';
 
 /**
  * Builds the slot title, limb name, and stats array for a RobotSlot.
@@ -27,7 +27,7 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
   const limb = slotData?.limb;
 
   const limbName = limb != null
-    ? (limb.name ?? limb.Name ?? null)
+    ? (limb.name ?? null)
     : t('robotSlot.noLimb');
 
   const slotTitle = t(`robotSlot.slotNames.${slotKey}`) || slotKey;
@@ -55,21 +55,21 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
     type: 'value',
   });
 
-  // --- Встроенное оружие (только builtinWeaponId, не heldWeapon) ---
+  // --- Оружие конечности ---
   if (limb?.builtinWeaponId) {
     const builtinWeapon = { id: limb.builtinWeaponId, isBuiltin: true, ...limb._builtinWeapon };
-    const weaponName = builtinWeapon.name ?? builtinWeapon.Name ?? builtinWeapon.id ?? t('common.empty');
+    const weaponName = builtinWeapon.name ?? builtinWeapon.id ?? t('common.empty');
 
     if (onWeaponPress) {
       stats.push({
-        label: t('robotSlot.weapon.builtin'),
+        label: 'Оружие',
         value: weaponName,
         type: 'button',
         onPress: () => onWeaponPress(builtinWeapon),
       });
     } else {
       stats.push({
-        label: t('robotSlot.weapon.builtin'),
+        label: 'Оружие',
         value: weaponName,
         type: 'value',
       });
@@ -78,25 +78,25 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
 
   // --- Кнопки апгрейда ---
   stats.push({
-    label: t('robotSlot.buttons.upgradeLimb'),
+    label: 'Конечность',
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeLimb && onUpgradeLimb(slotKey),
   });
   stats.push({
-    label: t('robotSlot.buttons.upgradePlating'),
+    label: 'Обшивка',
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('plating'),
   });
   stats.push({
-    label: t('robotSlot.buttons.upgradeArmor'),
+    label: 'Броня',
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('armor'),
   });
   stats.push({
-    label: t('robotSlot.buttons.upgradeFrame'),
+    label: 'Рама',
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('frame'),

@@ -132,8 +132,16 @@ const InventoryScreen = () => {
     () => new Set((equipmentCatalog?.robotWeapons || []).map((entry) => entry.id)),
     [equipmentCatalog],
   );
+  const robotArmsById = useMemo(
+    () => new Map((equipmentCatalog?.robotArms || []).map((entry) => [entry.id, entry])),
+    [equipmentCatalog],
+  );
   const isRobotOnlyItem = (item) => Boolean(item?.id && robotWeaponIds.has(item.id));
-  const isRobotLimbWeapon = (item) => item?.itemType === 'weapon' && Boolean(item?.limbSlot);
+  const resolveRobotArmFromWeapon = (item) => {
+    if (!item?.id) return null;
+    return robotArmsById.get(item.id) || null;
+  };
+  const isRobotLimbWeapon = (item) => Boolean(resolveRobotArmFromWeapon(item));
 
   // Проверяем наличие руки с canHoldWeapons в слотах робота (Requirement 7.2)
   const robotHasHoldingArm = useMemo(() => {
@@ -570,42 +578,12 @@ const InventoryScreen = () => {
       return;
     }
     if (isRobotCharacter && isRobotLimbWeapon(displayWeapon)) {
+      const armDef = resolveRobotArmFromWeapon(displayWeapon);
+      if (!armDef) return;
       const slots = equippedRobotSlots || {};
       const slotKeys = Object.keys(slots);
-      const armKeys = slotKeys.filter((key) => key.toLowerCase().includes('arm'));
-      const firstFreeArm = () => armKeys.find((key) => !slots[key]?.limb) || armKeys[0] || null;
-      const rawTargets = Array.isArray(displayWeapon.limbSlot)
-        ? displayWeapon.limbSlot
-        : String(displayWeapon.limbSlot || '').split('+');
-      const resolvedTargets = [];
-
-      rawTargets
-        .map((token) => String(token || '').trim())
-        .filter(Boolean)
-        .forEach((token) => {
-          const normalized = token.toLowerCase().replace(/[\s_-]/g, '');
-          if (normalized === 'leftarm') {
-            resolvedTargets.push(slotKeys.includes('leftArm') ? 'leftArm' : firstFreeArm());
-            return;
-          }
-          if (normalized === 'rightarm') {
-            resolvedTargets.push(slotKeys.includes('rightArm') ? 'rightArm' : firstFreeArm());
-            return;
-          }
-          if (normalized === 'arms') {
-            const freeArm = firstFreeArm();
-            if (freeArm) resolvedTargets.push(freeArm);
-            return;
-          }
-          const byExact = slotKeys.find((key) => key.toLowerCase() === normalized);
-          if (byExact) resolvedTargets.push(byExact);
-        });
-
-      const finalTargets = [...new Set(resolvedTargets.filter(Boolean))];
-      if (finalTargets.length === 0) {
-        const freeArm = firstFreeArm();
-        if (freeArm) finalTargets.push(freeArm);
-      }
+      const compatibleSlots = Array.isArray(armDef.compatibleSlots) ? armDef.compatibleSlots : [];
+      const finalTargets = compatibleSlots.filter((key) => slotKeys.includes(key) && !slots[key]?.limb);
       if (finalTargets.length === 0) {
         showAlert(tInventory('screen.alerts.manipulatorRequiredTitle'), tInventory('screen.alerts.robotNoHandlingLimbMessage'));
         return;
@@ -613,22 +591,16 @@ const InventoryScreen = () => {
 
       const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
       const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-      if (totalOwned <= alreadyEquippedCount) {
+      if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
       }
 
       const updatedSlots = { ...slots };
-      const weaponSlots = Number(displayWeapon.weaponSlots ?? displayWeapon.weaponSlot ?? 0);
       const weaponLimb = {
-        ...displayWeapon,
+        ...armDef,
         itemType: 'robotArm',
-        weaponSlots,
-        canHoldWeapons: weaponSlots > 0,
-        builtinWeapons: Array.isArray(displayWeapon.builtinWeapons) && displayWeapon.builtinWeapons.length
-          ? displayWeapon.builtinWeapons
-          : [{ ...displayWeapon }],
+        builtinWeaponId: armDef.builtinWeaponId || displayWeapon.id,
       };
       finalTargets.forEach((key) => {
         if (!updatedSlots[key]) return;
@@ -693,9 +665,7 @@ const InventoryScreen = () => {
       // Add weapon directly to equippedWeapons with sourceSlot (Requirement 7.2 / design §9)
       const sourceStackKey = weaponToEquip.stackKey || getStackKey(displayWeapon);
       const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-      const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-
-      if (totalOwned <= alreadyEquippedCount) {
+      if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
       }
@@ -726,9 +696,7 @@ const InventoryScreen = () => {
     
     // Проверяем количество этого конкретного предмета в инвентаре
     const totalOwned = equipment.items.find(i => (i.stackKey || getStackKey(i)) === sourceStackKey)?.quantity || 0;
-    const alreadyEquippedCount = equippedWeapons.filter(w => w && (w.stackKey || getStackKey(w)) === sourceStackKey).length;
-
-    if (totalOwned <= alreadyEquippedCount) {
+    if (totalOwned <= 0) {
         showAlert(tInventory('screen.alerts.noItemsTitle'), tInventory('screen.alerts.noItemsMessage'));
         return;
     }
