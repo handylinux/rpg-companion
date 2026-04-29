@@ -20,6 +20,26 @@
     ]
   },
   {
+    "id": "robot_weapon_protectron_manipulator",
+    "itemType": "weapon",
+    "weaponSlots": 0,
+    "weaponType": "Unarmed",
+    "damage": 2,
+    "damageType": "physical",
+    "range": "C",
+    "mainAttr": "STR",
+    "mainSkill": "UNARMED",
+    "weight": 0,
+    "cost": 0,
+    "rarity": 0,
+    "meleeBonusApplies": true,
+    "qualities": [
+      {
+        "qualityId": "quality_close_quarters"
+      }
+    ]
+  },
+  {
     "id": "robot_weapon_flamethrower",
     "itemType": "weapon",
     "weaponSlots": 0,
