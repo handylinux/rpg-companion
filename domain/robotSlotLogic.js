@@ -55,21 +55,21 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
     type: 'value',
   });
 
-  // --- Оружие конечности ---
+  // --- Встроенное оружие (только builtinWeaponId, не heldWeapon) ---
   if (limb?.builtinWeaponId) {
     const builtinWeapon = { id: limb.builtinWeaponId, isBuiltin: true, ...limb._builtinWeapon };
     const weaponName = builtinWeapon.name ?? builtinWeapon.id ?? t('common.empty');
 
     if (onWeaponPress) {
       stats.push({
-        label: 'Оружие',
+        label: t('robotSlot.weapon.builtin'),
         value: weaponName,
         type: 'button',
         onPress: () => onWeaponPress(builtinWeapon),
       });
     } else {
       stats.push({
-        label: 'Оружие',
+        label: t('robotSlot.weapon.builtin'),
         value: weaponName,
         type: 'value',
       });
@@ -78,25 +78,25 @@ export const buildRobotSlotStats = (slotKey, slotData, callbacks = {}) => {
 
   // --- Кнопки апгрейда ---
   stats.push({
-    label: 'Конечность',
+    label: t('robotSlot.buttons.upgradeLimb'),
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeLimb && onUpgradeLimb(slotKey),
   });
   stats.push({
-    label: 'Обшивка',
+    label: t('robotSlot.buttons.upgradePlating'),
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('plating'),
   });
   stats.push({
-    label: 'Броня',
+    label: t('robotSlot.buttons.upgradeArmor'),
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('armor'),
   });
   stats.push({
-    label: 'Рама',
+    label: t('robotSlot.buttons.upgradeFrame'),
     value: '⋯',
     type: 'button',
     onPress: () => onUpgradeArmor && onUpgradeArmor('frame'),
