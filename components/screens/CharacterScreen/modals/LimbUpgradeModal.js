@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Pressable,
 } from 'react-native';
 import { useCharacter } from '../../../CharacterContext';
 import { applyLimbReplacement } from '../../../../domain/robotEquip';
@@ -14,7 +15,7 @@ import { getCurrentLocale } from '../../../../i18n/locale';
 // ---------------------------------------------------------------------------
 // Static data imports — raw stats
 // ---------------------------------------------------------------------------
-import dataRobotWeapons from '../../../../data/equipment/robot/weapons.json';
+import dataRobotArms from '../../../../data/equipment/robot/robotarms.json';
 import dataRobotHeads from '../../../../data/equipment/robot/robotheads.json';
 import dataRobotBody  from '../../../../data/equipment/robot/robotbody.json';
 import dataRobotLegs  from '../../../../data/equipment/robot/robotlegs.json';
@@ -22,15 +23,17 @@ import dataRobotLegs  from '../../../../data/equipment/robot/robotlegs.json';
 // ---------------------------------------------------------------------------
 // i18n imports
 // ---------------------------------------------------------------------------
-import ruRobotWeapons from '../../../../i18n/ru-RU/data/equipment/robot/weapons.json';
+import ruRobotArms from '../../../../i18n/ru-RU/data/equipment/robot/robotarms.json';
 import ruRobotHeads from '../../../../i18n/ru-RU/data/equipment/robot/robotheads.json';
 import ruRobotBody  from '../../../../i18n/ru-RU/data/equipment/robot/robotbody.json';
 import ruRobotLegs  from '../../../../i18n/ru-RU/data/equipment/robot/robotlegs.json';
+import ruRobotWeapons from '../../../../i18n/ru-RU/data/equipment/robot/weapons.json';
 
-import enRobotWeapons from '../../../../i18n/en-EN/data/equipment/robot/weapons.json';
+import enRobotArms from '../../../../i18n/en-EN/data/equipment/robot/robotarms.json';
 import enRobotHeads from '../../../../i18n/en-EN/data/equipment/robot/robotheads.json';
 import enRobotBody  from '../../../../i18n/en-EN/data/equipment/robot/robotbody.json';
 import enRobotLegs  from '../../../../i18n/en-EN/data/equipment/robot/robotlegs.json';
+import enRobotWeapons from '../../../../i18n/en-EN/data/equipment/robot/weapons.json';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -68,9 +71,11 @@ const getLimbCatalogForSlot = (slotKey) => {
     slotKey === 'rightArm' ||
     slotKey.startsWith('arm')
   ) {
-    const dataRobotArms = (dataRobotWeapons || []).filter((item) => item.itemType === 'robotArm');
-    const i18nRobotArms = (isRu ? ruRobotWeapons : enRobotWeapons).filter((item) => item.itemType === 'robotArm');
-    return mergeById(dataRobotArms, i18nRobotArms);
+    const i18nRobotArms = [
+      ...(isRu ? ruRobotArms : enRobotArms),
+      ...(isRu ? ruRobotWeapons : enRobotWeapons),
+    ].filter((item, index, arr) => item?.id && arr.findIndex((x) => x?.id === item.id) === index);
+    return mergeById(dataRobotArms || [], i18nRobotArms);
   }
   // legs / thruster / chassis
   return mergeById(dataRobotLegs, isRu ? ruRobotLegs : enRobotLegs);
@@ -228,8 +233,8 @@ const LimbUpgradeModal = ({ visible, slotKey, currentLimb, bodyPlan, onClose }) 
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.container}>
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <Pressable style={styles.container} onPress={(e) => e.stopPropagation()}>
           <Text style={styles.title}>Модернизировать конечность</Text>
 
           {compatibleLimbs.length === 0 ? (
@@ -253,8 +258,8 @@ const LimbUpgradeModal = ({ visible, slotKey, currentLimb, bodyPlan, onClose }) 
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Закрыть</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 };

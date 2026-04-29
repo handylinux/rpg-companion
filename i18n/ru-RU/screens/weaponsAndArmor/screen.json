@@ -116,10 +116,10 @@
       "damage": "Урон"
     },
     "buttons": {
-      "upgradeLimb": "Модернизировать конечность",
-      "upgradeArmor": "Улучшить броню",
-      "upgradePlating": "Улучшить обшивку",
-      "upgradeFrame": "Улучшить раму"
+      "upgradeLimb": "Конечность",
+      "upgradeArmor": "Броня",
+      "upgradePlating": "Обшивка",
+      "upgradeFrame": "Рама"
     }
   },
   "common": {
