@@ -12,8 +12,10 @@ import ruMiscItems from './ru-RU/data/equipment/items.json';
 import ruRobotWeapons from './ru-RU/data/equipment/robot/weapons.json';
 import ruRobotArmor from './ru-RU/data/equipment/robot/armor.json';
 import ruRobotPlating from './ru-RU/data/equipment/robot/plating.json';
+import ruRobotFrames from './ru-RU/data/equipment/robot/frames.json';
 import ruRobotLocations from './ru-RU/data/equipment/robot/locations.json';
-import ruRobotModules from './ru-RU/data/equipment/robot/modules.json';import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
+import ruRobotModules from './ru-RU/data/equipment/robot/modules.json';
+import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
 import ruRobotBody from './ru-RU/data/equipment/robot/robotbody.json';
 import ruChems from './ru-RU/data/consumables/chems.json';
 import ruDrinks from './ru-RU/data/consumables/drinks.json';
@@ -37,6 +39,7 @@ import enMiscItems from './en-EN/data/equipment/items.json';
 import enRobotWeapons from './en-EN/data/equipment/robot/weapons.json';
 import enRobotArmor from './en-EN/data/equipment/robot/armor.json';
 import enRobotPlating from './en-EN/data/equipment/robot/plating.json';
+import enRobotFrames from './en-EN/data/equipment/robot/frames.json';
 import enRobotLocations from './en-EN/data/equipment/robot/locations.json';
 import enRobotModules from './en-EN/data/equipment/robot/modules.json';
 import enRobotItems from './en-EN/data/equipment/robot/items.json';
@@ -128,6 +131,7 @@ const EQUIPMENT_BY_LOCALE = {
     robotWeapons: ruRobotWeapons,
     robotArmor: ruRobotArmor,
     robotPlating: ruRobotPlating,
+    robotFrames: ruRobotFrames,
     robotLocations: ruRobotLocations,
     robotModules: ruRobotModules,
     robotItems: ruRobotItems,
@@ -155,6 +159,7 @@ const EQUIPMENT_BY_LOCALE = {
     robotWeapons: enRobotWeapons,
     robotArmor: enRobotArmor,
     robotPlating: enRobotPlating,
+    robotFrames: enRobotFrames,
     robotLocations: enRobotLocations,
     robotModules: enRobotModules,
     robotItems: enRobotItems,
