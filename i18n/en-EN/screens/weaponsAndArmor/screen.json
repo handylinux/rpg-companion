@@ -111,8 +111,6 @@
       "frame": "Frame"
     },
     "weapon": {
-      "builtin": "Built-in",
-      "held": "Held",
       "damage": "DMG"
     },
     "buttons": {
