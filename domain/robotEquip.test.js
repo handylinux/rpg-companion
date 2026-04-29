@@ -521,6 +521,17 @@ describe('applyLimbReplacement', () => {
     expect(updated.leftArm.heldWeapon).toBeNull();
   });
 
+
+  it('removes sibling slot limb when replacing dual-slot arm kits', () => {
+    const slots = createEmptyRobotSlots('protectron');
+    const dual = { id: 'robot_shocker_arms', canHoldWeapons: false };
+    slots.leftArm.limb = dual;
+    slots.rightArm.limb = dual;
+
+    const { slots: updated } = applyLimbReplacement(slots, 'leftArm', newLimb);
+    expect(updated.leftArm.limb).toBe(newLimb);
+    expect(updated.rightArm.limb).toBeNull();
+  });
   it('rebuilds weapons array after replacement', () => {
     const slots = createEmptyRobotSlots('protectron');
     slots.leftArm.limb = oldLimb; // had builtinWeaponId
@@ -588,6 +599,20 @@ describe('getBuiltinWeaponsFromSlots', () => {
     expect(ids).toContain('pistol');
   });
 
+
+  it('deduplicates identical builtin attacks from two manipulator arms', () => {
+    const slots = createEmptyRobotSlots('protectron');
+    const sharedAttacks = [
+      { id: 'robot_melee', damage: 2 },
+      { id: 'robot_laser', damage: 3 },
+    ];
+    slots.leftArm.limb = { id: 'left_manip', builtinWeapons: sharedAttacks };
+    slots.rightArm.limb = { id: 'right_manip', builtinWeapons: sharedAttacks };
+
+    const weapons = getBuiltinWeaponsFromSlots(slots);
+    const ids = weapons.map((w) => w.id);
+    expect(ids).toEqual(['robot_melee', 'robot_laser']);
+  });
   it('includes heldWeapon with sourceSlot', () => {
     const slots = createEmptyRobotSlots('protectron');
     slots.rightArm.heldWeapon = { id: 'rifle', damage: 8 };
