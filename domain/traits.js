@@ -190,9 +190,22 @@ export function getTraitExtraSkills(trait) {
  * @param {object} trait - runtime or data trait object
  * @returns {string} i18n key, or empty string if not found
  */
+/**
+ * Find a trait whose localized display name (in current locale) matches the
+ * given string. Used to resolve runtime trait objects that only carry the
+ * localized `name` (e.g. set via handleSelectTrait), without id/descriptionKey.
+ */
+function findTraitByLocalizedName(name) {
+  if (!name) return undefined;
+  return traitsJson.find((t) => tTrait(t.displayNameKey) === name);
+}
+
 export function getTraitDescriptionKey(trait) {
   if (!trait) return '';
-  const dataEntry = findTraitByName(trait.name) || findTraitById(trait.id);
+  const dataEntry =
+    findTraitByName(trait.name) ||
+    findTraitById(trait.id) ||
+    findTraitByLocalizedName(trait.name);
   const key = dataEntry?.descriptionKey || trait.descriptionKey || '';
   return tTrait(key) || key;
 }

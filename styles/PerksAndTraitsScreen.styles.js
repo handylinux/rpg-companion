@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     whiteSpace: 'nowrap',
   },
-  nameColumn: { flex: 2, minWidth: 100 },
-  rankColumn: { flex: 0.5, textAlign: 'center', minWidth: 60 },
-  descriptionColumn: { flex: 3, borderRightWidth: 0, minWidth: 150 },
+  nameColumn: { width: 160, flexShrink: 0, flexGrow: 0 },
+  rankColumn: { width: 60, flexShrink: 0, flexGrow: 0, textAlign: 'center' },
+  descriptionColumn: { flex: 1, borderRightWidth: 0, minWidth: 0 },
   placeholder: { padding: 10, color: '#888', textAlign: 'center' },
   addPerkButton: {
     position: 'absolute',
