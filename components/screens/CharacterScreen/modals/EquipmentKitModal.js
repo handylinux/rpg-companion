@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { resolveKitItems } from '../../../../domain/kitResolver';
 import { isRobotCharacter, initRobotSlots } from '../../../../domain/robotEquip';
+import { getEquipmentCatalog } from '../../../../i18n/equipmentCatalog';
 import styles from '../../../../styles/EquipmentKitModal.styles';
 
 // Lazy-load robot catalog data
@@ -14,6 +15,12 @@ const loadRobotCatalog = () => ({
 });
 
 const CATEGORY_LABELS = {
+  robotHead: 'Голова',
+  robotBody: 'Корпус',
+  robotArm: 'Руки',
+  robotLeg: 'Ноги',
+  robotLegs: 'Ноги',
+  plating: 'Обшивка',
   weapon: 'Оружие',
   armor: 'Броня',
   clothing: 'Одежда',
@@ -27,7 +34,7 @@ const CATEGORY_LABELS = {
   ammo: 'Патроны',
 };
 
-const CATEGORY_ORDER = ['armor', 'clothing', 'weapon', 'module', 'chem', 'food', 'ammo', 'misc', 'loot', 'currency', 'currency_ncr'];
+const CATEGORY_ORDER = ['robotHead', 'robotBody', 'robotArm', 'robotLeg', 'robotLegs', 'plating', 'armor', 'clothing', 'weapon', 'module', 'chem', 'food', 'ammo', 'misc', 'loot', 'currency', 'currency_ncr'];
 
 const toChoiceKey = (kitId, itemIndex) => `${kitId}-${itemIndex}`;
 const toGroupKey = (group = []) => `group-${group.map((item) => item?.itemId || item?.weaponId || item?.name).join('+')}`;
@@ -138,6 +145,18 @@ const formatAmmoSuffix = (ammo) => {
   const qty = Number(ammo.quantity || 0);
   const qtyText = qty > 0 ? `${qty} шт.` : '0 шт.';
   return ` (${qtyText} ${ammo.name})`;
+};
+
+// For robotArm entries with a builtinWeaponId, returns " + <weapon name>" so the
+// modal makes it visible that the arm carries a built-in weapon (e.g. manipulator).
+const formatBuiltinWeaponSuffix = (entry) => {
+  if (!entry || entry.itemType !== 'robotArm') return '';
+  const builtinId = entry.builtinWeaponId;
+  if (!builtinId) return '';
+  const catalog = getEquipmentCatalog();
+  const weapon = (catalog?.weapons || []).find((w) => w.id === builtinId);
+  const name = weapon?.name || builtinId;
+  return ` + ${name}`;
 };
 
 const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, character }) => {
@@ -308,8 +327,8 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, chara
                                         const selected = selectedChoices[choiceKey] === optionKey;
 
                                         const optionLabel = option.group
-                                          ? option.group.map((groupItem) => getDisplayName(groupItem)).join(' + ')
-                                          : getDisplayName(option);
+                                          ? option.group.map((groupItem) => `${getDisplayName(groupItem)}${formatBuiltinWeaponSuffix(groupItem)}`).join(' + ')
+                                          : `${getDisplayName(option)}${formatBuiltinWeaponSuffix(option)}`;
 
                                         return (
                                           <TouchableOpacity
@@ -332,7 +351,7 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, chara
 
                                 return (
                                   <View key={`fixed-${entry._entryIndex}`} style={styles.fixedItem}>
-                                    <Text>{getDisplayName(entry)}{formatQuantitySuffix(entry)}</Text>
+                                    <Text>{getDisplayName(entry)}{formatBuiltinWeaponSuffix(entry)}{formatQuantitySuffix(entry)}</Text>
                                     {entry.resolvedAmmunition && (
                                       <Text style={styles.ammoText}>{formatAmmoSuffix(entry.resolvedAmmunition)}</Text>
                                     )}
