@@ -18,6 +18,8 @@ import ruRobotLocations from './ru-RU/data/equipment/robot/locations.json';
 import ruRobotModules from './ru-RU/data/equipment/robot/modules.json';
 import ruRobotItems from './ru-RU/data/equipment/robot/items.json';
 import ruRobotBody from './ru-RU/data/equipment/robot/robotbody.json';
+import ruRobotHeads from './ru-RU/data/equipment/robot/robotheads.json';
+import ruRobotLegs from './ru-RU/data/equipment/robot/robotlegs.json';
 import ruChems from './ru-RU/data/consumables/chems.json';
 import ruDrinks from './ru-RU/data/consumables/drinks.json';
 import ruFood from './ru-RU/data/consumables/food.json';
@@ -46,6 +48,8 @@ import enRobotLocations from './en-EN/data/equipment/robot/locations.json';
 import enRobotModules from './en-EN/data/equipment/robot/modules.json';
 import enRobotItems from './en-EN/data/equipment/robot/items.json';
 import enRobotBody from './en-EN/data/equipment/robot/robotbody.json';
+import enRobotHeads from './en-EN/data/equipment/robot/robotheads.json';
+import enRobotLegs from './en-EN/data/equipment/robot/robotlegs.json';
 import enChems from './en-EN/data/consumables/chems.json';
 import enDrinks from './en-EN/data/consumables/drinks.json';
 import enFood from './en-EN/data/consumables/food.json';
@@ -84,6 +88,8 @@ import dataDrinks from '../data/consumables/drinks.json';
 import dataFood from '../data/consumables/food.json';
 import dataWeaponModSlots from '../data/equipment/weapon_mod_slots.json';
 import dataRobotBody from '../data/equipment/robot/robotbody.json';
+import dataRobotHeads from '../data/equipment/robot/robotheads.json';
+import dataRobotLegs from '../data/equipment/robot/robotlegs.json';
 import dataRobotArms from '../data/equipment/robot/robotarms.json';
 import dataRobotArmor from '../data/equipment/robot/armor.json';
 import dataRobotPlating from '../data/equipment/robot/armor_plating.json';
@@ -140,6 +146,8 @@ const EQUIPMENT_BY_LOCALE = {
     robotModules: ruRobotModules,
     robotItems: ruRobotItems,
     robotBody: ruRobotBody,
+    robotHeads: ruRobotHeads,
+    robotLegs: ruRobotLegs,
   },
   'en-EN': {
     weapons: enWeapons,
@@ -169,6 +177,8 @@ const EQUIPMENT_BY_LOCALE = {
     robotModules: enRobotModules,
     robotItems: enRobotItems,
     robotBody: enRobotBody,
+    robotHeads: enRobotHeads,
+    robotLegs: enRobotLegs,
   },
 };
 
@@ -277,7 +287,12 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
   const mergedFood = mergeById(dataFood, i18n.food);
   const mergedGeneralGoods = mergeById(dataGeneralGoods, i18n.generalGoods || []);
   const mergedOddities = mergeById(dataOddities, i18n.oddities || []);
-  const mergedRobotBody = mergeById(dataRobotBody || [], i18n.robotBody || []);
+  const mergedRobotBody = mergeById(dataRobotBody || [], i18n.robotBody || [])
+    .map((b) => ({ ...b, itemType: b.itemType || 'robotBody' }));
+  const mergedRobotHeads = mergeById(dataRobotHeads || [], i18n.robotHeads || [])
+    .map((h) => ({ ...h, itemType: h.itemType || 'robotHead' }));
+  const mergedRobotLegs = mergeById(dataRobotLegs || [], i18n.robotLegs || [])
+    .map((l) => ({ ...l, itemType: l.itemType || 'robotLeg' }));
   const mergedWeaponMods = mergeById(dataWeaponMods, i18n.weaponMods);
   const mergedArmorMods = mergeById(dataArmorMods, i18n.armorMods);
   const mergedUniqArmorMods = mergeById(dataUniqArmorMods, i18n.uniqArmorMods);
@@ -319,6 +334,8 @@ export const getEquipmentCatalog = (locale = getCurrentLocale()) => {
     robotModules: mergeById(dataRobotParts.robotModules || [], i18n.robotModules || []).map((m) => ({ ...m, itemType: 'module' })),
     robotItems: Array.isArray(i18n.robotItems) ? i18n.robotItems : [],
     robotBody: mergedRobotBody,
+    robotHeads: mergedRobotHeads,
+    robotLegs: mergedRobotLegs,
     equipmentKits,
   };
 };

@@ -14,27 +14,44 @@ const loadRobotCatalog = () => ({
   weapons: require('../../../../data/equipment/robot/weapons.json'),
 });
 
-const CATEGORY_LABELS = {
-  robotHead: 'Голова',
-  robotBody: 'Корпус',
-  robotArm: 'Руки',
-  robotLeg: 'Ноги',
-  robotLegs: 'Ноги',
-  plating: 'Обшивка',
+// Meta-categories shown in the kit modal.
+// All robot limbs/plating collapse into a single "Стандартная конструкция" group;
+// weapons and modules are their own buckets; everything else goes to "Разное".
+const META_CATEGORY_LABELS = {
+  structure: 'Стандартная конструкция',
   weapon: 'Оружие',
-  armor: 'Броня',
-  clothing: 'Одежда',
-  chem: 'Химия',
-  misc: 'Разное',
   module: 'Модули',
-  food: 'Провизия',
-  loot: 'Прочее',
-  currency: 'Валюта',
-  currency_ncr: 'Валюта',
-  ammo: 'Патроны',
+  misc: 'Разное',
 };
 
-const CATEGORY_ORDER = ['robotHead', 'robotBody', 'robotArm', 'robotLeg', 'robotLegs', 'plating', 'armor', 'clothing', 'weapon', 'module', 'chem', 'food', 'ammo', 'misc', 'loot', 'currency', 'currency_ncr'];
+const META_CATEGORY_ORDER = ['structure', 'weapon', 'module', 'misc'];
+
+// Sub-order inside the "Стандартная конструкция" group: голова → корпус → рука → ноги → обшивка
+const STRUCTURE_SUBORDER = {
+  robotHead: 0,
+  robotBody: 1,
+  robotArm: 2,
+  robotLeg: 3,
+  robotLegs: 3,
+  plating: 4,
+  armor: 5,
+  frame: 6,
+};
+
+const STRUCTURE_TYPES = new Set(Object.keys(STRUCTURE_SUBORDER));
+
+const getMetaCategory = (item) => {
+  const type = item?.itemType || (item?.weaponId ? 'weapon' : 'misc');
+  if (STRUCTURE_TYPES.has(type)) return 'structure';
+  if (type === 'weapon') return 'weapon';
+  if (type === 'module') return 'module';
+  return 'misc';
+};
+
+const getStructureSortKey = (item) => {
+  const type = item?.itemType || (item?.weaponId ? 'weapon' : 'misc');
+  return STRUCTURE_SUBORDER[type] ?? 99;
+};
 
 const toChoiceKey = (kitId, itemIndex) => `${kitId}-${itemIndex}`;
 const toGroupKey = (group = []) => `group-${group.map((item) => item?.itemId || item?.weaponId || item?.name).join('+')}`;
@@ -130,7 +147,6 @@ const summarizeItems = (items) => {
 };
 
 const getDisplayName = (item) => item.displayName || item.Название || item.name || item.itemId || item.weaponId || 'Неизвестный предмет';
-const getItemCategory = (item) => item?.itemType || (item?.weaponId ? 'weapon' : 'misc');
 
 
 const formatQuantitySuffix = (item) => {
@@ -276,17 +292,16 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, chara
 
     (kit.items || []).forEach((entry, index) => {
       if (entry?.hiddenInKitModal) return;
-      if (entry?.type === 'choice') {
-        const firstOption = (entry.items || [])[0];
-        const category = getItemCategory(firstOption);
-        if (!groups[category]) groups[category] = [];
-        groups[category].push({ ...entry, _entryIndex: index });
-      } else {
-        const category = getItemCategory(entry);
-        if (!groups[category]) groups[category] = [];
-        groups[category].push({ ...entry, _entryIndex: index });
-      }
+      const probe = entry?.type === 'choice' ? (entry.items || [])[0] : entry;
+      const meta = getMetaCategory(probe);
+      if (!groups[meta]) groups[meta] = [];
+      groups[meta].push({ ...entry, _entryIndex: index, _sortKey: getStructureSortKey(probe) });
     });
+
+    // Within "Стандартная конструкция" sort by sub-order: head → body → arm → legs → plating
+    if (groups.structure) {
+      groups.structure.sort((a, b) => (a._sortKey ?? 99) - (b._sortKey ?? 99));
+    }
 
     return groups;
   };
@@ -311,12 +326,12 @@ const EquipmentKitModal = ({ visible, onClose, equipmentKits, onSelectKit, chara
 
                     {expandedKit === kit.id && (
                       <View style={styles.kitDetails}>
-                        {CATEGORY_ORDER.map((category) => {
+                        {META_CATEGORY_ORDER.map((category) => {
                           if (!groups[category]?.length) return null;
 
                           return (
                             <View key={category} style={styles.categoryContainer}>
-                              <Text style={styles.categoryTitle}>{CATEGORY_LABELS[category] || 'Снаряжение'}:</Text>
+                              <Text style={styles.categoryTitle}>{META_CATEGORY_LABELS[category] || 'Снаряжение'}:</Text>
                               {groups[category].map((entry) => {
                                 if (entry?.type === 'choice') {
                                   return (

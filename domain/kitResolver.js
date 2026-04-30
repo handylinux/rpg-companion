@@ -122,6 +122,8 @@ const resolveItemById = (item) => {
       ...(catalog?.robotArms || []),
       ...(catalog?.robotItems || []),
       ...(catalog?.robotBody || []),
+      ...(catalog?.robotHeads || []),
+      ...(catalog?.robotLegs || []),
     ];
     const found = all.find((entry) => entry.id === item.itemId);
     if (found) {
