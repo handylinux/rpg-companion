@@ -19,6 +19,7 @@ import dataRobotArms from '../../../../data/equipment/robot/robotarms.json';
 import dataRobotHeads from '../../../../data/equipment/robot/robotheads.json';
 import dataRobotBody  from '../../../../data/equipment/robot/robotbody.json';
 import dataRobotLegs  from '../../../../data/equipment/robot/robotlegs.json';
+import dataRobotWeapons from '../../../../data/equipment/robot/weapons.json';
 
 // ---------------------------------------------------------------------------
 // i18n imports
@@ -203,10 +204,16 @@ const LimbUpgradeModal = ({ visible, slotKey, currentLimb, bodyPlan, onClose }) 
     if (!equippedRobotSlots || !slotKey) return;
 
     // Apply limb replacement — returns { slots, weapons }
+    const isRu = getCurrentLocale() === 'ru-RU';
+    const mergedWeapons = mergeById(
+      dataRobotWeapons || [],
+      isRu ? ruRobotWeapons : enRobotWeapons,
+    );
     const { slots: updatedSlots, weapons: updatedWeapons } = applyLimbReplacement(
       equippedRobotSlots,
       slotKey,
       newLimb,
+      mergedWeapons,
     );
 
     // Move old limb to inventory if it exists

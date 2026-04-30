@@ -9,7 +9,7 @@
   { "id": "robot_weapon_shocker_arms",           "name": "Руки-шокеры",                        "rangeName": "Близкая" },
   { "id": "robot_weapon_self_destruct",          "name": "Самоуничтожение",                    "rangeName": "Близкая" },
   { "id": "robot_weapon_construction_claw",      "name": "Строительный коготь",                "rangeName": "Близкая" },
-  { "id": "robot_weapon_drill",                  "name": "Дрель",                              "rangeName": "Близкая" },
+  { "id": "robot_weapon_drill",                  "name": "Бур",                                "rangeName": "Близкая" },
   { "id": "robot_weapon_vice_grip",              "name": "Тиски",                              "rangeName": "Близкая" },
   { "id": "robot_weapon_mod_shock",              "name": "Мод: Разряд",                        "rangeName": "Близкая" },
   { "id": "robot_weapon_mod_stun",               "name": "Мод: Оглушение",                     "rangeName": "Близкая" },

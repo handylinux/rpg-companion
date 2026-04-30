@@ -50,6 +50,38 @@ export function getSlotForDirection(bodyPlan, direction) {
 
 
 // ---------------------------------------------------------------------------
+// buildArmLimb — normalize a robotarms catalog entry into a slot-ready limb
+// with builtinWeapons resolved from the weapons catalog.
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolve a robotarms catalog entry into a `limb` object suitable for placing
+ * in a slot. Resolves `builtinWeaponId` against `weaponsCatalog` so that
+ * `getBuiltinWeaponsFromSlots` can produce attack cards.
+ *
+ * @param {object} armEntry        - entry from data/equipment/robot/robotarms.json (optionally merged with i18n)
+ * @param {object[]} weaponsCatalog - entries from data/equipment/robot/weapons.json (optionally merged with i18n)
+ * @returns {object} normalized limb object
+ */
+export function buildArmLimb(armEntry, weaponsCatalog = []) {
+  if (!armEntry) return armEntry;
+  const list = Array.isArray(weaponsCatalog) ? weaponsCatalog : [];
+  const weaponStats = armEntry.builtinWeaponId
+    ? list.find((w) => w.id === armEntry.builtinWeaponId) || null
+    : null;
+  const builtinWeapons = weaponStats
+    ? [{ ...weaponStats, isBuiltin: true }]
+    : (Array.isArray(armEntry.builtinWeapons) ? armEntry.builtinWeapons : []);
+  return {
+    ...armEntry,
+    itemType: 'robotArm',
+    builtinWeapons,
+    canHoldWeapons: armEntry.canHoldWeapons ?? (armEntry.weaponSlots > 0),
+    weaponSlots: armEntry.weaponSlots ?? 0,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // initRobotSlots
 // ---------------------------------------------------------------------------
 
@@ -92,19 +124,7 @@ export function initRobotSlots(bodyPlan, resolvedKitItems = [], robotCatalog = {
   };
 
   // Build a limb object from a robotarms entry + its weapon stats
-  const buildLimbFromArmEntry = (armEntry) => {
-    const weaponStats = resolveWeaponStats(armEntry.builtinWeaponId);
-    const builtinWeapons = weaponStats
-      ? [{ ...weaponStats, isBuiltin: true }]
-      : (armEntry.builtinWeapons || []);
-    return {
-      ...armEntry,
-      itemType: 'robotArm',
-      builtinWeapons,
-      canHoldWeapons: armEntry.canHoldWeapons ?? (armEntry.weaponSlots > 0),
-      weaponSlots: armEntry.weaponSlots ?? 0,
-    };
-  };
+  const buildLimbFromArmEntry = (armEntry) => buildArmLimb(armEntry, weaponsCatalog);
 
   const buildBuiltinWeapons = (weaponData) => {
     if (Array.isArray(weaponData?.builtinWeapons) && weaponData.builtinWeapons.length > 0) {
@@ -391,15 +411,28 @@ export function canReplaceLimb(slotKey, newLimb, character) {
  * @param {object} newLimb
  * @returns {{ slots: object, weapons: object[] }}
  */
-export function applyLimbReplacement(slots, slotKey, newLimb) {
+export function applyLimbReplacement(slots, slotKey, newLimb, weaponsCatalog = []) {
+  // If the new limb is a robot arm and its builtinWeapons haven't been
+  // resolved yet (i.e. the caller passed a raw catalog entry), normalize it
+  // so that getBuiltinWeaponsFromSlots can produce attack cards.
+  let normalizedLimb = newLimb;
+  if (
+    newLimb &&
+    newLimb.itemType === 'robotArm' &&
+    (!Array.isArray(newLimb.builtinWeapons) || newLimb.builtinWeapons.length === 0) &&
+    newLimb.builtinWeaponId
+  ) {
+    normalizedLimb = buildArmLimb(newLimb, weaponsCatalog);
+  }
+
   const updatedSlots = {
     ...slots,
     [slotKey]: {
       ...slots[slotKey],
-      limb: newLimb,
+      limb: normalizedLimb,
       // Keep held weapon if the new limb can hold weapons; otherwise clear it
       heldWeapon:
-        newLimb?.canHoldWeapons ? (slots[slotKey]?.heldWeapon ?? null) : null,
+        normalizedLimb?.canHoldWeapons ? (slots[slotKey]?.heldWeapon ?? null) : null,
     },
   };
 

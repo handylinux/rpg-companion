@@ -14,7 +14,7 @@
   { "id": "robot_weapon_cryojet",                "name": "Криораспылитель" },
   { "id": "robot_weapon_shocker_arms",           "name": "Руки-шокеры" },
   { "id": "robot_weapon_construction_claw",      "name": "Строительный коготь" },
-  { "id": "robot_weapon_drill",                  "name": "Дрель" },
+  { "id": "robot_weapon_drill",                  "name": "Бур" },
   { "id": "robot_weapon_vice_grip",              "name": "Тиски" },
   { "id": "robot_weapon_claw",                   "name": "Коготь" }
 ]
